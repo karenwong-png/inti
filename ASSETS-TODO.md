@@ -9,10 +9,10 @@ code change needed.
 
 ## Campus / partnership
 
-| File | Where it appears |
-| --- | --- |
-| `INTI-campus.jpg` | Hero background (the INTI Nilai campus photo) |
-| `BeLivexINTI_photo.jpg` | "Built Together with INTI" partnership card |
+| File | Where it appears | Status |
+| --- | --- | --- |
+| `INTI-campus.jpg` | Hero background (INTI Nilai campus photo) | in repo — only 680x454, so a higher-resolution original would render sharper |
+| `BeLivexINTI_photo.jpg` | "Built Together with INTI" partnership card | still needed |
 
 ## Youth City Residence
 
@@ -36,8 +36,7 @@ code change needed.
 
 ## Logo
 
-`inti-logo-black.svg`, `inti-logo-white.svg` and `inti-logo-full-black.svg` are
-hand-built recreations of the INTI International University & Colleges lockup
-(compact for the nav/footer, full lockup with the "Your Future Built Today" bar
-for the partnership card). Replace them with the official brand files when INTI
-supplies them — keep the same filenames and the page picks them up.
+`inti-logo.png` is INTI's official International University & Colleges lockup
+(2000x433, transparent, with the "Your Future Built Today" bar). It is used in
+the nav, the partnership card and the footer. Because the type is black and
+grey, the footer places it on a white plaque rather than recolouring the mark.

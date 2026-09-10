@@ -72,7 +72,7 @@ nav.top {
   color: var(--orange-deep);
 }
 .brand img.logo-belive { height: 36px; width: auto; display: block; }
-.brand img.logo-vitrox { height: 40px; width: auto; max-width: 260px; display: block; }
+.brand img.logo-vitrox { height: 46px; width: auto; max-width: 220px; display: block; }
 .brand .x { color: var(--ink); opacity: 0.3; font-size: 18px; font-style: italic; }
 
 nav ul { list-style: none; display: flex; gap: 36px; }
@@ -109,7 +109,7 @@ nav ul a:hover::after { transform: scaleX(1); }
   .brand { gap: 3px; }
   .brand-logos { gap: 8px; }
   .brand img.logo-belive { height: 22px; }
-  .brand img.logo-vitrox { height: 28px; }
+  .brand img.logo-vitrox { height: 30px; }
   .brand .x { font-size: 12px; }
   .brand-tagline { font-size: 8px; letter-spacing: 0.1em; }
   nav.top .cta-btn {
@@ -133,16 +133,16 @@ nav ul a:hover::after { transform: scaleX(1); }
   /* Layer 2 is the INTI Nilai campus photo. If the file is absent the radial
      brand wash below still carries the hero, so nothing looks broken. */
   background-image:
-    linear-gradient(262deg,
+    linear-gradient(98deg,
       var(--paper) 0%,
-      rgba(250,247,242,0.94) 28%,
-      rgba(250,247,242,0.72) 50%,
-      rgba(250,247,242,0.38) 80%,
-      rgba(250,247,242,0.25) 100%),
+      rgba(250,247,242,0.93) 30%,
+      rgba(250,247,242,0.66) 52%,
+      rgba(250,247,242,0.28) 80%,
+      rgba(250,247,242,0.16) 100%),
     url('INTI-campus.jpg'),
     radial-gradient(120% 90% at 88% 12%, rgba(255,107,26,0.30) 0%, rgba(255,107,26,0.06) 45%, transparent 72%);
   background-size: cover, cover, cover;
-  background-position: center, center left, center;
+  background-position: center, center right, center;
   background-repeat: no-repeat, no-repeat, no-repeat;
 }
 
@@ -486,7 +486,7 @@ section { padding: 100px 40px; position: relative; }
   display: flex; align-items: center; gap: 18px;
   position: relative; z-index: 1;
 }
-.built-together-logos img { height: 68px; width: auto; max-width: 330px; display: block; }
+.built-together-logos img { height: 72px; width: auto; max-width: 340px; display: block; }
 .built-together-logos .bt-x {
   font-size: 26px; color: var(--ink); opacity: 0.3; font-style: italic;
 }
@@ -2089,6 +2089,12 @@ footer {
 }
 .foot .brand { color: var(--paper); font-size: 20px; flex-direction: row; align-items: center; gap: 14px; }
 .foot .brand .x { color: rgba(250,247,242,0.5); }
+/* The official INTI lockup is black + grey type, so it needs a light ground on
+   the dark footer. A white plaque keeps the mark untouched. */
+.foot .brand img.logo-vitrox {
+  height: 40px; max-width: 210px;
+  background: #FFFFFF; padding: 7px 11px; border-radius: 10px;
+}
 .foot .legal { font-size: 11px; }
 
 /* ---------- UTILITY ---------- */
@@ -2165,7 +2171,7 @@ footer {
 <nav class="top">
   <div class="brand">
     <div class="brand-logos">
-      <img class="logo-vitrox" src="inti-logo-black.svg" alt="INTI International University">
+      <img class="logo-vitrox" src="inti-logo.png" alt="INTI International University">
       <span class="x">×</span>
       <img class="logo-belive" src="beLive_Logo_F_fit.png" alt="beLive">
     </div>
@@ -2209,7 +2215,7 @@ footer {
   <div class="built-together-card">
     <div class="built-together-top">
       <div class="built-together-logos">
-        <img src="inti-logo-full-black.svg" alt="INTI International University">
+        <img src="inti-logo.png" alt="INTI International University">
         <span class="bt-x">×</span>
         <img src="beLive_Logo_F_fit.png" alt="beLive">
       </div>
@@ -2815,7 +2821,7 @@ footer {
 <footer>
   <div class="foot">
     <div class="brand">
-      <img class="logo-vitrox" src="inti-logo-white.svg" alt="INTI International University">
+      <img class="logo-vitrox" src="inti-logo.png" alt="INTI International University">
       <span class="x">×</span>
       <img class="logo-belive" src="beLive_Logo_F_fit_w.png" alt="beLive">
     </div>
