@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2380 372" role="img" aria-label="INTI International University &amp; Colleges">
+  <title>INTI International University &amp; Colleges</title>
+  <g transform="translate(0,12) scale(0.95)"><path fill="#EC1C24" d="M139.2,4.4 L164.3,72.3 L175.0,82.3 L179.3,96.8 L229.1,54.5 L201.2,116.5 L212.9,121.6 L214.3,127.6 L291.6,138.8 L223.9,162.4 L212.1,170.6 L202.3,176.7 L243.9,224.8 L183.1,194.7 L182.0,210.0 L171.2,215.7 L159.2,297.7 L137.3,223.2 L124.3,222.7 L116.8,206.1 L58.6,236.7 L91.5,183.1 L72.6,173.1 L86.8,159.4 L11.3,131.1 L90.7,129.3 L87.7,117.4 L101.9,116.6 L67.8,65.4 L120.7,101.7 L117.6,81.3 L127.1,76.4 Z"/></g>
+  <g font-family="Arial,Helvetica,'Helvetica Neue','Liberation Sans',sans-serif" lengthAdjust="spacingAndGlyphs">
+    <text x="326" y="208" font-size="238" font-weight="900" fill="#111111" textLength="440">INTI</text>
+    <text x="800" y="196" font-size="162" font-weight="700" fill="#58595B" textLength="860">International</text>
+    <text x="800" y="348" font-size="162" font-weight="700" fill="#58595B" textLength="1470">University &amp; Colleges</text>
+    <text x="2282" y="268" font-size="56" font-weight="700" fill="#58595B" textLength="78">TM</text>
+  </g>
+</svg>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Exclusive Co-Living for INCEIF University Students</title>
-<meta name="description" content="Modern fully furnished rooms designed for student comfort, convenience, and community living — powered by BeLive" />
+<title>Exclusive Co-Living for INTI International University Students</title>
+<meta name="description" content="BeLive co-living for INTI International University students in Putra Nilai — fully furnished rooms at Youth City Residence and Akasia @ Bandar Belia, minutes from campus." />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="shortcut icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="favicon.png" />
@@ -72,7 +72,7 @@ nav.top {
   color: var(--orange-deep);
 }
 .brand img.logo-belive { height: 36px; width: auto; display: block; }
-.brand img.logo-vitrox { height: 48px; width: auto; display: block; }
+.brand img.logo-vitrox { height: 40px; width: auto; max-width: 260px; display: block; }
 .brand .x { color: var(--ink); opacity: 0.3; font-size: 18px; font-style: italic; }
 
 nav ul { list-style: none; display: flex; gap: 36px; }
@@ -130,6 +130,8 @@ nav ul a:hover::after { transform: scaleX(1); }
   align-items: center;
   overflow: hidden;
   background-color: var(--paper);
+  /* Layer 2 is the INTI Nilai campus photo. If the file is absent the radial
+     brand wash below still carries the hero, so nothing looks broken. */
   background-image:
     linear-gradient(262deg,
       var(--paper) 0%,
@@ -137,10 +139,11 @@ nav ul a:hover::after { transform: scaleX(1); }
       rgba(250,247,242,0.72) 50%,
       rgba(250,247,242,0.38) 80%,
       rgba(250,247,242,0.25) 100%),
-    url('INCEIF-bg.jpg');
-  background-size: cover, cover;
-  background-position: center, center left;
-  background-repeat: no-repeat, no-repeat;
+    url('INTI-campus.jpg'),
+    radial-gradient(120% 90% at 88% 12%, rgba(255,107,26,0.30) 0%, rgba(255,107,26,0.06) 45%, transparent 72%);
+  background-size: cover, cover, cover;
+  background-position: center, center left, center;
+  background-repeat: no-repeat, no-repeat, no-repeat;
 }
 
 .hero::before {
@@ -271,8 +274,10 @@ h1.hero-title .underline::after {
         rgba(250,247,242,0.92) 0%,
         rgba(250,247,242,0.78) 55%,
         rgba(250,247,242,0.45) 100%),
-      url('INCEIF-bg.jpg');
-    background-position: center, center bottom;
+      url('INTI-campus.jpg'),
+      radial-gradient(120% 80% at 50% 100%, rgba(255,107,26,0.28) 0%, transparent 70%);
+    background-size: cover, cover, cover;
+    background-position: center, center bottom, center bottom;
   }
   .hero-content { margin-left: 0; }
   .hero-visual { height: 480px; margin-top: 20px; }
@@ -481,7 +486,7 @@ section { padding: 100px 40px; position: relative; }
   display: flex; align-items: center; gap: 18px;
   position: relative; z-index: 1;
 }
-.built-together-logos img { height: 56px; width: auto; display: block; }
+.built-together-logos img { height: 68px; width: auto; max-width: 330px; display: block; }
 .built-together-logos .bt-x {
   font-size: 26px; color: var(--ink); opacity: 0.3; font-style: italic;
 }
@@ -563,8 +568,8 @@ section { padding: 100px 40px; position: relative; }
   display: grid; gap: 16px;
   grid-template-columns: repeat(4, 1fr);
 }
-.why-group.group-comfort .why-group-grid,
-.why-group.group-worry .why-group-grid { grid-template-columns: repeat(3, 1fr); }
+.why-group.group-comfort .why-group-grid { grid-template-columns: repeat(4, 1fr); }
+.why-group.group-worry .why-group-grid   { grid-template-columns: repeat(5, 1fr); }
 .why-tile {
   background: linear-gradient(180deg, #FFFFFF 0%, #FFFBF5 100%);
   border: 1px solid rgba(14,14,16,0.06);
@@ -594,10 +599,27 @@ section { padding: 100px 40px; position: relative; }
   font-size: 12.5px; line-height: 1.5;
   color: var(--ink-soft); opacity: 0.8;
 }
+/* Small starred footnote watermark — sits under a tile's copy for conditions
+   that apply to that benefit only (deposit eligibility, selected units). */
+.why-tile .tile-note {
+  display: block; margin-top: 9px;
+  font-size: 10px; line-height: 1.4; font-style: italic;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft); opacity: 0.5;
+}
+.why-tile .tile-note .tn-star {
+  font-style: normal; font-weight: 700;
+  color: var(--group-accent); opacity: 0.85;
+  margin-right: 2px;
+}
 .section-cta-row {
   display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
   margin: 40px auto 0; padding: 0 20px;
   position: relative; z-index: 1;
+}
+@media (max-width: 1240px) {
+  .why-group.group-comfort .why-group-grid { grid-template-columns: repeat(3, 1fr); }
+  .why-group.group-worry .why-group-grid   { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 1024px) {
   .why-group-grid,
@@ -904,6 +926,24 @@ section { padding: 100px 40px; position: relative; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 .res-photo { position: relative; border-radius: 32px; overflow: hidden; aspect-ratio: 4/3; }
+/* Photo slots for the Nilai residences that have no file yet. initOptionalImages()
+   tags the container so the layout holds its shape and reads as intentional
+   instead of showing a broken image. */
+.photo-pending {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(255,107,26,0.20) 0%, rgba(14,14,16,0.55) 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0 12px, transparent 12px 24px);
+}
+.photo-pending::after {
+  content: 'Photo coming soon';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(250,247,242,0.6); text-align: center; padding: 0 12px;
+}
+.room-card .photo-pending::after,
+.common-card .photo-pending::after { font-size: 10px; letter-spacing: 0.12em; }
 .res-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s ease; }
 .res-panel.active .res-photo img { transform: scale(1.08); }
 .res-photo .photo-tag {
@@ -1013,7 +1053,7 @@ section { padding: 100px 40px; position: relative; }
   .res-videos .rv-grid { grid-template-columns: minmax(0, 320px); justify-content: center; max-width: none; }
 }
 
-/* "Getting to INCEIF University" route infographic — one per residence.
+/* "Getting to INTI International University" route infographic — one per residence.
    Wide, text-dense artwork, so it runs the full panel width and opens in the
    existing lightbox for detail. */
 .res-getting-there { grid-column: 1 / -1; margin-top: 8px; }
@@ -1525,10 +1565,8 @@ table.compare {
     text-transform: uppercase; letter-spacing: 0.06em;
     color: var(--orange-deep);
   }
-  table.compare tbody td:nth-child(2)::before { content: 'Rica Residence Sentul'; }
-  table.compare tbody td:nth-child(3)::before { content: 'The Birch'; }
-  /* Duta Park Residences column hidden — Unio shifts up to the 4th cell */
-  table.compare tbody td:nth-child(4)::before { content: 'Unio Residence @ Kepong'; }
+  table.compare tbody td:nth-child(2)::before { content: 'Youth City Residence'; }
+  table.compare tbody td:nth-child(3)::before { content: 'Akasia @ Bandar Belia'; }
   table.compare tbody td[colspan]::before { content: none; }
   table.compare tbody tr td:last-child { border-bottom: none; }
   .compare .num-cell { font-size: 20px; }
@@ -2127,7 +2165,7 @@ footer {
 <nav class="top">
   <div class="brand">
     <div class="brand-logos">
-      <img class="logo-vitrox" src="inceif-logo-black.png" alt="INCEIF University">
+      <img class="logo-vitrox" src="inti-logo-black.svg" alt="INTI International University">
       <span class="x">×</span>
       <img class="logo-belive" src="beLive_Logo_F_fit.png" alt="beLive">
     </div>
@@ -2140,7 +2178,7 @@ footer {
     <li><a href="#difference">BeLive Difference</a></li>
     <li><a href="#how-to-book">How to Book</a></li>
   </ul>
-  <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn">Book Now <span class="arrow">→</span></a>
+  <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn">Book Now <span class="arrow">→</span></a>
 </nav>
 
 <!-- HERO -->
@@ -2148,41 +2186,41 @@ footer {
   <div class="hero-content">
     <h1 class="hero-title">
       Exclusive <span class="underline">Co-Living</span> for<br>
-      <em>INCEIF University</em> Students
+      <em>INTI</em> Students in <em>Nilai</em>
     </h1>
     <p class="lede">
-      Modern fully furnished rooms designed for student comfort, convenience, and community living — powered by BeLive.
+      Minutes from <strong>INTI International University</strong>, Putra Nilai — modern fully furnished rooms designed for student comfort, convenience and community living, powered by BeLive.
     </p>
     <div class="hero-ctas">
-      <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn orange">Book a Room Now <span class="arrow">→</span></a>
+      <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn orange">Book a Room Now <span class="arrow">→</span></a>
       <a href="#residences" class="cta-btn outline">Explore Room Types</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="num">4,500+</div><div class="label">Spaces Managed</div></div>
       <div class="stat"><div class="num">2</div><div class="label">Premium Residences</div></div>
-      <div class="stat"><div class="num">RM560</div><div class="label">From / month</div></div>
+      <div class="stat"><div class="num">RM650</div><div class="label">From / month</div></div>
     </div>
   </div>
   <div class="hero-visual" hidden></div>
 </section>
 
-<!-- BUILT TOGETHER WITH INCEIF UNIVERSITY -->
+<!-- BUILT TOGETHER WITH INTI INTERNATIONAL UNIVERSITY -->
 <section class="built-together" id="built-together">
   <div class="built-together-card">
     <div class="built-together-top">
       <div class="built-together-logos">
-        <img src="inceif-logo-black.png" alt="INCEIF University">
+        <img src="inti-logo-full-black.svg" alt="INTI International University">
         <span class="bt-x">×</span>
         <img src="beLive_Logo_F_fit.png" alt="beLive">
       </div>
       <div class="built-together-text">
         <div class="kicker">Partnership</div>
-        <h2>Built Together with <em>INCEIF University.</em></h2>
-        <p>An exclusive co-living programme co-designed by BeLive and INCEIF University — built around how students actually live, study and unwind in Batu Kawan.</p>
+        <h2>Built Together with <em>INTI International University.</em></h2>
+        <p>An exclusive co-living programme co-designed by BeLive and INTI International University — built around how students actually live, study and unwind in Nilai.</p>
       </div>
     </div>
     <div class="built-together-photos">
-      <figure style="grid-column:1/-1;"><img src="BeLivexInceif_photo.jpeg" alt="BeLive × INCEIF University"></figure>
+      <figure style="grid-column:1/-1;"><img src="BeLivexINTI_photo.jpg" data-optional="remove" data-optional-block=".built-together-photos" alt="BeLive × INTI International University"></figure>
     </div>
   </div>
 </section>
@@ -2191,7 +2229,7 @@ footer {
 <section class="why-belive" id="why-belive">
   <div class="section-head">
     <div class="kicker">Why Choose BeLive</div>
-    <h2>Why INCEIF Students <em>Choose BeLive.</em></h2>
+    <h2>Why INTI Students <em>Choose BeLive.</em></h2>
     <p>Built for student life — smart, comfortable and worry-free, all in one address.</p>
   </div>
   <div class="why-groups">
@@ -2202,9 +2240,14 @@ footer {
       </div>
       <div class="why-group-grid">
         <div class="why-tile">
+          <div class="tile-icon">🚪</div>
+          <h4>Main Door Smart Lock</h4>
+          <p>IoT lock on the unit's front door — PIN or app entry, and it locks itself behind you.</p>
+        </div>
+        <div class="why-tile">
           <div class="tile-icon">🔐</div>
-          <h4>Smart Lock</h4>
-          <p>IoT lock on the unit and bedroom — no keys to lose.</p>
+          <h4>Room Smart Lock</h4>
+          <p>A second smart lock on your own bedroom, so your space stays private — no keys to lose.</p>
         </div>
         <div class="why-tile">
           <div class="tile-icon">🚨</div>
@@ -2216,11 +2259,6 @@ footer {
           <h4>Electricity Tracking by Meter</h4>
           <p>Monitor your own electricity usage and top up easily from the app.</p>
         </div>
-        <div class="why-tile">
-          <div class="tile-icon">🌐</div>
-          <h4>Free WiFi</h4>
-          <p>High-speed internet included in every unit.</p>
-        </div>
       </div>
     </div>
     <div class="why-group group-comfort">
@@ -2230,19 +2268,40 @@ footer {
       </div>
       <div class="why-group-grid">
         <div class="why-tile">
+          <div class="tile-icon">🛋️</div>
+          <h4>High-End Interior, Fully Furnished</h4>
+          <p>Designer-styled interiors fitted end to end — premium bedframe, mattress, wardrobe, study desk and aircond, all in place on day one.</p>
+        </div>
+        <div class="why-tile">
           <div class="tile-icon">🧊</div>
           <h4>Personal Fridge</h4>
           <p>Your own fridge in the room — snacks and drinks always close by.</p>
+          <span class="tile-note"><span class="tn-star">*</span>For selected units only</span>
         </div>
         <div class="why-tile">
-          <div class="tile-icon">🛋️</div>
-          <h4>Fully Furnished</h4>
-          <p>Move in with your suitcase — bed, wardrobe, desk done.</p>
+          <div class="tile-icon">🍳</div>
+          <h4>Free Cooking</h4>
+          <p>Cook whenever you like in the shared kitchen — hob, hood and cookware included, at no extra charge.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🧺</div>
+          <h4>Laundry</h4>
+          <p>Washing machine in the yard — laundry day handled at home, no coin-op runs.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">💧</div>
+          <h4>Water Dispenser Filter</h4>
+          <p>Filtered hot and cold water on tap in the shared kitchen.</p>
         </div>
         <div class="why-tile">
           <div class="tile-icon">🧹</div>
           <h4>2× Weekly Cleaning</h4>
           <p>Common areas cleaned twice a week, every week.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🔧</div>
+          <h4>Service &amp; Maintenance</h4>
+          <p>Report it in the app and our in-house team fixes it — no chasing landlords.</p>
         </div>
       </div>
     </div>
@@ -2256,16 +2315,27 @@ footer {
           <div class="tile-icon">💸</div>
           <h4>Zero Deposit</h4>
           <p>Move in easier with a much lower upfront cost.</p>
+          <span class="tile-note"><span class="tn-star">*</span>Zero deposit for Malaysians only</span>
         </div>
         <div class="why-tile">
-          <div class="tile-icon">🛠️</div>
+          <div class="tile-icon">🌐</div>
+          <h4>High-Speed WiFi</h4>
+          <p>Fibre WiFi in every unit, included in your rent and live from the day you move in.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🚰</div>
+          <h4>Fresh Water</h4>
+          <p>Stay refreshed with Coway-filtered drinking water included in your stay.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🤝</div>
           <h4>24/7 Support</h4>
           <p>BeLive community managers, day and night.</p>
         </div>
         <div class="why-tile">
           <div class="tile-icon">🚆</div>
-          <h4>Public Transport (KTM, MRT, LRT)</h4>
-          <p>Rail connections between residence and campus, with the route mapped for each address.</p>
+          <h4>Public Transport (KTM &amp; Bus)</h4>
+          <p>KTM Nilai and the town bus terminal are close by, with the campus route mapped for each address.</p>
         </div>
       </div>
     </div>
@@ -2280,22 +2350,22 @@ footer {
   <div class="map-wrap">
     <div class="map-header">
       <span class="market-badge">Market Insights</span>
-      <h2 class="catchment-title">Catchment Map · <em>Kuala Lumpur</em></h2>
-      <p class="catchment-sub">Everything around INCEIF University — at a glance.</p>
+      <h2 class="catchment-title">Catchment Map · <em>Nilai</em></h2>
+      <p class="catchment-sub">Everything around INTI International University — at a glance.</p>
     </div>
 
     <div class="map-layout">
       <div class="map-canvas">
-        <div id="vitrox-map" role="application" aria-label="Map of INCEIF University and surrounding residences and amenities"></div>
+        <div id="vitrox-map" role="application" aria-label="Map of INTI International University and surrounding residences and amenities"></div>
         <div class="map-overlay map-overlay-top">
           <span class="map-stat-chip"><span class="chip-dot"></span><strong>5 km</strong> &amp; <strong>10 km</strong> catchment</span>
-          <span class="map-stat-chip"><span class="chip-dot"></span><strong>Central</strong> Kuala Lumpur</span>
-          <span class="map-stat-chip"><span class="chip-dot"></span><strong>5 min</strong> to Hospital Kuala Lumpur</span>
+          <span class="map-stat-chip"><span class="chip-dot"></span><strong>Putra Nilai</strong> · Negeri Sembilan</span>
+          <span class="map-stat-chip"><span class="chip-dot"></span><strong>Under 10 min</strong> to campus</span>
         </div>
         <div class="map-overlay map-overlay-bottom">
           <div class="map-legend-card">
             <h4>Map Legend</h4>
-            <div class="map-legend-row"><span class="lg-star">★</span> INCEIF University</div>
+            <div class="map-legend-row"><span class="lg-star">★</span> INTI International University</div>
             <div class="map-legend-row"><span class="lg-dot" style="background:#FF6B1A"></span> Active category pin</div>
             <div class="map-legend-row"><span class="lg-ring"></span> 5 km inner catchment</div>
             <div class="map-legend-row"><span class="lg-ring lg-ring-outer"></span> 10 km outer catchment</div>
@@ -2316,7 +2386,7 @@ footer {
 
     <p class="map-footnote">
       Click a category card to filter the map — by default only nearby residences are shown.
-      Tick <strong>Show all</strong> to see every catchment pin at once. The ★ pin marks INCEIF University.
+      Tick <strong>Show all</strong> to see every catchment pin at once. The ★ pin marks INTI International University.
     </p>
   </div>
 </section>
@@ -2324,158 +2394,71 @@ footer {
 <!-- RESIDENCES -->
 <section class="residences" id="residences">
   <div class="section-head">
-    <div class="kicker">Three Iconic Residences</div>
+    <div class="kicker">Two Iconic Residences</div>
     <h2 style="color:var(--paper);">Pick the address that <em>feels</em><br>like you.</h2>
-    <p>Each residence has its own personality — from family-friendly mid-rises to resort-style towers.</p>
+    <p>Both addresses sit inside the Putra Nilai student belt — minutes from INTI International University, each with its own personality.</p>
   </div>
 
   <div class="res-tabs">
-    <button class="res-tab active" data-tab="rica">Rica Residence Sentul</button>
-    <button class="res-tab" data-tab="birch">The Birch</button>
-    <!-- Duta Park Residences hidden
-    <button class="res-tab" data-tab="duta">Duta Park Residences</button>
-    -->
-    <button class="res-tab" data-tab="unio">Unio Residence @ Kepong</button>
+    <button class="res-tab active" data-tab="youthcity">Youth City Residence</button>
+    <button class="res-tab" data-tab="akasia">Akasia</button>
   </div>
 
-  <!-- RICA RESIDENCE SENTUL -->
-  <div class="res-panel active" data-panel="rica">
+  <!-- YOUTH CITY RESIDENCE @ PUTRA NILAI -->
+  <div class="res-panel active" data-panel="youthcity">
     <div class="res-photo">
-      <img src="rica_condo1.jpg" alt="Rica Residence Sentul">
-      <span class="photo-tag">Rica Residence · Sentul</span>
+      <img src="YouthCity_condo.jpg" data-optional="pending" alt="Youth City Residence, Putra Nilai">
+      <span class="photo-tag">Youth City · Putra Nilai</span>
     </div>
     <div class="res-info">
-      <div class="res-name">Rica Residence <em>Sentul</em></div>
-      <div class="res-vibe">~ Sentul · connected city living ~</div>
-      <div class="res-desc">A serviced residence in Sentul's revitalised quarter — about 2 km from INCEIF University and a short hop from the KL city core, with quick links to KTM/LRT and the northern expressways.</div>
+      <div class="res-name">Youth City <em>Residence</em></div>
+      <div class="res-vibe">~ Putra Nilai · student-city energy ~</div>
+      <div class="res-desc">A four-tower service residence inside the Vision City masterplan in Putra Nilai — roughly 3.5 km from INTI International University, with shops, cafés and daily essentials at street level, and KTM Nilai plus the town bus terminal a short ride away.</div>
       <div class="res-facilities">
-        <span>Sauna</span><span>Gym</span><span>BBQ Area</span>
+        <span>Swimming Pool</span><span>Gymnasium</span><span>Landscaped Garden</span><span>Playground</span><span>24-Hour Security</span>
       </div>
       <div class="res-facility-photos">
-        <figure><img src="rica_sauna.jpg" alt="Rica Residence facility — sauna"><figcaption>Sauna</figcaption></figure>
-        <figure><img src="rica_gym.png" alt="Rica Residence facility — gym"><figcaption>Gym</figcaption></figure>
-        <figure><img src="rica_bbq.jpg" alt="Rica Residence facility — BBQ area"><figcaption>BBQ Area</figcaption></figure>
+        <figure><img src="YC_pool.jpg" data-optional="pending" alt="Youth City Residence facility — swimming pool"><figcaption>Swimming Pool</figcaption></figure>
+        <figure><img src="YC_gym.jpg" data-optional="pending" alt="Youth City Residence facility — gymnasium"><figcaption>Gymnasium</figcaption></figure>
+        <figure><img src="YC_garden.jpg" data-optional="pending" alt="Youth City Residence facility — landscaped garden"><figcaption>Landscaped Garden</figcaption></figure>
       </div>
     </div>
     <div class="res-getting-there">
-      <div class="gt-head">Getting to INCEIF University</div>
+      <div class="gt-head">Getting to INTI International University</div>
       <figure>
-        <img src="BeLive_Rica_Inceif.jpg" loading="lazy" decoding="async"
-             alt="Route guide from Rica Residence Sentul to INCEIF University">
+        <img src="BeLive_YouthCity_INTI.jpg" loading="lazy" decoding="async"
+             data-optional="remove" data-optional-block=".res-getting-there"
+             alt="Route guide from Youth City Residence to INTI International University">
         <figcaption>Tap to enlarge</figcaption>
       </figure>
     </div>
   </div>
 
-  <!-- THE BIRCH, JALAN IPOH -->
-  <div class="res-panel" data-panel="birch">
+  <!-- AKASIA @ BANDAR BELIA, PUTRA NILAI -->
+  <div class="res-panel" data-panel="akasia">
     <div class="res-photo">
-      <img src="TB_condo.png" alt="The Birch, Jalan Ipoh">
-      <span class="photo-tag">The Birch · Jalan Ipoh</span>
+      <img src="Akasia_condo.jpg" data-optional="pending" alt="Akasia @ Bandar Belia, Putra Nilai">
+      <span class="photo-tag">Akasia · Putra Nilai</span>
     </div>
     <div class="res-info">
-      <div class="res-name">The <em>Birch</em></div>
-      <div class="res-vibe">~ Jalan Ipoh · vibrant &amp; central ~</div>
-      <div class="res-desc">A freehold residential tower on Jalan Ipoh, roughly 2 km from campus and minutes from the KL city centre — surrounded by markets, eateries and transit on the city's northern fringe.</div>
+      <div class="res-name">Akasia <em>@ Bandar Belia</em></div>
+      <div class="res-vibe">~ Putra Nilai · quiet &amp; self-contained ~</div>
+      <div class="res-desc">Menara Akasia at Bandar Belia, off Jalan Bandar Belia 1/1 in Putra Nilai — about 3.7 km from campus, with a pool, gym and jogging track on site, a mini mart downstairs and 24-hour security at the gate.</div>
       <div class="res-facilities">
-        <span>Swimming Pool</span><span>Gym</span><span>BBQ Area</span>
+        <span>Swimming Pool</span><span>Gymnasium</span><span>Jogging Track</span><span>BBQ Area</span><span>Mini Mart</span><span>24-Hour Security</span>
       </div>
       <div class="res-facility-photos">
-        <figure><img src="TB-Swimming-Pool.jpeg" alt="The Birch facility — swimming pool"><figcaption>Swimming Pool</figcaption></figure>
-        <figure><img src="TB-Gymnasium.jpeg" alt="The Birch facility — gymnasium"><figcaption>Gym</figcaption></figure>
-        <figure><img src="TB-BBQ-Area.jpeg" alt="The Birch facility — BBQ area"><figcaption>BBQ Area</figcaption></figure>
+        <figure><img src="AK_pool.jpg" data-optional="pending" alt="Akasia facility — swimming pool"><figcaption>Swimming Pool</figcaption></figure>
+        <figure><img src="AK_gym.jpg" data-optional="pending" alt="Akasia facility — gymnasium"><figcaption>Gymnasium</figcaption></figure>
+        <figure><img src="AK_jogging.jpg" data-optional="pending" alt="Akasia facility — jogging track"><figcaption>Jogging Track</figcaption></figure>
       </div>
     </div>
     <div class="res-getting-there">
-      <div class="gt-head">Getting to INCEIF University</div>
+      <div class="gt-head">Getting to INTI International University</div>
       <figure>
-        <img src="BeLive_The_Birch_Inceif.jpg" loading="lazy" decoding="async"
-             alt="Route guide from The Birch, Jalan Ipoh to INCEIF University">
-        <figcaption>Tap to enlarge</figcaption>
-      </figure>
-    </div>
-  </div>
-
-  <!-- DUTA PARK RESIDENCES — hidden -->
-  <!--
-  <div class="res-panel" data-panel="duta">
-    <div class="res-photo">
-      <img src="duta_park_condo.jpg" alt="Duta Park Residences">
-      <span class="photo-tag">Duta Park · Sentul</span>
-    </div>
-    <div class="res-info">
-      <div class="res-name">Duta Park <em>Residences</em></div>
-      <div class="res-vibe">~ Sentul · close-to-campus convenience ~</div>
-      <div class="res-desc">High-rise living off Jalan Sentul / Jalan Kuching — the closest of the four to INCEIF University at about 1.3 km, with the city centre, parks and transit all within easy reach.</div>
-      <div class="res-facilities">
-        <span>Swimming Pool</span><span>Reading Lounge</span><span>Gym</span>
-      </div>
-      <div class="res-facility-photos">
-        <figure><img src="Duta_park_pool.jpg" alt="Duta Park facility — swimming pool"><figcaption>Swimming Pool</figcaption></figure>
-        <figure><img src="Duta_Park_Reading-Lounge.jpg" alt="Duta Park facility — reading lounge"><figcaption>Reading Lounge</figcaption></figure>
-        <figure><img src="Duta_Park_Gym.jpg" alt="Duta Park facility — gym"><figcaption>Gym</figcaption></figure>
-      </div>
-    </div>
-  </div>
-  -->
-
-  <!-- UNIO RESIDENCE @ KEPONG -->
-  <div class="res-panel" data-panel="unio">
-    <div class="res-photo">
-      <img src="UNIO_condo.jpg" alt="Unio Residence @ Kepong">
-      <span class="photo-tag">Unio Residence · Kepong</span>
-    </div>
-    <div class="res-info">
-      <div class="res-name">Unio Residence <em>@ Kepong</em></div>
-      <div class="res-vibe">~ Kepong · modern &amp; spacious ~</div>
-      <div class="res-desc">A modern condominium in Kepong, around 7 km from campus, offering generous facilities and leafy surrounds with shopping, dining and the Kepong Metropolitan Park close by.</div>
-      <div class="res-facilities">
-        <span>Games Room</span><span>Hot Dip Pool</span><span>Floating Gym</span>
-      </div>
-      <div class="res-facility-photos">
-        <figure><img src="UNIO_games_room.png" alt="Unio Residence facility — games room"><figcaption>Games Room</figcaption></figure>
-        <figure><img src="UNIO_Hot_Dip_Pool.png" alt="Unio Residence facility — hot dip pool"><figcaption>Hot Dip Pool</figcaption></figure>
-        <figure><img src="UNIO_Floating_Gym.png" alt="Unio Residence facility — floating gym"><figcaption>Floating Gym</figcaption></figure>
-      </div>
-    </div>
-    <div class="res-videos">
-      <div class="rv-head">Video Tour</div>
-      <div class="rv-grid">
-        <figure>
-          <video controls preload="metadata" playsinline>
-            <source src="Unio%20Residence,%20Kepong_compressed.mp4#t=0.5" type="video/mp4">
-            Your browser does not support embedded video.
-          </video>
-          <figcaption>Residence Tour</figcaption>
-        </figure>
-        <figure>
-          <video controls preload="metadata" playsinline>
-            <source src="Unio_Residence_Facilities_compressed.mp4#t=0.5" type="video/mp4">
-            Your browser does not support embedded video.
-          </video>
-          <figcaption>Facilities</figcaption>
-        </figure>
-        <figure>
-          <video controls preload="metadata" playsinline>
-            <source src="Unio_Pool_compressed.mp4#t=0.5" type="video/mp4">
-            Your browser does not support embedded video.
-          </video>
-          <figcaption>Pool</figcaption>
-        </figure>
-        <figure>
-          <video controls preload="metadata" playsinline>
-            <source src="Unio_Residence_MRT_compressed.mp4#t=0.5" type="video/mp4">
-            Your browser does not support embedded video.
-          </video>
-          <figcaption>MRT Connectivity</figcaption>
-        </figure>
-      </div>
-    </div>
-    <div class="res-getting-there">
-      <div class="gt-head">Getting to INCEIF University</div>
-      <figure>
-        <img src="BeLive_Unio_Inceif.jpg" loading="lazy" decoding="async"
-             alt="Route guide from Unio Residence @ Kepong to INCEIF University">
+        <img src="BeLive_Akasia_INTI.jpg" loading="lazy" decoding="async"
+             data-optional="remove" data-optional-block=".res-getting-there"
+             alt="Route guide from Akasia @ Bandar Belia to INTI International University">
         <figcaption>Tap to enlarge</figcaption>
       </figure>
     </div>
@@ -2681,33 +2664,27 @@ footer {
   <div class="section-head">
     <div class="kicker">Side by Side</div>
     <h2>Compare your <em>options.</em></h2>
-    <p>A quick look at how the three residences stack up.</p>
+    <p>A quick look at how the two residences stack up.</p>
   </div>
   <div class="compare-table-wrap">
     <table class="compare">
       <thead>
         <tr>
           <th>Detail</th>
-          <th>Rica Residence Sentul <span class="tag">Sentul</span></th>
-          <th>The Birch <span class="tag">Jalan Ipoh</span></th>
-          <!-- <th>Duta Park Residences <span class="tag">Sentul</span></th> -->
-          <th>Unio Residence @ Kepong <span class="tag">Kepong</span></th>
+          <th>Youth City Residence <span class="tag">Putra Nilai</span></th>
+          <th>Akasia @ Bandar Belia <span class="tag">Putra Nilai</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Community Atmosphere</td>
-          <td>Connected city living in Sentul.</td>
-          <td>Vibrant &amp; central, on Jalan Ipoh.</td>
-          <!-- <td>Close-to-campus convenience in Sentul.</td> -->
-          <td>Modern &amp; spacious in Kepong.</td>
+          <td>Student-city energy inside Vision City.</td>
+          <td>Quiet &amp; self-contained at Bandar Belia.</td>
         </tr>
         <tr>
-          <td>Distance from INCEIF University</td>
-          <td><span class="num-cell">5.5 km</span><br><span class="td-sub">~13-min drive</span></td>
-          <td><span class="num-cell">3.7 km</span><br><span class="td-sub">~16-min drive</span></td>
-          <!-- <td><span class="num-cell">4.8 km</span><br><span class="td-sub">~11-min drive</span></td> -->
-          <td><span class="num-cell">8.6 km</span><br><span class="td-sub">~20-min drive</span></td>
+          <td>Distance from INTI International University</td>
+          <td><span class="num-cell">3.5 km</span><br><span class="td-sub">~8-min drive</span></td>
+          <td><span class="num-cell">3.7 km</span><br><span class="td-sub">~9-min drive</span></td>
         </tr>
         <tr>
           <td>Room Pricing <span class="td-sub">per month, from</span></td>
@@ -2715,36 +2692,23 @@ footer {
             <li>Master — RM1,100</li>
             <li>Queen Balcony — RM850</li>
             <li>Queen — RM800</li>
-            <li>Single — RM650–700</li>
+            <li>Single — RM700</li>
           </ul></td>
           <td><ul>
             <li>Master — RM1,100</li>
-            <li>Queen Balcony — RM850</li>
             <li>Queen — RM800</li>
-            <li>Single — RM700</li>
-          </ul></td>
-          <!-- <td><ul>
-            <li>Master — RM1,100</li>
-            <li>Queen — RM800</li>
-            <li>Single — RM700</li>
-          </ul></td> -->
-          <td><ul>
-            <li>Master — RM1,100</li>
-            <li>Queen Balcony — RM850</li>
             <li>Single — RM700</li>
             <li>Mini Single — RM650</li>
           </ul></td>
         </tr>
         <tr>
           <td>Key Facilities</td>
-          <td><ul><li>Sauna</li><li>Gym</li><li>BBQ Area</li></ul></td>
-          <td><ul><li>Swimming Pool</li><li>Gym</li><li>BBQ Area</li></ul></td>
-          <!-- <td><ul><li>Swimming Pool</li><li>Reading Lounge</li><li>Gym</li></ul></td> -->
-          <td><ul><li>Games Room</li><li>Hot Dip Pool</li><li>Floating Gym</li></ul></td>
+          <td><ul><li>Swimming Pool</li><li>Gymnasium</li><li>Landscaped Garden</li><li>Playground</li></ul></td>
+          <td><ul><li>Swimming Pool</li><li>Gymnasium</li><li>Jogging Track</li><li>BBQ Area &amp; Mini Mart</li></ul></td>
         </tr>
         <tr>
           <td>Accessibility</td>
-          <td colspan="3">All three are well-connected within Kuala Lumpur — close to KTM/LRT/MRT stations, major roads (Jalan Kuching, DUKE, MRR2) and the city centre.</td>
+          <td colspan="2">Both sit in Putra Nilai, under 10 minutes from campus — close to Mesamall Nilai, KTM Nilai and the Nilai bus terminal, with the North–South Expressway (Nilai interchange) and KLIA within easy reach.</td>
         </tr>
       </tbody>
     </table>
@@ -2784,7 +2748,7 @@ footer {
     </div>
   </div>
   <div class="section-cta-row">
-    <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn orange">Enquire Now <span class="arrow">→</span></a>
+    <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn orange">Enquire Now <span class="arrow">→</span></a>
   </div>
 </section>
 
@@ -2809,10 +2773,8 @@ footer {
       <label class="calc-field">
         <span>Residence</span>
         <select id="calc-condo">
-          <option value="rica">Rica Residence Sentul</option>
-          <option value="birch">The Birch</option>
-          <!-- <option value="duta">Duta Park Residences</option> -->
-          <option value="unio">Unio Residence @ Kepong</option>
+          <option value="youthcity">Youth City Residence</option>
+          <option value="akasia">Akasia @ Bandar Belia</option>
         </select>
       </label>
       <label class="calc-field">
@@ -2835,7 +2797,7 @@ footer {
     </p>
   </div>
   <div class="section-cta-row">
-    <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn orange">Check Availability <span class="arrow">→</span></a>
+    <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn orange">Check Availability <span class="arrow">→</span></a>
   </div>
 </section>
 
@@ -2845,7 +2807,7 @@ footer {
     <h2>Rent Safe, <em>Stay Happy.</em></h2>
     <p>Smart student co-living designed for comfort, convenience, and peace of mind.</p>
     <div class="final-cta-buttons">
-      <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="fcta-btn primary">Book a Room Now <span class="arrow">→</span></a>
+      <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="fcta-btn primary">Book a Room Now <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -2853,7 +2815,7 @@ footer {
 <footer>
   <div class="foot">
     <div class="brand">
-      <img class="logo-vitrox" src="inceif-logo-white.png" alt="INCEIF University">
+      <img class="logo-vitrox" src="inti-logo-white.svg" alt="INTI International University">
       <span class="x">×</span>
       <img class="logo-belive" src="beLive_Logo_F_fit_w.png" alt="beLive">
     </div>
@@ -2862,9 +2824,9 @@ footer {
 </footer>
 
 <!-- Floating Book Now CTA -->
-<a class="booking-float" href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener">
+<a class="booking-float" href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener">
   <img src="Booking_Button.png" width="1024" height="1536"
-       alt="Book now — enquire about a BeLive room at INCEIF University">
+       alt="Book now — enquire about a BeLive room at INTI International University">
 </a>
 
 <!-- Lightbox for enlarging condo images -->
@@ -2879,62 +2841,37 @@ const tabs = document.querySelectorAll('.res-tab');
 const panels = document.querySelectorAll('.res-panel');
 const roomsStrip = document.getElementById('rooms-strip');
 
-// Room images currently reuse each condo's building photo as a placeholder —
-// swap in per-room bedroom photos when available. Prices per BeLive (RM/month).
+// Room, facility and common-area photos for the two Nilai residences are not in
+// the repo yet — the filenames below are the drop-in slots. Any that is missing
+// renders as a "photo coming soon" panel instead of a broken image.
+// Prices per BeLive (RM/month).
 const roomData = {
-  rica: {
-    label: 'Rica Residence Sentul',
+  youthcity: {
+    label: 'Youth City Residence',
     rooms: [
-      { name: 'Master Room',          rent: 1100, disp: 'RM1,100',     img: 'Rica_QP.jpg' },
-      { name: 'Queen Balcony Bedroom', rent: 850, disp: 'RM850',       img: 'Rica_QCB.jpg' },
-      { name: 'Queen Bedroom',         rent: 800, disp: 'RM800',       img: 'Rica_QC.jpg' },
-      { name: 'Single Bedroom',        rent: 650, disp: 'RM650 – 700', img: 'Rica_SC.jpg' },
+      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'YC_master.jpg' },
+      { name: 'Queen Balcony Bedroom',  rent: 850, disp: 'RM850',   img: 'YC_queen_balcony.jpg' },
+      { name: 'Queen Bedroom',          rent: 800, disp: 'RM800',   img: 'YC_queen.jpg' },
+      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'YC_single.jpg' },
     ],
     common: [
-      { img: 'Rica_Kitchen_Dining.jpeg', label: 'Kitchen & Dining', alt: 'Rica Residence shared kitchen & dining' },
-      { img: 'Rica_Yard.jpeg',           label: 'Yard',             alt: 'Rica Residence yard' },
+      { img: 'YC_kitchen.jpg',     label: 'Shared Kitchen', alt: 'Youth City Residence shared kitchen' },
+      { img: 'YC_dining.jpg',      label: 'Dining Area',    alt: 'Youth City Residence dining area' },
+      { img: 'YC_yard.jpg',        label: 'Laundry Yard',   alt: 'Youth City Residence laundry yard' },
     ],
   },
-  birch: {
-    label: 'The Birch',
+  akasia: {
+    label: 'Akasia @ Bandar Belia',
     rooms: [
-      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'TB_QP.jpg' },
-      { name: 'Queen Balcony Bedroom',  rent: 850, disp: 'RM850',   img: 'TB_QCB.jpg' },
-      { name: 'Queen Bedroom',          rent: 800, disp: 'RM800',   img: 'TB_QC.jpg' },
-      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'TB_SC.jpg' },
+      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'AK_master.jpg' },
+      { name: 'Queen Bedroom',          rent: 800, disp: 'RM800',   img: 'AK_queen.jpg' },
+      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'AK_single.jpg' },
+      { name: 'Mini Single Bedroom',    rent: 650, disp: 'RM650',   img: 'AK_mini_single.jpg' },
     ],
     common: [
-      { img: 'TB_Kitchen.jpeg', label: 'Shared Kitchen', alt: 'The Birch shared kitchen' },
-      { img: 'TB_Dining.jpg',   label: 'Dining Area',    alt: 'The Birch dining area' },
-      { img: 'TB_Yard.jpeg',    label: 'Yard',           alt: 'The Birch yard' },
-    ],
-  },
-  // Duta Park Residences hidden
-  // duta: {
-  //   label: 'Duta Park Residences',
-  //   rooms: [
-  //     { name: 'Master Room',   rent: 1100, disp: 'RM1,100', img: 'DP_QP.jpg' },
-  //     { name: 'Queen Bedroom',  rent: 800, disp: 'RM800',   img: 'DP_QC.jpg' },
-  //     { name: 'Single Bedroom', rent: 700, disp: 'RM700',   img: 'DP_SC.JPG' },
-  //   ],
-  //   common: [
-  //     { img: 'DP_Entrance.jpg', label: 'Entrance',                 alt: 'Duta Park unit entrance' },
-  //     { img: 'DP_Dining.jpg',   label: 'Dining Area',              alt: 'Duta Park dining area' },
-  //     { img: 'DP_Kitchen.jpg',  label: 'Shared Kitchen & Laundry', alt: 'Duta Park shared kitchen and laundry' },
-  //   ],
-  // },
-  unio: {
-    label: 'Unio Residence @ Kepong',
-    rooms: [
-      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'UNIO_QP.jpg' },
-      { name: 'Queen Balcony Bedroom',  rent: 850, disp: 'RM850',   img: 'UNIO_QCB.jpg' },
-      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'UNIO_SC.jpg' },
-      { name: 'Mini Single Bedroom',    rent: 650, disp: 'RM650',   img: 'UNIO_MSC.jpg' },
-    ],
-    common: [
-      { img: 'Unio_Common_Area.JPG', label: 'Common Area', alt: 'Unio Residence common area' },
-      { img: 'Unio_Kitchen.JPG',     label: 'Kitchen',     alt: 'Unio Residence kitchen' },
-      { img: 'Unio_Yard.JPG',        label: 'Yard',        alt: 'Unio Residence yard' },
+      { img: 'AK_kitchen.jpg', label: 'Shared Kitchen', alt: 'Akasia shared kitchen' },
+      { img: 'AK_living.jpg',  label: 'Common Area',    alt: 'Akasia common living area' },
+      { img: 'AK_yard.jpg',    label: 'Laundry Yard',   alt: 'Akasia laundry yard' },
     ],
   },
 };
@@ -2943,7 +2880,7 @@ function renderRooms(key) {
   const d = roomData[key];
   const cardsHtml = d.rooms.map(r => `
     <div class="room-card">
-      <div class="room-img"><img src="${r.img}" alt="${r.name}"></div>
+      <div class="room-img"><img src="${r.img}" data-optional="pending" alt="${r.name}"></div>
       <div class="room-body">
         <div class="rt">${r.name}</div>
         ${r.size ? `<div class="rsize">${r.size}</div>` : ''}
@@ -2952,7 +2889,7 @@ function renderRooms(key) {
           <span class="now">${r.disp}</span>
           <span class="per">/ month</span>
         </div>
-        <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="room-cta">Book This Room <span class="arrow">→</span></a>
+        <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="room-cta">Book This Room <span class="arrow">→</span></a>
       </div>
     </div>
   `).join('');
@@ -2970,7 +2907,8 @@ function renderRooms(key) {
       <span>🌀 Fan</span>
       <span>💡 Light</span>
       <span>⚡ Smart Meter</span>
-      <span>🔐 Smart Room Door Lock</span>
+      <span>🚪 Main Door Smart Lock</span>
+      <span>🔐 Room Smart Lock</span>
     </div>
     <div class="rooms-carousel">
       <button class="carousel-arrow prev" aria-label="Previous rooms">‹</button>
@@ -2987,7 +2925,7 @@ function renderCommon(key) {
   const common = (roomData[key] && roomData[key].common) || [];
   commonGrid.innerHTML = common.map(c => `
     <div class="common-card">
-      <div class="common-img"><img src="${c.img}" alt="${c.alt}"></div>
+      <div class="common-img"><img src="${c.img}" data-optional="pending" alt="${c.alt}"></div>
       <div class="common-label">${c.label}</div>
     </div>
   `).join('');
@@ -3050,8 +2988,8 @@ document.addEventListener('click', e => {
 });
 
 // Initial render
-renderRooms('rica');
-renderCommon('rica');
+renderRooms('youthcity');
+renderCommon('youthcity');
 
 // --- Lightbox: click any condo image (building, facility, room, shared space) to enlarge ---
 (function initLightbox() {
@@ -3081,6 +3019,34 @@ renderCommon('rica');
   });
   lightbox.addEventListener('click', close);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
+// --- Optional images: photos that have not been supplied yet ---
+// Youth City / Akasia photography is not in the repo yet. Every slot carries
+// data-optional so a 404 degrades gracefully:
+//   data-optional="pending" → container gets .photo-pending ("photo coming soon")
+//   data-optional="remove"  → the block named by data-optional-block is dropped
+// Delegated on capture because the error event on <img> does not bubble, and
+// images injected later by renderRooms()/renderCommon() need it too.
+(function initOptionalImages() {
+  const handle = img => {
+    if (!(img instanceof HTMLImageElement) || !img.hasAttribute('data-optional')) return;
+    if (img.getAttribute('data-optional') === 'remove') {
+      const sel = img.getAttribute('data-optional-block');
+      const block = sel ? img.closest(sel) : img.closest('figure');
+      if (block) block.remove();
+      return;
+    }
+    const host = img.closest('.res-photo, .res-facility-photos figure, .built-together-photos figure, .room-img, .common-img');
+    img.remove();
+    if (host) host.classList.add('photo-pending');
+  };
+  document.addEventListener('error', e => handle(e.target), true);
+  // Markup images can 404 while the document is still parsing, i.e. before the
+  // listener above exists — catch those by their finished-but-empty state.
+  document.querySelectorAll('img[data-optional]').forEach(img => {
+    if (img.complete && img.naturalWidth === 0) handle(img);
+  });
 })();
 
 // --- Residence videos: drop any tile whose file is missing ---
@@ -3116,16 +3082,14 @@ renderCommon('rica');
   };
 
   const condoLabels = {
-    rica: 'Rica Residence Sentul',
-    birch: 'The Birch',
-    // duta: 'Duta Park Residences',   // hidden
-    unio: 'Unio Residence @ Kepong',
+    youthcity: 'Youth City Residence',
+    akasia: 'Akasia @ Bandar Belia',
   };
   const FEES = {
     adminMoveIn: 529,      // one-time admin & move-in fee (SST-inclusive)
     carPark: 100,
     accessCard: 150,
-    inceifProcessing: 150, // INCEIF processing fee — charged to every tenant type
+    intiProcessing: 150, // INTI processing fee — charged to every tenant type
     rentalAddOn: 200,      // added to room price for all tenants
     localDiscount: 120,    // deducted for local students & local staff
     depositMultiple: 2,    // security deposit = room rental x 2 (multiple not shown to users)
@@ -3151,13 +3115,13 @@ renderCommon('rica');
     // Deposit follows the room rental; waived for local students & local staff.
     const depositBeforeWaiver = rent * FEES.depositMultiple;
     const securityDeposit = isLocal ? 0 : depositBeforeWaiver;
-    const total = FEES.adminMoveIn + FEES.inceifProcessing
+    const total = FEES.adminMoveIn + FEES.intiProcessing
       + rentalCharges - discount + carpark + securityDeposit + FEES.accessCard;
 
     breakdown.innerHTML = `
       <div class="payment-row group-head"><span class="pr-label">One-Time &amp; Monthly Fees</span></div>
       <div class="payment-row"><div><span class="pr-label">Admin &amp; Move-In Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.adminMoveIn)}</span></div>
-      <div class="payment-row"><div><span class="pr-label">INCEIF Processing Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.inceifProcessing)}</span></div>
+      <div class="payment-row"><div><span class="pr-label">INTI Processing Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.intiProcessing)}</span></div>
       <div class="payment-row"><div><span class="pr-label">Rental Charges</span><span class="pr-note">${condoLabels[condoSel.value]} — ${room.name} · incl. SST</span></div><span class="pr-value">${fmt(rentalCharges)}</span></div>
       ${isLocal ? `<div class="payment-row"><div><span class="pr-label">Discount</span><span class="pr-note">${tenant.label} rate</span></div><span class="pr-value discount">− ${fmt(discount)}</span></div>` : ''}
       <div class="payment-row"><div><span class="pr-label">Car Park (Monthly)</span><span class="pr-note">${wantsCarpark ? 'Reserved bay added · incl. SST' : 'Not included'}</span></div><span class="pr-value${wantsCarpark ? '' : ' muted'}">${wantsCarpark ? fmt(FEES.carPark) : '—'}</span></div>
@@ -3189,71 +3153,73 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 window.addEventListener('load', () => {
   if (typeof L === 'undefined') return;
 
-  // Subject: INCEIF University — central Kuala Lumpur (Google Plus Code 5M6R+29, off Jalan Raja Laut / Jalan Tun Ismail).
-  // NOTE: surrounding coordinates are approximate (KL city-centre landmarks).
-  const INCEIF = [3.16006, 101.69094];
+  // Subject: INTI International University — Persiaran Perdana BBN, Putra Nilai,
+  // 71800 Nilai, Negeri Sembilan (82-acre campus).
+  // NOTE: surrounding coordinates are approximate Nilai / Putra Nilai landmarks,
+  // and the km figures are indicative driving distances — confirm before print.
+  const INTI = [2.81364, 101.75824];
 
   const CATEGORIES = {
     residence: {
       label: 'Residences', icon: '🏠', color: '#FF6B1A',
-      places: 'INCEIF University (★) · Rica Residence Sentul · The Birch · Unio Residence @ Kepong',
-      stat: '<strong>City-centre campus</strong> with student living all around',
+      places: 'INTI International University (★) · Youth City Residence · Akasia @ Bandar Belia',
+      stat: '<strong>Both addresses under 4 km</strong> from campus',
       defaultOn: true,
+    },
+    education: {
+      label: 'Campuses & Schools', icon: '🎓', color: '#6366F1',
+      places: 'INTI International University · USIM · Nilai University · Manipal International University · Nilai Springs schools',
+      stat: "<strong>Negeri Sembilan's university belt</strong>",
+    },
+    commercial: {
+      label: 'Shopping & Daily Needs', icon: '🛍️', color: '#14B8A6',
+      places: 'Mesamall Nilai · AEON Nilai · Nilai Square · Nilai 3 Wholesale Centre · Giant Nilai',
+      stat: '<strong>Malls, groceries & F&B</strong> minutes away',
+    },
+    transport: {
+      label: 'Transport & Connectivity', icon: '🚆', color: '#F59E0B',
+      places: 'KTM Nilai · KTM Labu · Nilai Bus Terminal · Nilai (North–South Expressway) interchange · KLIA & klia2',
+      stat: '<strong>KTM to KL Sentral</strong> + KLIA on the doorstep',
     },
     healthcare: {
       label: 'Healthcare', icon: '⚕️', color: '#DC2626',
-      places: 'Hospital Kuala Lumpur · National Heart Institute (IJN) · KPJ Tawakkal · Gleneagles KL · Prince Court · Pusrawi',
-      stat: '<strong>Top hospitals</strong> minutes away',
-    },
-    commercial: {
-      label: 'Commercial', icon: '🛍️', color: '#14B8A6',
-      places: 'Sunway Putra Mall · Quill City Mall · Sogo KL · Suria KLCC · Pavilion KL · The Exchange TRX · Berjaya Times Square · Chow Kit Market',
-      stat: '<strong>Malls, markets & F&B</strong> all around',
-    },
-    industrial: {
-      label: 'Business & Finance', icon: '🏦', color: '#F59E0B',
-      places: 'Bank Negara Malaysia · KLCC · Tun Razak Exchange (TRX) · KL Sentral · PWTC · Menara Maybank · Tabung Haji',
-      stat: "<strong>KL's financial & business core</strong>",
+      places: 'Nilai Medical Centre · Klinik Kesihatan Nilai · Nilai Medical Centre clinics · pharmacies at Mesamall',
+      stat: '<strong>Specialist care</strong> within the catchment',
     },
   };
 
   const PLACES = [
     // Residences
-    { cat:'residence',  name:'INCEIF University',                    desc:'Your campus — the ★ subject property in central Kuala Lumpur.', coords:INCEIF, home:true },
-    { cat:'residence',  name:'Rica Residence Sentul',               desc:'Serviced residence in the Sentul regeneration zone.', coords:[3.1778074, 101.6847228], dist:5.5 },
-    { cat:'residence',  name:'The Birch',                            desc:'Freehold residential tower on Jalan Ipoh.', coords:[3.1763944, 101.6815058], dist:3.7 },
-    // { cat:'residence',  name:'Duta Park Residences',                 desc:'High-rise living off Jalan Sentul / Jalan Kuching.', coords:[3.1702492, 101.6858202], dist:4.8 },   // hidden
-    { cat:'residence',  name:'Unio Residence @ Kepong',              desc:'Modern condominium in Kepong.', coords:[3.2088385, 101.6492117], dist:8.6 },
+    { cat:'residence',  name:'INTI International University',   desc:'Your campus — the ★ subject property on Persiaran Perdana BBN, Putra Nilai.', coords:INTI, home:true },
+    { cat:'residence',  name:'Youth City Residence',            desc:'Four-tower service residence inside Vision City, Putra Nilai.', coords:[2.82640, 101.78040], dist:3.5, tab:'youthcity' },
+    { cat:'residence',  name:'Akasia @ Bandar Belia',           desc:'Menara Akasia at Bandar Belia, off Jalan Bandar Belia 1/1.', coords:[2.82420, 101.78380], dist:3.7, tab:'akasia' },
+
+    // Campuses & Schools
+    { cat:'education',  name:'Universiti Sains Islam Malaysia (USIM)', desc:'Public university campus in Bandar Baru Nilai.', coords:[2.83480, 101.77660], dist:4 },
+    { cat:'education',  name:'Nilai University',                desc:'Private university on Persiaran Nilai 1, Putra Nilai.', coords:[2.81900, 101.79600], dist:5 },
+    { cat:'education',  name:'Manipal International University', desc:'Private medical & science campus, Putra Nilai.', coords:[2.80700, 101.79000], dist:4.5 },
+    { cat:'education',  name:'Nilai Springs International School', desc:'International school beside Nilai Springs.', coords:[2.79600, 101.77400], dist:3.5 },
+
+    // Shopping & Daily Needs
+    { cat:'commercial', name:'Mesamall Nilai',                  desc:'Nilai\'s lifestyle mall — cinema, bowling, groceries and F&B.', coords:[2.82000, 101.78700], dist:4 },
+    { cat:'commercial', name:'AEON Nilai',                      desc:'Hypermarket and shopping centre in Nilai town.', coords:[2.81300, 101.79800], dist:5 },
+    { cat:'commercial', name:'Nilai Square',                    desc:'Neighbourhood shops, eateries and services.', coords:[2.81600, 101.79200], dist:4.5 },
+    { cat:'commercial', name:'Nilai 3 Wholesale Centre',        desc:'Malaysia\'s best-known wholesale shopping strip.', coords:[2.78800, 101.80600], dist:7 },
+    { cat:'commercial', name:'Giant Nilai',                     desc:'Everyday groceries and pharmacy.', coords:[2.81100, 101.78200], dist:3.5 },
+
+    // Transport & Connectivity
+    { cat:'transport',  name:'KTM Nilai Station',               desc:'KTM Komuter line straight into KL Sentral.', coords:[2.80900, 101.79600], dist:4.5 },
+    { cat:'transport',  name:'KTM Labu Station',                desc:'Alternate Komuter stop south of Nilai.', coords:[2.77000, 101.82000], dist:9 },
+    { cat:'transport',  name:'Nilai Bus Terminal',              desc:'Local and intercity bus services.', coords:[2.81400, 101.79400], dist:4.5 },
+    { cat:'transport',  name:'Nilai Interchange (PLUS)',        desc:'North–South Expressway on-ramp toward KL and Seremban.', coords:[2.82800, 101.80800], dist:6 },
+    { cat:'transport',  name:'KLIA & klia2',                    desc:'Kuala Lumpur International Airport terminals.', coords:[2.74560, 101.70990], dist:14 },
 
     // Healthcare
-    { cat:'healthcare', name:'Hospital Kuala Lumpur (HKL)',          desc:'Malaysia\'s largest public referral hospital.', coords:[3.17350, 101.70100], dist:3 },
-    { cat:'healthcare', name:'Institut Jantung Negara (IJN)',        desc:'National Heart Institute.', coords:[3.17120, 101.69980], dist:3.6 },
-    { cat:'healthcare', name:'KPJ Tawakkal Specialist Hospital',    desc:'Private specialist hospital on Jalan Pahang.', coords:[3.17580, 101.69380], dist:3.4 },
-    { cat:'healthcare', name:'Gleneagles Hospital KL',               desc:'Private tertiary hospital, Ampang.', coords:[3.16200, 101.73000], dist:9.6 },
-    { cat:'healthcare', name:'Prince Court Medical Centre',          desc:'Premium private hospital, Jalan Kia Peng.', coords:[3.15880, 101.72280], dist:5 },
-    { cat:'healthcare', name:'Hospital Pusrawi',                     desc:'Private hospital near Jalan Tun Razak.', coords:[3.14500, 101.69580], dist:4 },
-
-    // Commercial
-    { cat:'commercial', name:'Sunway Putra Mall',                    desc:'Major mall beside PWTC & Putra LRT.', coords:[3.16620, 101.69120], dist:3.4 },
-    { cat:'commercial', name:'Quill City Mall',                      desc:'Lifestyle mall on Jalan Sultan Ismail.', coords:[3.16220, 101.69820], dist:2.8 },
-    { cat:'commercial', name:'Sogo Kuala Lumpur',                    desc:'Department store on Jalan Tuanku Abdul Rahman.', coords:[3.15680, 101.69480], dist:2.2 },
-    { cat:'commercial', name:'Suria KLCC',                           desc:'Flagship mall beneath the Petronas Towers.', coords:[3.15800, 101.71230], dist:5.3 },
-    { cat:'commercial', name:'Pavilion Kuala Lumpur',                desc:'Premier Bukit Bintang shopping destination.', coords:[3.14900, 101.71300], dist:4.4 },
-    { cat:'commercial', name:'Berjaya Times Square',                 desc:'Mega mall & indoor theme park.', coords:[3.14270, 101.71060], dist:4.4 },
-    { cat:'commercial', name:'Chow Kit Market',                      desc:'KL\'s largest wet market for daily essentials.', coords:[3.16450, 101.69680], dist:2.5 },
-    { cat:'commercial', name:'The Exchange TRX',                     desc:'Premium retail mall at Tun Razak Exchange.', coords:[3.14200, 101.71900], dist:5.2 },
-
-    // Business & Finance
-    { cat:'industrial', name:'Bank Negara Malaysia',                 desc:'Central bank & Islamic-finance regulator.', coords:[3.15450, 101.69180], dist:0.7 },
-    { cat:'industrial', name:'Petronas Twin Towers (KLCC)',          desc:'KLCC business & financial district.', coords:[3.15790, 101.71230], dist:4 },
-    { cat:'industrial', name:'Tun Razak Exchange (TRX)',             desc:'KL\'s international financial district.', coords:[3.14200, 101.71900], dist:5.2 },
-    { cat:'industrial', name:'KL Sentral',                           desc:'Transit hub & corporate office district.', coords:[3.13380, 101.68690], dist:3.9 },
-    { cat:'industrial', name:'Putra World Trade Centre (PWTC)',      desc:'Convention & exhibition centre on Jalan Tun Ismail.', coords:[3.17270, 101.69350], dist:4.8 },
-    { cat:'industrial', name:'Menara Maybank',                       desc:'Maybank headquarters tower.', coords:[3.14650, 101.70000], dist:2.2 },
-    { cat:'industrial', name:'Bangunan Tabung Haji',                 desc:'Iconic Lembaga Tabung Haji HQ tower.', coords:[3.16220, 101.71650], dist:5.8 },
+    { cat:'healthcare', name:'Nilai Medical Centre',            desc:'Private specialist hospital serving Nilai.', coords:[2.80980, 101.79380], dist:4.5 },
+    { cat:'healthcare', name:'Klinik Kesihatan Nilai',          desc:'Government health clinic in Nilai town.', coords:[2.81950, 101.78850], dist:4 },
   ];
 
-  const map = L.map('vitrox-map', { scrollWheelZoom: false, zoomControl: true }).setView(INCEIF, 13);
+  const map = L.map('vitrox-map', { scrollWheelZoom: false, zoomControl: true }).setView(INTI, 13);
   // OpenStreetMap standard tiles: free, no API key, no account. Replaces CARTO's
   // basemaps.cartocdn.com light_all, which rate-limits anonymous use.
   // The {s} subdomain and {r} retina placeholders are dropped — OSM serves from a
@@ -3266,13 +3232,13 @@ window.addEventListener('load', () => {
   }).addTo(map);
 
   // Catchment rings around the subject — inner 5 km + outer 10 km
-  const ring5km = L.circle(INCEIF, {
+  const ring5km = L.circle(INTI, {
     radius: 5000,
     color: '#FF6B1A', weight: 1.5, opacity: 0.55,
     fillColor: '#FF6B1A', fillOpacity: 0.05,
     dashArray: '6 8',
   }).addTo(map);
-  const ring10km = L.circle(INCEIF, {
+  const ring10km = L.circle(INTI, {
     radius: 10000,
     color: '#FF6B1A', weight: 1.2, opacity: 0.35,
     fillColor: '#FF6B1A', fillOpacity: 0.02,
@@ -3289,8 +3255,8 @@ window.addEventListener('load', () => {
   }).addTo(map);
   // Compute label positions north of subject for each ring
   const metersPerDegLat = 111320;
-  ringLabel([INCEIF[0] + 5000 / metersPerDegLat, INCEIF[1]], '5 km');
-  ringLabel([INCEIF[0] + 10000 / metersPerDegLat, INCEIF[1]], '10 km');
+  ringLabel([INTI[0] + 5000 / metersPerDegLat, INTI[1]], '5 km');
+  ringLabel([INTI[0] + 10000 / metersPerDegLat, INTI[1]], '10 km');
 
   const makeIcon = (color, isHome) => L.divIcon({
     className: '',
@@ -3304,10 +3270,10 @@ window.addEventListener('load', () => {
 
   const subjectLabel = L.divIcon({
     className: '',
-    html: `<div class="map-pin-label"><span class="star">★</span> INCEIF University</div>`,
+    html: `<div class="map-pin-label"><span class="star">★</span> INTI International University</div>`,
     iconSize: [0, 0], iconAnchor: [-22, 8],
   });
-  L.marker(INCEIF, { icon: subjectLabel, interactive: false, keyboard: false }).addTo(map);
+  L.marker(INTI, { icon: subjectLabel, interactive: false, keyboard: false }).addTo(map);
 
   const layers = {};
   Object.keys(CATEGORIES).forEach(k => { layers[k] = L.layerGroup(); });
@@ -3319,12 +3285,12 @@ window.addEventListener('load', () => {
     const marker = L.marker(p.coords, { icon: makeIcon(cat.color, !!p.home) });
     // Prefer an explicit (Google Maps) distance when provided; otherwise estimate straight-line.
     const distanceText = p.home ? null
-      : (p.dist != null ? `${p.dist} km` : `~${formatDistance(L.latLng(INCEIF).distanceTo(L.latLng(p.coords)))}`);
+      : (p.dist != null ? `${p.dist} km` : `~${formatDistance(L.latLng(INTI).distanceTo(L.latLng(p.coords)))}`);
     marker.bindPopup(`
       <div class="pop-cat" style="color:${cat.color}">${cat.label}</div>
       <div class="pop-title">${p.name}</div>
       <div class="pop-desc">${p.desc}</div>
-      ${distanceText ? `<div class="pop-distance"><span class="pop-distance-icon">↔</span> <strong>${distanceText}</strong> from INCEIF University</div>` : ''}
+      ${distanceText ? `<div class="pop-distance"><span class="pop-distance-icon">↔</span> <strong>${distanceText}</strong> from INTI International University</div>` : ''}
       ${p.tab ? `<a href="#residences" class="pop-cta" data-restab="${p.tab}">View More <span class="arrow">→</span></a>` : ''}
     `);
     // Permanent label above each pin: residences show their name (+ distance);
@@ -3388,8 +3354,8 @@ window.addEventListener('load', () => {
   setVisibility();
 
   // Fit bounds to show subject + immediate residences with generous padding
-  // Fit to a 22 km square around INCEIF so the entire 10 km ring is comfortably visible
-  map.fitBounds(L.latLng(INCEIF).toBounds(22000), { padding: [20, 20] });
+  // Fit to a 22 km square around INTI so the entire 10 km ring is comfortably visible
+  map.fitBounds(L.latLng(INTI).toBounds(22000), { padding: [20, 20] });
 });
 </script>
 
