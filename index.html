@@ -1,0 +1,3397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exclusive Co-Living for INCEIF University Students</title>
+<meta name="description" content="Modern fully furnished rooms designed for student comfort, convenience, and community living — powered by BeLive" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="shortcut icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="favicon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+
+<style>
+:root {
+  --orange: #FF6B1A;
+  --orange-deep: #E5530A;
+  --orange-soft: #FFF1E6;
+  --teal: #00BFA6;
+  --ink: #0E0E10;
+  --ink-soft: #2A2A2E;
+  --paper: #FAF7F2;
+  --paper-warm: #F2EDE3;
+  --line: rgba(14,14,16,0.12);
+  --shadow-lg: 0 30px 60px -20px rgba(14,14,16,0.25);
+  --shadow-md: 0 12px 30px -10px rgba(14,14,16,0.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.display { font-family: 'Poppins', sans-serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1; font-variation-settings: "opsz" 144, "SOFT" 50; }
+.script { font-family: 'Poppins', sans-serif; font-weight: 700; }
+
+/* ---------- NAV ---------- */
+nav.top {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 40px;
+  background: rgba(250, 247, 242, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 22px;
+  letter-spacing: -0.02em;
+}
+.brand-logos { display: flex; align-items: center; gap: 14px; }
+.brand-tagline {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--orange-deep);
+}
+.brand img.logo-belive { height: 36px; width: auto; display: block; }
+.brand img.logo-vitrox { height: 48px; width: auto; display: block; }
+.brand .x { color: var(--ink); opacity: 0.3; font-size: 18px; font-style: italic; }
+
+nav ul { list-style: none; display: flex; gap: 36px; }
+nav ul a {
+  color: var(--ink); text-decoration: none; font-size: 14px;
+  font-weight: 500; position: relative; transition: color 0.2s;
+}
+nav ul a:hover { color: var(--orange); }
+nav ul a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -4px;
+  height: 2px; background: var(--orange); transform: scaleX(0);
+  transform-origin: left; transition: transform 0.3s;
+}
+nav ul a:hover::after { transform: scaleX(1); }
+
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ink); color: var(--paper);
+  padding: 12px 22px; border-radius: 100px;
+  font-size: 14px; font-weight: 500; text-decoration: none;
+  transition: all 0.25s; border: none; cursor: pointer;
+}
+.cta-btn:hover { background: var(--orange); transform: translateY(-2px); }
+.cta-btn.outline { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.cta-btn.outline:hover { background: var(--ink); color: var(--paper); }
+.cta-btn.orange { background: var(--orange); }
+.cta-btn.orange:hover { background: var(--orange-deep); }
+.cta-btn .arrow { transition: transform 0.25s; }
+.cta-btn:hover .arrow { transform: translateX(4px); }
+
+@media (max-width: 768px) {
+  nav.top { padding: 12px 16px; gap: 10px; }
+  nav ul { display: none; }
+  .brand { gap: 3px; }
+  .brand-logos { gap: 8px; }
+  .brand img.logo-belive { height: 22px; }
+  .brand img.logo-vitrox { height: 28px; }
+  .brand .x { font-size: 12px; }
+  .brand-tagline { font-size: 8px; letter-spacing: 0.1em; }
+  nav.top .cta-btn {
+    background: var(--orange); color: white;
+    padding: 9px 16px; font-size: 13px; flex: 0 0 auto;
+  }
+  nav.top .cta-btn .arrow { display: none; }
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  min-height: 100vh;
+  padding: 140px 40px 80px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(262deg,
+      var(--paper) 0%,
+      rgba(250,247,242,0.94) 28%,
+      rgba(250,247,242,0.72) 50%,
+      rgba(250,247,242,0.38) 80%,
+      rgba(250,247,242,0.25) 100%),
+    url('INCEIF-bg.jpg');
+  background-size: cover, cover;
+  background-position: center, center left;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.hero::before {
+  content: ''; position: absolute;
+  top: -200px; right: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, var(--orange) 0%, transparent 65%);
+  opacity: 0.12; z-index: 0;
+  pointer-events: none;
+}
+
+.hero-content { position: relative; z-index: 2; max-width: 720px; margin-left: 0; margin-right: auto; text-align: left; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--orange-deep);
+  padding: 8px 16px;
+  background: var(--orange-soft);
+  border-radius: 100px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.8s ease forwards;
+}
+.eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+
+h1.hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(48px, 6.5vw, 96px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  margin-bottom: 32px;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+h1.hero-title em {
+  font-style: italic; color: var(--orange);
+  font-weight: 500;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+h1.hero-title .underline {
+  position: relative; display: inline-block;
+}
+h1.hero-title .underline::after {
+  content: ''; position: absolute; bottom: 0.05em; left: -0.05em; right: -0.05em;
+  height: 0.18em; background: var(--orange); opacity: 0.25; z-index: -1;
+  transform: skewX(-5deg);
+}
+
+.hero p.lede {
+  font-size: 19px; line-height: 1.5; color: var(--ink-soft);
+  max-width: 540px; margin-bottom: 40px;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.8s 0.5s ease both; }
+
+.hero-stats {
+  display: flex; gap: 40px; margin-top: 60px;
+  padding-top: 32px; border-top: 1px solid var(--line);
+  animation: fadeUp 0.8s 0.7s ease both;
+}
+.stat .num {
+  font-family: 'Poppins', sans-serif; font-size: 44px; font-weight: 500;
+  color: var(--orange-deep); line-height: 1;
+}
+.stat .label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink-soft); margin-top: 6px;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Hero visual */
+.hero-visual {
+  position: relative; z-index: 1;
+  height: 620px;
+  animation: fadeUp 1s 0.4s ease both;
+}
+.hero-card {
+  position: absolute;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.hero-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-card.main { width: 75%; height: 75%; top: 0; right: 0; z-index: 2; }
+.hero-card.small {
+  width: 50%; height: 50%; bottom: 0; left: 0;
+  border: 8px solid var(--paper);
+  z-index: 1;
+}
+.hero-card .tag {
+  position: absolute; bottom: 18px; left: 18px;
+  background: rgba(14,14,16,0.85); color: var(--paper);
+  padding: 8px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  backdrop-filter: blur(10px);
+}
+
+.floating-badge {
+  position: absolute;
+  background: var(--paper);
+  border-radius: 100px;
+  padding: 14px 22px;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; font-weight: 500;
+  z-index: 3;
+  animation: float 5s ease-in-out infinite;
+}
+.floating-badge.fb1 { top: 30%; left: -20px; }
+.floating-badge.fb2 { bottom: 8%; right: 8%; animation-delay: -2.5s; }
+.floating-badge .icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--orange-soft); color: var(--orange-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+@media (max-width: 980px) {
+  .hero {
+    grid-template-columns: 1fr; padding: 120px 24px 60px; min-height: auto;
+    background-image:
+      linear-gradient(180deg,
+        rgba(250,247,242,0.92) 0%,
+        rgba(250,247,242,0.78) 55%,
+        rgba(250,247,242,0.45) 100%),
+      url('INCEIF-bg.jpg');
+    background-position: center, center bottom;
+  }
+  .hero-content { margin-left: 0; }
+  .hero-visual { height: 480px; margin-top: 20px; }
+  .hero-stats { gap: 24px; flex-wrap: wrap; }
+}
+
+/* ---------- SECTION SHARED ---------- */
+section { padding: 100px 40px; position: relative; }
+.section-head { max-width: 720px; margin: 0 auto 64px; text-align: center; }
+.section-head .kicker {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--orange-deep); font-weight: 600; margin-bottom: 18px;
+}
+.section-head h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(36px, 4.5vw, 56px); line-height: 1.05;
+  letter-spacing: -0.025em; margin-bottom: 20px;
+}
+.section-head h2 em { font-style: italic; color: var(--orange); }
+.section-head p { color: var(--ink-soft); font-size: 17px; max-width: 600px; margin: 0 auto; }
+
+@media (max-width: 768px) { section { padding: 70px 20px; } }
+
+/* ---------- BENEFITS ---------- */
+.benefits {
+  background: var(--paper-warm);
+  border-radius: 40px 40px 0 0;
+}
+.benefits-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; max-width: 1200px; margin: 0 auto;
+}
+.benefit {
+  background: var(--paper); border-radius: 24px;
+  padding: 36px 32px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative; overflow: hidden;
+}
+.benefit:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+.benefit .num {
+  font-family: 'Poppins', sans-serif; font-size: 80px; font-weight: 300;
+  color: var(--orange); opacity: 0.18; line-height: 1;
+  position: absolute; top: 10px; right: 24px; font-style: italic;
+}
+.benefit h3 {
+  font-family: 'Poppins', sans-serif; font-weight: 500;
+  font-size: 24px; margin-bottom: 14px; letter-spacing: -0.01em;
+}
+.benefit p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+
+@media (max-width: 768px) { .benefits-grid { grid-template-columns: 1fr; } }
+
+/* ---------- WHY CHOOSE BELIVE ---------- */
+.why-belive {
+  background: linear-gradient(180deg, var(--paper) 0%, #FDF8F1 100%);
+  position: relative; overflow: hidden;
+}
+.why-belive::before {
+  content: ''; position: absolute;
+  top: -160px; right: -160px;
+  width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,176,122,0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+.why-belive::after {
+  content: ''; position: absolute;
+  bottom: -200px; left: -160px;
+  width: 460px; height: 460px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,191,166,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.why-belive .section-head { margin-bottom: 56px; position: relative; z-index: 1; }
+.why-grid {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.why-card {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFBF5 100%);
+  border: 1px solid rgba(14,14,16,0.06);
+  border-radius: 22px;
+  padding: 28px 22px 24px;
+  transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1),
+              box-shadow 0.35s, border-color 0.35s;
+  position: relative; overflow: hidden;
+  counter-increment: whycount;
+}
+.why-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--orange) 0%, #FFB07A 100%);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.why-card::after {
+  content: '0' counter(whycount);
+  position: absolute; top: 16px; right: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: var(--orange-deep); opacity: 0.25;
+  letter-spacing: 0.04em;
+  transition: opacity 0.3s;
+}
+.why-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255,107,26,0.45);
+  box-shadow: 0 28px 50px -22px rgba(255,107,26,0.4);
+}
+.why-card:hover::before { transform: scaleX(1); }
+.why-card:hover::after { opacity: 0.6; }
+.why-card .why-icon {
+  width: 58px; height: 58px; border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; line-height: 1;
+  background: linear-gradient(135deg, var(--orange-soft) 0%, #FFD8B6 100%);
+  margin-bottom: 18px;
+  box-shadow: 0 10px 22px -10px rgba(255,107,26,0.45);
+  transition: transform 0.4s cubic-bezier(0.22,0.61,0.36,1);
+}
+.why-card:hover .why-icon { transform: scale(1.08) rotate(-4deg); }
+.why-card h3 {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: 16px; letter-spacing: -0.01em;
+  color: var(--ink); margin-bottom: 8px;
+}
+.why-card p {
+  font-size: 13px; line-height: 1.6;
+  color: var(--ink-soft); opacity: 0.78;
+}
+.why-grid { counter-reset: whycount; }
+.why-outro {
+  position: relative; z-index: 1;
+  margin: 64px auto 0; max-width: 880px;
+  text-align: center;
+  padding: 56px 40px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: white; border-radius: 32px;
+  box-shadow: 0 32px 60px -22px rgba(255,107,26,0.5);
+  overflow: hidden;
+}
+.why-outro::before, .why-outro::after {
+  content: ''; position: absolute; border-radius: 50%;
+  pointer-events: none;
+}
+.why-outro::before {
+  top: -120px; right: -80px;
+  width: 320px; height: 320px;
+  background: rgba(255,255,255,0.12);
+}
+.why-outro::after {
+  bottom: -140px; left: -100px;
+  width: 300px; height: 300px;
+  background: rgba(255,255,255,0.08);
+}
+.why-outro h3 {
+  position: relative; z-index: 1;
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 40px);
+  letter-spacing: -0.02em; margin-bottom: 14px;
+  color: white;
+  display: inline-flex; align-items: center; gap: 14px;
+}
+.why-outro h3::before, .why-outro h3::after {
+  content: '✦'; font-size: 18px;
+  color: rgba(255,255,255,0.75);
+}
+.why-outro p {
+  position: relative; z-index: 1;
+  color: rgba(255,255,255,0.92);
+  font-size: 16px; line-height: 1.6;
+  max-width: 580px; margin: 0 auto;
+}
+@media (max-width: 1024px) {
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .why-grid { grid-template-columns: 1fr; }
+  .why-outro { padding: 40px 24px; margin-top: 44px; border-radius: 24px; }
+  .why-outro h3 { gap: 10px; }
+  .why-outro h3::before, .why-outro h3::after { font-size: 14px; }
+}
+
+/* ---------- BUILT TOGETHER ---------- */
+.built-together { background: var(--paper); padding: 70px 40px; }
+.built-together-card {
+  max-width: 1100px; margin: 0 auto;
+  background: linear-gradient(135deg, #FFFFFF 0%, var(--orange-soft) 100%);
+  border-radius: 28px;
+  padding: 44px 56px;
+  border: 1px solid rgba(14,14,16,0.06);
+  box-shadow: 0 30px 60px -25px rgba(14,14,16,0.18);
+  position: relative; overflow: hidden;
+}
+.built-together-top {
+  display: grid; grid-template-columns: auto 1fr; gap: 44px;
+  align-items: center;
+}
+.built-together-card::before {
+  content: ''; position: absolute;
+  top: -80px; right: -80px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,26,0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+.built-together-logos {
+  display: flex; align-items: center; gap: 18px;
+  position: relative; z-index: 1;
+}
+.built-together-logos img { height: 56px; width: auto; display: block; }
+.built-together-logos .bt-x {
+  font-size: 26px; color: var(--ink); opacity: 0.3; font-style: italic;
+}
+.built-together-text { position: relative; z-index: 1; }
+.built-together-text .kicker {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--orange-deep);
+  margin-bottom: 10px;
+}
+.built-together-text h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: clamp(24px, 2.6vw, 30px);
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 8px;
+}
+.built-together-text h2 em { font-style: normal; color: var(--orange); }
+.built-together-text p {
+  font-size: 15px; line-height: 1.55; color: var(--ink-soft);
+}
+.built-together-photos {
+  position: relative; z-index: 1;
+  margin-top: 36px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+.built-together-photos figure {
+  margin: 0; border-radius: 18px; overflow: hidden;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 18px 36px -20px rgba(14,14,16,0.4);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+.built-together-photos img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+.built-together-photos figure:hover img { transform: scale(1.05); }
+@media (max-width: 768px) {
+  .built-together-card { padding: 32px 22px; text-align: center; }
+  .built-together-top { grid-template-columns: 1fr; gap: 24px; }
+  .built-together-logos { justify-content: center; flex-wrap: wrap; gap: 12px; }
+  .built-together-logos img { height: 38px; max-width: 42%; object-fit: contain; }
+  .built-together-photos { grid-template-columns: 1fr; gap: 14px; margin-top: 28px; }
+  .built-together { padding: 50px 16px; }
+}
+
+/* ---------- WHY BELIVE: GROUPS ---------- */
+.why-groups {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; gap: 28px;
+  position: relative; z-index: 1;
+}
+.why-group {
+  --group-accent: var(--orange);
+  --group-accent-soft: rgba(255,107,26,0.12);
+  background: white;
+  border: 1px solid rgba(14,14,16,0.06);
+  border-radius: 24px;
+  padding: 32px 32px 28px;
+  position: relative;
+}
+.why-group::before {
+  content: ''; position: absolute;
+  top: 0; left: 24px; right: 24px; height: 4px;
+  border-radius: 0 0 6px 6px;
+  background: var(--group-accent);
+}
+.why-group.group-comfort { --group-accent: #41C0BE; --group-accent-soft: rgba(65,192,190,0.14); }
+.why-group.group-worry   { --group-accent: var(--orange-deep); --group-accent-soft: rgba(229,83,10,0.12); }
+.why-group-head {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px;
+  margin-bottom: 22px;
+}
+.why-group-title {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: 22px; color: var(--ink); letter-spacing: -0.01em;
+}
+.why-group-title em { font-style: normal; color: var(--group-accent); }
+.why-group-sub { font-size: 13px; color: var(--ink-soft); opacity: 0.75; }
+.why-group-grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+}
+.why-group.group-comfort .why-group-grid,
+.why-group.group-worry .why-group-grid { grid-template-columns: repeat(3, 1fr); }
+.why-tile {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFBF5 100%);
+  border: 1px solid rgba(14,14,16,0.06);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.why-tile:hover {
+  transform: translateY(-4px);
+  border-color: var(--group-accent);
+  box-shadow: 0 18px 30px -18px var(--group-accent-soft);
+}
+.why-tile .tile-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: var(--group-accent-soft);
+  color: var(--group-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; line-height: 1;
+  margin-bottom: 12px;
+}
+.why-tile h4 {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: 14px; letter-spacing: -0.01em;
+  color: var(--ink); margin-bottom: 4px;
+}
+.why-tile p {
+  font-size: 12.5px; line-height: 1.5;
+  color: var(--ink-soft); opacity: 0.8;
+}
+.section-cta-row {
+  display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  margin: 40px auto 0; padding: 0 20px;
+  position: relative; z-index: 1;
+}
+@media (max-width: 1024px) {
+  .why-group-grid,
+  .why-group.group-comfort .why-group-grid,
+  .why-group.group-worry .why-group-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .why-group-grid,
+  .why-group.group-comfort .why-group-grid,
+  .why-group.group-worry .why-group-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .why-group { padding: 26px 18px; }
+  .why-tile { padding: 16px 14px; }
+  .why-tile h4 { font-size: 13.5px; }
+  .why-tile p { font-size: 12px; }
+}
+
+/* ---------- ROOM CARD CTA ---------- */
+.room-card .room-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px;
+  background: var(--orange); color: white;
+  border-radius: 100px; padding: 9px 18px;
+  font-size: 13px; font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.room-card .room-cta:hover { background: var(--orange-deep); transform: translateX(2px); }
+
+/* ---------- HOW TO BOOK ---------- */
+.how-to-book { background: var(--paper-warm); position: relative; overflow: hidden; }
+.how-to-book::before {
+  content: ''; position: absolute;
+  top: -140px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(circle, rgba(255,176,122,0.28) 0%, transparent 70%);
+  pointer-events: none;
+}
+.how-steps {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
+  position: relative; z-index: 1;
+}
+/* Dashed connector line behind the top badges (desktop) */
+.how-steps::before {
+  content: ''; position: absolute;
+  top: 56px; left: 12%; right: 12%; height: 3px;
+  background-image: linear-gradient(90deg, var(--orange) 0 60%, transparent 0);
+  background-size: 16px 3px; background-repeat: repeat-x;
+  opacity: 0.4; z-index: 0;
+}
+.how-step {
+  position: relative; z-index: 1;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFBF5 100%);
+  border-radius: 22px; padding: 32px 24px 26px;
+  border: 1px solid rgba(14,14,16,0.06);
+  box-shadow: 0 14px 30px -22px rgba(14,14,16,0.25);
+  transition: transform 0.3s cubic-bezier(.22,.61,.36,1), box-shadow 0.3s, border-color 0.3s;
+}
+.how-step:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255,107,26,0.4);
+  box-shadow: 0 28px 46px -22px rgba(255,107,26,0.4);
+}
+.how-step-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.how-step .step-num {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: white;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Poppins', sans-serif; font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 8px 18px -6px rgba(255,107,26,0.6);
+  position: relative; z-index: 1;
+}
+.how-step .step-emoji {
+  font-size: 30px; line-height: 1;
+  transition: transform 0.4s cubic-bezier(.22,.61,.36,1);
+}
+.how-step:hover .step-emoji { transform: scale(1.18) rotate(-6deg); }
+.how-step h4 {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: 17px; color: var(--ink); margin-bottom: 8px;
+}
+.how-step p { font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); opacity: 0.82; }
+@media (max-width: 1024px) {
+  .how-steps { grid-template-columns: repeat(2, 1fr); }
+  .how-steps::before { display: none; }
+}
+@media (max-width: 560px) {
+  .how-steps { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .how-step { padding: 22px 18px 20px; }
+}
+
+/* ---------- REFERENCE CALCULATION OF PAYMENT ---------- */
+.payment-ref { background: var(--paper); }
+.payment-card {
+  max-width: none; margin: 0 auto;
+  background: white;
+  border-radius: 24px; border: 1px solid var(--line);
+  box-shadow: 0 24px 50px -28px rgba(14,14,16,0.18);
+  overflow: hidden;
+}
+.payment-row {
+  display: grid; grid-template-columns: 1fr auto;
+  padding: 18px 28px; gap: 16px;
+  border-bottom: 1px solid var(--line); align-items: center;
+}
+.payment-row:last-of-type { border-bottom: none; }
+.payment-row .pr-label { font-size: 15px; color: var(--ink); font-weight: 500; }
+.payment-row .pr-note  { display: block; font-size: 12px; color: var(--ink-soft); opacity: 0.7; margin-top: 2px; font-weight: 400; }
+.payment-row .pr-value { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 18px; color: var(--orange-deep); white-space: nowrap; }
+.payment-row.total { background: var(--orange-soft); padding: 22px 28px; }
+.payment-row.total .pr-label { font-size: 17px; font-weight: 600; }
+.payment-row.total .pr-value { font-size: 22px; color: var(--orange-deep); }
+.payment-disclaimer {
+  max-width: 1100px; margin: 18px auto 0;
+  font-size: 12px; color: var(--ink-soft); opacity: 0.65;
+  text-align: center; line-height: 1.55; padding: 0 20px;
+}
+
+/* Payment calculator */
+.calc-wrap { max-width: 1200px; margin: 0 auto; }
+.calc-controls {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 22px;
+}
+.calc-field { display: flex; flex-direction: column; gap: 8px; }
+.calc-field span {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-soft); opacity: 0.75;
+}
+.calc-field select {
+  appearance: none; -webkit-appearance: none;
+  font-family: inherit; font-size: 13px; font-weight: 500; color: var(--ink);
+  background: white; border: 1.5px solid var(--line);
+  border-radius: 14px; padding: 12px 40px 12px 16px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23E5530A' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.calc-field select:hover { border-color: var(--orange); }
+.calc-field select:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,107,26,0.15); }
+.payment-row.group-head {
+  background: rgba(14,14,16,0.03);
+  padding: 12px 28px;
+}
+.payment-row.group-head .pr-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-soft); opacity: 0.7;
+}
+.payment-row .pr-value.muted { color: var(--ink-soft); opacity: 0.7; font-weight: 500; }
+.payment-row .pr-value.discount { color: #16A34A; font-weight: 600; }
+.payment-row .pr-value .pr-was {
+  text-decoration: line-through;
+  color: var(--ink-soft); opacity: 0.6;
+  font-weight: 500; font-size: 15px; margin-right: 6px;
+}
+.payment-row.note { display: block; padding: 10px 28px 14px; }
+.payment-row.note .pr-foot { font-size: 12px; color: var(--ink-soft); opacity: 0.75; font-weight: 400; line-height: 1.5; }
+@media (max-width: 860px) {
+  .calc-controls { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .calc-controls { grid-template-columns: 1fr; }
+}
+
+/* ---------- FINAL CTA — RENT SAFE, STAY HAPPY ---------- */
+.final-cta {
+  padding: 100px 40px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: white; position: relative; overflow: hidden;
+}
+.final-cta::before, .final-cta::after {
+  content: ''; position: absolute; border-radius: 50%; pointer-events: none;
+}
+.final-cta::before { top: -120px; right: -80px; width: 360px; height: 360px; background: rgba(255,255,255,0.1); }
+.final-cta::after  { bottom: -140px; left: -100px; width: 320px; height: 320px; background: rgba(255,255,255,0.08); }
+.final-cta-wrap {
+  max-width: 760px; margin: 0 auto; text-align: center;
+  position: relative; z-index: 1;
+}
+.final-cta h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: clamp(34px, 4.4vw, 52px); letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+.final-cta p {
+  font-size: 17px; line-height: 1.55; color: rgba(255,255,255,0.92);
+  margin-bottom: 36px;
+}
+.final-cta-buttons { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.fcta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 26px; border-radius: 100px;
+  font-family: inherit; font-size: 15px; font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+.fcta-btn.primary { background: white; color: var(--orange-deep); box-shadow: 0 12px 28px -12px rgba(14,14,16,0.4); }
+.fcta-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 18px 36px -12px rgba(14,14,16,0.45); }
+.fcta-btn.teal { background: #41C0BE; color: white; box-shadow: 0 12px 28px -12px rgba(65,192,190,0.5); }
+.fcta-btn.teal:hover { background: #34a8a6; transform: translateY(-2px); }
+.fcta-btn.outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.75); }
+.fcta-btn.outline:hover { background: white; color: var(--orange-deep); border-color: white; }
+
+/* ---------- WHY RENT ---------- */
+.why {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; max-width: 1200px; margin: 0 auto;
+  align-items: center;
+}
+.why-list { display: flex; flex-direction: column; gap: 4px; }
+.why-item {
+  padding: 24px 0; border-bottom: 1px solid var(--line);
+  display: grid; grid-template-columns: 56px 1fr; gap: 20px;
+  align-items: start; cursor: pointer;
+  transition: padding 0.3s;
+}
+.why-item:hover { padding-left: 12px; }
+.why-item .icon-wrap {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--orange-soft);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--orange-deep);
+  transition: all 0.3s;
+}
+.why-item:hover .icon-wrap { background: var(--orange); color: white; transform: rotate(-8deg); }
+.why-item h4 { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 19px; margin-bottom: 4px; }
+.why-item p { color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+
+.why-visual { position: relative; }
+.why-stat-card {
+  background: var(--ink); color: var(--paper);
+  border-radius: 32px; padding: 48px; position: relative;
+  overflow: hidden;
+}
+.why-stat-card::before {
+  content: ''; position: absolute; top: -50%; right: -50%;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, var(--orange) 0%, transparent 70%);
+  opacity: 0.4;
+}
+.why-stat-card .label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--orange); margin-bottom: 12px; position: relative;
+}
+.why-stat-card .big {
+  font-family: 'Poppins', sans-serif; font-size: clamp(56px, 12vw, 96px); font-weight: 400;
+  line-height: 1; letter-spacing: -0.03em; position: relative;
+}
+.why-stat-card .big em { font-style: italic; color: var(--orange); }
+.why-stat-card .desc { margin-top: 16px; opacity: 0.8; font-size: 15px; position: relative; }
+.why-stat-card .badge {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: white; background: rgba(255,107,26,0.95);
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 900px) {
+  .why { grid-template-columns: 1fr; gap: 40px; }
+  .why > * { min-width: 0; }
+  .why-stat-card { padding: 36px 28px; }
+}
+
+/* ---------- RESIDENCES ---------- */
+.residences { background: var(--ink); color: var(--paper); }
+.residences .section-head h2 { color: var(--paper); }
+.residences .section-head p { color: rgba(250,247,242,0.7); }
+.residences .section-head .kicker { color: var(--orange); }
+
+.res-tabs {
+  display: flex; justify-content: center; gap: 8px;
+  margin: 0 auto 50px; max-width: 100%; flex-wrap: nowrap;
+  padding: 10px; background: rgba(255,255,255,0.06);
+  border-radius: 100px; width: fit-content;
+}
+.res-tab {
+  padding: 14px 28px; border-radius: 100px;
+  font-size: 16px; font-weight: 600; white-space: nowrap;
+  border: none; background: transparent;
+  color: rgba(250,247,242,0.7); cursor: pointer;
+  transition: all 0.3s;
+}
+.res-tab.active { background: var(--orange); color: white; }
+.res-tab:hover:not(.active) { color: var(--paper); }
+/* Wrap to multiple rows only when there isn't room for a single row */
+@media (max-width: 1000px) {
+  .res-tabs { flex-wrap: wrap; max-width: 820px; }
+}
+@media (max-width: 560px) {
+  .res-tab { padding: 12px 22px; font-size: 14px; }
+}
+
+.res-panel { display: none; max-width: 1280px; margin: 0 auto; }
+.res-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; animation: fadeIn 0.5s; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.res-photo { position: relative; border-radius: 32px; overflow: hidden; aspect-ratio: 4/3; }
+.res-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s ease; }
+.res-panel.active .res-photo img { transform: scale(1.08); }
+.res-photo .photo-tag {
+  position: absolute; top: 24px; left: 24px;
+  background: rgba(14,14,16,0.7); backdrop-filter: blur(10px);
+  padding: 8px 16px; border-radius: 100px; font-size: 12px;
+  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+.res-info .res-name {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(40px, 5vw, 64px); letter-spacing: -0.03em;
+  line-height: 1; margin-bottom: 12px;
+}
+.res-info .res-name em { font-style: italic; color: var(--orange); }
+.res-info .res-vibe {
+  font-family: 'Poppins', sans-serif; font-size: 28px; color: var(--orange);
+  margin-bottom: 28px; transform: rotate(-1deg); display: inline-block;
+}
+.res-info .res-desc { font-size: 16px; line-height: 1.65; color: rgba(250,247,242,0.8); margin-bottom: 32px; }
+
+.res-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  padding: 24px 0; margin-bottom: 28px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.res-stat .v { font-family: 'Poppins', sans-serif; font-size: 28px; color: var(--orange); }
+.res-stat .l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(250,247,242,0.6); margin-top: 4px; }
+
+.res-facilities { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.res-facilities span {
+  font-size: 12px; padding: 6px 12px;
+  background: rgba(255,255,255,0.08); border-radius: 100px;
+  color: rgba(250,247,242,0.85);
+}
+.res-facility-photos {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-bottom: 28px;
+}
+.res-facility-photos figure {
+  position: relative; margin: 0;
+  border-radius: 14px; overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 12px 28px -16px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.res-facility-photos img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.res-facility-photos figure:hover img { transform: scale(1.04); }
+.res-facility-photos figcaption {
+  position: absolute; left: 10px; bottom: 10px;
+  background: rgba(14,14,16,0.78); color: rgba(250,247,242,0.95);
+  font-size: 11px; font-weight: 500;
+  padding: 5px 10px; border-radius: 100px;
+  backdrop-filter: blur(8px);
+}
+@media (max-width: 700px) {
+  .res-facility-photos { grid-template-columns: 1fr; }
+}
+
+/* Residence video gallery — spans both panel columns, below photo + info */
+.res-videos { grid-column: 1 / -1; }
+.res-videos .rv-head {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+  color: rgba(250,247,242,0.6); margin-bottom: 14px;
+}
+.res-videos .rv-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px;
+  align-items: start;
+  /* Capped: these are 9:16 clips, so full-width columns would run ~700px tall.
+     1120px keeps a 4-up row at the same tile size a 3-up row had at 840px. */
+  max-width: 1120px; margin: 0 auto;
+}
+.res-videos figure {
+  position: relative; margin: 0;
+  border-radius: 18px; overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 16px 34px -18px rgba(0,0,0,0.65);
+}
+/* All three clips are 9:16 portrait, so pinning the ratio avoids layout shift
+   before metadata loads. No poster image is set — each source carries a #t=0.5
+   media fragment so the browser paints a real frame from the video itself as
+   the cover. The frame matches the tile ratio, so nothing is cropped. */
+.res-videos video {
+  width: 100%; display: block;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  background: #0E0E10;
+}
+.res-videos figcaption {
+  position: absolute; left: 12px; top: 12px;
+  background: rgba(14,14,16,0.78); color: rgba(250,247,242,0.95);
+  font-size: 11px; font-weight: 500;
+  padding: 5px 10px; border-radius: 100px;
+  backdrop-filter: blur(8px); pointer-events: none;
+}
+/* Below the 4-up width, drop to 2-up before going single-column, so tiles never
+   shrink to slivers on tablets. */
+@media (max-width: 1060px) {
+  .res-videos .rv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 560px; }
+}
+@media (max-width: 700px) {
+  .res-videos .rv-grid { grid-template-columns: minmax(0, 320px); justify-content: center; max-width: none; }
+}
+
+/* "Getting to INCEIF University" route infographic — one per residence.
+   Wide, text-dense artwork, so it runs the full panel width and opens in the
+   existing lightbox for detail. */
+.res-getting-there { grid-column: 1 / -1; margin-top: 8px; }
+.res-getting-there .gt-head {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+  color: rgba(250,247,242,0.6); margin-bottom: 14px;
+}
+.res-getting-there figure {
+  margin: 0; position: relative;
+  border-radius: 18px; overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 16px 34px -18px rgba(0,0,0,0.65);
+}
+/* No fixed ratio — the three infographics differ slightly (1.50 vs 1.64). */
+.res-getting-there img { width: 100%; height: auto; display: block; }
+.res-getting-there figcaption {
+  position: absolute; right: 12px; bottom: 12px;
+  background: rgba(14,14,16,0.78); color: rgba(250,247,242,0.95);
+  font-size: 11px; font-weight: 500;
+  padding: 5px 10px; border-radius: 100px;
+  backdrop-filter: blur(8px); pointer-events: none;
+}
+
+/* Room cards */
+.rooms-strip {
+  margin-top: 60px; max-width: 1280px; margin-left: auto; margin-right: auto;
+}
+.rooms-strip h3 {
+  font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 28px;
+  margin-bottom: 10px; letter-spacing: -0.01em;
+}
+.rooms-strip h3 em { font-style: italic; color: var(--orange); }
+.rooms-desc {
+  max-width: none; margin-bottom: 18px;
+  font-size: 15px; line-height: 1.6; color: rgba(250,247,242,0.7);
+}
+.rooms-included {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 26px;
+}
+.rooms-included .ri-intro {
+  font-size: 14px; color: rgba(250,247,242,0.65);
+  align-self: center; margin-right: 4px;
+}
+.rooms-included span:not(.ri-intro) {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 500; color: rgba(250,247,242,0.9);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 6px 12px; border-radius: 100px;
+}
+
+.common-strip {
+  margin-top: 80px; max-width: 1280px; margin-left: auto; margin-right: auto;
+}
+.common-strip .kicker {
+  color: var(--orange);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  font-weight: 600; margin-bottom: 14px;
+}
+.common-strip h3 {
+  font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 28px;
+  margin-bottom: 12px; letter-spacing: -0.01em;
+}
+.common-strip h3 em { font-style: italic; color: var(--orange); }
+.common-desc {
+  max-width: none; margin-bottom: 16px;
+  font-size: 15px; line-height: 1.6; color: rgba(250,247,242,0.7);
+}
+.common-clean {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 500; color: rgba(250,247,242,0.92);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 8px 16px; border-radius: 100px;
+  margin-bottom: 28px;
+}
+.common-clean strong { color: var(--orange); font-weight: 700; }
+.common-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+}
+.common-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.common-card:hover { transform: translateY(-4px); border-color: var(--orange); }
+.common-card .common-img { aspect-ratio: 4/3; overflow: hidden; }
+.common-card .common-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+.common-card:hover .common-img img { transform: scale(1.05); }
+.common-card .common-label {
+  padding: 16px 20px;
+  font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 500;
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .common-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .common-grid { grid-template-columns: 1fr; }
+}
+
+/* Section divider */
+.section-divider {
+  border: 0; height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(14,14,16,0.18) 50%, transparent 100%);
+  max-width: 1280px; margin: 0 auto;
+}
+
+/* Awards section */
+.awards { background: #ECE7DA; color: var(--ink); }
+.awards-wrap {
+  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+  align-items: center;
+}
+.awards-copy .kicker {
+  color: var(--orange);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  font-weight: 600; margin-bottom: 14px;
+}
+.awards-copy h3 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(28px, 3vw, 36px);
+  margin-bottom: 32px; letter-spacing: -0.01em; color: var(--ink);
+}
+.awards-copy h3 em { font-style: italic; color: var(--orange); }
+.awards-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px 20px;
+  align-items: center;
+}
+.awards-grid img {
+  width: 100%; height: auto; max-height: 110px;
+  object-fit: contain;
+  opacity: 0.9; transition: opacity 0.3s, transform 0.3s;
+}
+.awards-grid img:hover { opacity: 1; transform: translateY(-2px); }
+.awards-team-photo {
+  border-radius: 28px; overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(14,14,16,0.25);
+}
+.awards-team-photo img {
+  display: block; width: 100%; height: auto;
+}
+@media (max-width: 900px) {
+  .awards-wrap { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 540px) {
+  .awards-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+
+/* Smart lock spotlight */
+.lock-spotlight { background: var(--paper-warm); }
+.lock-wrap {
+  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px;
+  align-items: center;
+}
+.lock-photos {
+  display: grid; grid-template-columns: 1fr; gap: 16px;
+  max-width: 540px;
+}
+.lock-photo {
+  position: relative;
+}
+.lock-photo img {
+  display: block; width: 100%; height: auto;
+  border-radius: 18px;
+}
+.lock-tag {
+  position: absolute; left: 12px; bottom: 12px;
+  background: var(--ink); color: var(--paper);
+  padding: 8px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.lock-tag::before {
+  content: '🔒'; font-size: 14px;
+}
+.lock-copy .kicker {
+  color: var(--orange);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  font-weight: 600; margin-bottom: 14px;
+}
+.lock-copy h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.02em;
+  margin-bottom: 20px; color: var(--ink);
+}
+.lock-copy h2 em { font-style: italic; color: var(--orange); }
+.lock-copy p {
+  font-size: 17px; line-height: 1.55; color: var(--ink-soft);
+  margin-bottom: 26px;
+}
+.lock-points {
+  list-style: none; padding: 0; display: grid; gap: 12px;
+}
+.lock-points li {
+  position: relative; padding-left: 28px;
+  font-size: 15px; line-height: 1.5; color: var(--ink-soft);
+}
+.lock-points li::before {
+  content: ''; position: absolute; left: 0; top: 9px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 4px rgba(238,108,77,0.15);
+}
+.lock-points strong { color: var(--ink); font-weight: 600; }
+.lock-outro {
+  margin-top: 24px; padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 15px; line-height: 1.6; color: var(--ink-soft);
+}
+.lock-outro strong { color: var(--orange-deep); font-weight: 600; }
+@media (max-width: 900px) {
+  .lock-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .lock-photos { max-width: 420px; margin: 0 auto; }
+}
+
+/* Smart utilities spotlight */
+.utility-spotlight { background: #FFF4E0; }
+.utility-wrap {
+  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px;
+  align-items: center;
+}
+.utility-photo {
+  position: relative; max-width: 520px; margin: 0 auto;
+}
+.utility-photo img {
+  display: block; width: 100%; height: auto;
+  filter: drop-shadow(0 30px 40px rgba(14,14,16,0.22));
+}
+.utility-chip {
+  position: absolute; left: 12px; bottom: 12px;
+  background: var(--ink); color: var(--paper);
+  padding: 8px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.utility-chip::before { content: '⚡'; font-size: 14px; }
+.utility-copy .kicker {
+  color: var(--orange);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  font-weight: 600; margin-bottom: 14px;
+}
+.utility-copy h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.02em;
+  margin-bottom: 20px; color: var(--ink);
+}
+.utility-copy h2 em { font-style: italic; color: var(--orange); }
+.utility-copy p {
+  font-size: 17px; line-height: 1.55; color: var(--ink-soft);
+  margin-bottom: 26px;
+}
+.utility-points {
+  list-style: none; padding: 0; display: grid; gap: 12px;
+}
+.utility-points li {
+  position: relative; padding-left: 28px;
+  font-size: 15px; line-height: 1.5; color: var(--ink-soft);
+}
+.utility-points li::before {
+  content: ''; position: absolute; left: 0; top: 9px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 4px rgba(238,108,77,0.15);
+}
+.utility-points strong { color: var(--ink); font-weight: 600; }
+.utility-outro {
+  margin-top: 24px; padding-top: 22px;
+  border-top: 1px solid rgba(14,14,16,0.1);
+  font-size: 15px; line-height: 1.6; color: var(--ink-soft);
+}
+.utility-outro strong { color: var(--orange-deep); font-weight: 600; }
+@media (max-width: 900px) {
+  .utility-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .utility-photo { max-width: 420px; margin: 0 auto; order: 1; }
+  .utility-copy { order: 2; }
+  .utility-chip { left: 8px; bottom: 8px; font-size: 11px; padding: 7px 12px; }
+}
+
+/* Emergency support spotlight (image on the left, cream background) */
+.emergency-spotlight { background: #FFF4E0; }
+.emergency-wrap {
+  max-width: 1280px; margin: 0 auto;
+  display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px;
+  align-items: center;
+}
+.emergency-photo {
+  position: relative; max-width: 520px; margin: 0 auto;
+}
+.emergency-photo img {
+  display: block; width: 100%; height: auto;
+  filter: drop-shadow(0 30px 40px rgba(14,14,16,0.22));
+}
+.emergency-chip {
+  position: absolute; left: 12px; bottom: 12px;
+  background: var(--ink); color: var(--paper);
+  padding: 8px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.emergency-chip::before { content: '☎️'; font-size: 14px; }
+.emergency-copy .kicker {
+  color: var(--orange);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em;
+  font-weight: 600; margin-bottom: 14px;
+}
+.emergency-copy h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.02em;
+  margin-bottom: 20px; color: var(--ink);
+}
+.emergency-copy h2 em { font-style: italic; color: var(--orange); }
+.emergency-copy p {
+  font-size: 17px; line-height: 1.55; color: var(--ink-soft);
+  margin-bottom: 26px;
+}
+.emergency-points {
+  list-style: none; padding: 0; display: grid; gap: 12px;
+}
+.emergency-points li {
+  position: relative; padding-left: 28px;
+  font-size: 15px; line-height: 1.5; color: var(--ink-soft);
+}
+.emergency-points li::before {
+  content: ''; position: absolute; left: 0; top: 9px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 4px rgba(238,108,77,0.15);
+}
+.emergency-points strong { color: var(--ink); font-weight: 600; }
+.emergency-outro {
+  margin-top: 24px; padding-top: 22px;
+  border-top: 1px solid rgba(14,14,16,0.1);
+  font-size: 15px; line-height: 1.6; color: var(--ink-soft);
+}
+.emergency-outro strong { color: var(--orange-deep); font-weight: 600; }
+@media (max-width: 900px) {
+  .emergency-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .emergency-photo { max-width: 420px; margin: 0 auto; }
+  .emergency-chip { left: 8px; bottom: 8px; font-size: 11px; padding: 7px 12px; }
+}
+
+.rooms-carousel { position: relative; }
+.rooms-viewport { overflow: hidden; }
+.rooms-track { display: flex; gap: 20px; transition: transform 0.45s cubic-bezier(.22,.61,.36,1); will-change: transform; }
+.rooms-track .room-card { flex: 0 0 calc((100% - 40px) / 3); }
+.carousel-arrow {
+  position: absolute; top: calc(50% - 24px); transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(20,20,20,0.7); border: 1px solid rgba(255,255,255,0.15);
+  color: var(--ink); cursor: pointer; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; line-height: 1; padding: 0 0 2px;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.carousel-arrow:hover:not(:disabled) { background: var(--orange); border-color: var(--orange); color: #fff; }
+.carousel-arrow.prev { left: -22px; }
+.carousel-arrow.next { right: -22px; }
+.carousel-arrow:disabled { opacity: 0.25; cursor: default; }
+
+.room-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.room-card:hover { transform: translateY(-4px); border-color: var(--orange); }
+.room-card .room-img { aspect-ratio: 4/3; overflow: hidden; }
+.room-card .room-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+.room-card:hover .room-img img { transform: scale(1.08); }
+.room-card .room-body { padding: 18px 20px; }
+.room-card .rt {
+  font-family: 'Poppins', sans-serif; font-size: 17px;
+  font-weight: 500; margin-bottom: 2px;
+}
+.room-card .rsize { font-size: 12px; color: rgba(250,247,242,0.6); margin-bottom: 14px; }
+.room-card .rprice {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.room-card .rprice .old { font-size: 13px; color: rgba(250,247,242,0.4); text-decoration: line-through; }
+.room-card .rprice .now { font-family: 'Poppins', sans-serif; font-size: 22px; color: var(--orange); font-weight: 500; }
+.room-card .rprice .per { font-size: 11px; color: rgba(250,247,242,0.5); }
+.room-card .promo {
+  display: inline-block; font-size: 10px; padding: 3px 8px;
+  background: var(--orange); color: white; border-radius: 100px;
+  text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .res-panel.active { grid-template-columns: 1fr; }
+  .rooms-track .room-card { flex-basis: calc((100% - 20px) / 2); }
+}
+@media (max-width: 540px) {
+  .rooms-track .room-card { flex-basis: 100%; }
+  .carousel-arrow.prev { left: 4px; }
+  .carousel-arrow.next { right: 4px; }
+}
+
+/* ---------- AMENITIES STRIP ---------- */
+.amenities {
+  background: var(--paper);
+  padding: 100px 40px;
+}
+.amenity-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.amenity {
+  text-align: center; padding: 32px 20px;
+  border: 1px solid var(--line); border-radius: 20px;
+  transition: all 0.3s;
+  background: white;
+}
+.amenity:hover {
+  border-color: var(--orange);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px rgba(255,107,26,0.3);
+}
+.amenity .ai {
+  width: 56px; height: 56px; margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--orange-soft); color: var(--orange-deep);
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+.amenity:hover .ai { background: var(--orange); color: white; }
+.amenity .at { font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 500; }
+
+@media (max-width: 768px) { .amenity-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ---------- COMPARISON ---------- */
+.compare-section { background: var(--paper-warm); }
+.compare-table-wrap {
+  max-width: 1200px; margin: 0 auto;
+  background: white; border-radius: 24px;
+  overflow-x: auto; box-shadow: var(--shadow-md);
+}
+.compare-table-wrap table.compare { min-width: 900px; }
+table.compare {
+  width: 100%; border-collapse: collapse;
+}
+.compare th, .compare td {
+  padding: 22px 24px; text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top; font-size: 14px;
+}
+.compare thead th {
+  background: var(--ink); color: var(--paper);
+  font-family: 'Poppins', sans-serif; font-size: 18px;
+  font-weight: 500; letter-spacing: -0.01em;
+  border-bottom: none;
+}
+.compare thead th:first-child {
+  font-family: 'Poppins', sans-serif; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.18em;
+  color: rgba(250,247,242,0.6); font-weight: 500;
+}
+.compare thead th .tag {
+  font-size: 11px; font-weight: 500; color: var(--orange);
+  display: block; margin-top: 4px; font-family: 'Poppins', sans-serif;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.compare tbody td:first-child {
+  font-weight: 500; color: var(--ink-soft);
+  background: var(--paper-warm); width: 22%;
+}
+.compare tbody tr:last-child td { border-bottom: none; }
+.compare tbody td ul { padding-left: 18px; margin: 0; }
+.compare tbody td li { margin-bottom: 4px; font-size: 13px; color: var(--ink-soft); }
+.compare .num-cell { font-family: 'Poppins', sans-serif; font-size: 22px; color: var(--orange-deep); font-weight: 500; }
+.compare .td-sub { display: block; font-size: 12px; font-weight: 400; color: var(--ink-soft); opacity: 0.7; }
+
+@media (max-width: 768px) {
+  /* Stack the comparison table into cards so nothing is cut off */
+  .compare-table-wrap { background: transparent; box-shadow: none; border-radius: 0; overflow: visible; }
+  .compare-table-wrap table.compare { min-width: 0; }
+  table.compare, table.compare tbody { display: block; width: 100%; }
+  table.compare thead { display: none; }
+  table.compare tr {
+    display: block; background: white;
+    border: 1px solid var(--line); border-radius: 16px;
+    margin-bottom: 16px; overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  table.compare td {
+    display: block; width: auto !important;
+    padding: 14px 18px; border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  table.compare tbody td:first-child {
+    background: var(--ink); color: var(--paper);
+    font-weight: 600; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  table.compare tbody td:first-child .td-sub {
+    color: rgba(250,247,242,0.7); opacity: 1; text-transform: none; letter-spacing: 0;
+  }
+  table.compare tbody td:not(:first-child)::before {
+    display: block; margin-bottom: 4px;
+    font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--orange-deep);
+  }
+  table.compare tbody td:nth-child(2)::before { content: 'Rica Residence Sentul'; }
+  table.compare tbody td:nth-child(3)::before { content: 'The Birch'; }
+  /* Duta Park Residences column hidden — Unio shifts up to the 4th cell */
+  table.compare tbody td:nth-child(4)::before { content: 'Unio Residence @ Kepong'; }
+  table.compare tbody td[colspan]::before { content: none; }
+  table.compare tbody tr td:last-child { border-bottom: none; }
+  .compare .num-cell { font-size: 20px; }
+}
+
+/* ---------- MAP (Catchment) ---------- */
+.map-section {
+  background: linear-gradient(180deg, var(--paper) 0%, #FDF8F1 100%);
+  position: relative; overflow: hidden;
+}
+.map-section::before {
+  content: ''; position: absolute;
+  top: -180px; right: -180px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,176,122,0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+.map-section::after {
+  content: ''; position: absolute;
+  bottom: -200px; left: -160px;
+  width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,191,166,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.map-wrap {
+  max-width: 1280px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.map-header { margin-bottom: 36px; text-align: left; max-width: none; }
+.market-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: white;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 9px 18px; border-radius: 100px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 20px -6px rgba(255,107,26,0.45);
+}
+.market-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: white; box-shadow: 0 0 0 0 rgba(255,255,255,0.7);
+  animation: badgePulse 1.8s infinite;
+}
+@keyframes badgePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.7); }
+  70%  { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+.catchment-title {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05;
+  letter-spacing: -0.025em; color: var(--ink);
+  margin-bottom: 12px;
+}
+.catchment-title em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--orange) 0%, #FFB07A 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.catchment-sub {
+  color: var(--ink-soft); opacity: 0.75;
+  font-size: clamp(15px, 1.4vw, 17px); font-weight: 400;
+  max-width: 560px;
+}
+.map-layout {
+  display: grid; grid-template-columns: 1fr 440px; gap: 24px;
+  align-items: start;
+}
+.map-canvas {
+  position: relative;
+  border-radius: 24px; overflow: hidden;
+  border: 1px solid rgba(14,14,16,0.06);
+  box-shadow: 0 30px 60px -25px rgba(14,14,16,0.25), 0 8px 16px -8px rgba(14,14,16,0.08);
+  background: white;
+}
+#vitrox-map {
+  height: 760px; width: 100%;
+  z-index: 0;
+}
+/* Mute the OpenStreetMap basemap toward the pale tone the page was designed
+   against. Applied to the tile pane only, so the orange rings, markers, labels
+   and popups — which live in the overlay, marker and popup panes — keep their
+   full colour and contrast. */
+#vitrox-map .leaflet-tile-pane {
+  filter: saturate(0.32) brightness(1.06) contrast(0.92) sepia(0.06);
+}
+/* Floating overlay cards on the map */
+.map-overlay {
+  position: absolute; z-index: 2;
+  pointer-events: none;
+}
+.map-overlay-top {
+  top: 18px; left: 60px; right: 18px;
+  display: flex; gap: 10px; flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.map-stat-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: white; color: var(--ink);
+  font-size: 12px; font-weight: 500;
+  padding: 8px 14px; border-radius: 100px;
+  box-shadow: 0 6px 18px rgba(14,14,16,0.12);
+  border: 1px solid rgba(14,14,16,0.06);
+}
+.map-stat-chip strong { color: var(--orange-deep); font-weight: 700; }
+.map-stat-chip .chip-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,107,26,0.18);
+}
+.map-overlay-bottom {
+  bottom: 18px; left: 18px;
+  pointer-events: auto;
+}
+.map-legend-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 10px 28px rgba(14,14,16,0.16);
+  border: 1px solid rgba(14,14,16,0.06);
+  min-width: 200px;
+}
+.map-legend-card h4 {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-soft); opacity: 0.6;
+  margin-bottom: 10px;
+}
+.map-legend-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--ink);
+  margin-top: 6px;
+}
+.map-legend-row:first-of-type { margin-top: 0; }
+.map-legend-row .lg-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  flex: 0 0 auto;
+}
+.map-legend-row .lg-star {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--orange); color: white;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; flex: 0 0 auto;
+  box-shadow: 0 2px 8px rgba(255,107,26,0.45);
+}
+.map-legend-row .lg-ring {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px dashed var(--orange); flex: 0 0 auto;
+}
+.map-legend-row .lg-ring-outer {
+  border-style: dotted; opacity: 0.6;
+}
+.ring-label {
+  background: white; color: var(--orange-deep);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 8px; border-radius: 100px;
+  border: 1px solid rgba(255,107,26,0.35);
+  box-shadow: 0 2px 8px rgba(14,14,16,0.12);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+}
+.leaflet-control-zoom a {
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  color: var(--ink) !important;
+  background: white !important;
+}
+.leaflet-control-zoom { border: none !important; box-shadow: none !important; }
+.leaflet-control-zoom a:first-child { margin-bottom: 4px; }
+.leaflet-control-attribution {
+  background: rgba(255,255,255,0.85) !important;
+  border-radius: 6px;
+  font-size: 10px !important;
+}
+.map-pin {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: white; font-weight: 600;
+  transition: transform 0.15s;
+}
+.map-pin:hover { transform: scale(1.15); }
+.map-pin.home {
+  width: 44px; height: 44px; font-size: 18px;
+  background: var(--orange) !important;
+  box-shadow: 0 6px 22px rgba(255,107,26,0.55), 0 0 0 6px rgba(255,107,26,0.18);
+  animation: homePulse 2.4s infinite;
+}
+@keyframes homePulse {
+  0%, 100% { box-shadow: 0 6px 22px rgba(255,107,26,0.55), 0 0 0 6px rgba(255,107,26,0.18); }
+  50%      { box-shadow: 0 6px 22px rgba(255,107,26,0.55), 0 0 0 14px rgba(255,107,26,0.0); }
+}
+.map-pin-label {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ink); color: white;
+  font-size: 12px; font-weight: 600;
+  padding: 7px 14px 7px 12px; border-radius: 100px;
+  box-shadow: 0 6px 18px rgba(14,14,16,0.32);
+  white-space: nowrap;
+}
+.map-pin-label .star { color: var(--orange); font-size: 11px; }
+/* Permanent distance pill on each pin */
+.leaflet-tooltip.dist-label {
+  background: var(--ink); color: white;
+  border: none; border-radius: 100px;
+  padding: 4px 10px; font-size: 11px; font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 12px rgba(14,14,16,0.3);
+  white-space: nowrap;
+}
+.leaflet-tooltip.dist-label::before { display: none; }
+/* Residence pins show their name in the brand orange */
+.leaflet-tooltip.name-label { background: #FF6B1A; }
+.leaflet-popup-content-wrapper {
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(14,14,16,0.18);
+}
+.leaflet-popup-content {
+  font-family: 'Poppins', sans-serif; margin: 14px 18px;
+  font-size: 13px; line-height: 1.5;
+}
+.leaflet-popup-content .pop-cat {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--orange); font-weight: 600; margin-bottom: 4px;
+}
+.leaflet-popup-content .pop-title {
+  font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px;
+}
+.leaflet-popup-content .pop-desc { color: var(--ink-soft); }
+.leaflet-popup-content .pop-distance {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px dashed rgba(14,14,16,0.12);
+  font-size: 12px; color: var(--ink-soft);
+  display: flex; align-items: center; gap: 6px;
+}
+.leaflet-popup-content .pop-distance strong {
+  color: var(--orange-deep); font-weight: 700;
+}
+.leaflet-popup-content .pop-distance-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--orange-soft); color: var(--orange-deep);
+  font-size: 11px; font-weight: 700;
+}
+.leaflet-popup-content .pop-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  background: var(--orange); color: white;
+  font-size: 12px; font-weight: 600;
+  padding: 8px 14px; border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.leaflet-popup-content .pop-cta:hover { background: var(--orange-deep); transform: translateX(2px); }
+
+/* Filter sidebar */
+.map-filters { display: flex; flex-direction: column; gap: 10px; }
+.filter-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 4px 6px; gap: 12px;
+}
+.filter-head .f-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-soft); opacity: 0.6;
+}
+.show-all {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--ink); font-weight: 500;
+  cursor: pointer; user-select: none;
+  background: white; border: 1px solid var(--line);
+  padding: 8px 14px; border-radius: 10px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.show-all:hover { border-color: var(--orange); box-shadow: 0 4px 12px -4px rgba(255,107,26,0.3); }
+.show-all input {
+  appearance: none; -webkit-appearance: none;
+  width: 16px; height: 16px; border-radius: 4px;
+  border: 1.5px solid var(--line); background: white;
+  cursor: pointer; position: relative;
+  transition: background 0.15s, border-color 0.15s;
+  flex: 0 0 auto;
+}
+.show-all input:checked {
+  background: var(--orange); border-color: var(--orange);
+}
+.show-all input:checked::after {
+  content: ''; position: absolute;
+  left: 4px; top: 1px; width: 4px; height: 8px;
+  border: solid white; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.filter-card {
+  position: relative; text-align: left;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 16px; padding: 16px 18px;
+  cursor: pointer; font: inherit; color: inherit;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s, background 0.2s;
+}
+.filter-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -16px rgba(14,14,16,0.2);
+  border-color: rgba(14,14,16,0.18);
+}
+.filter-card.active {
+  background: linear-gradient(135deg, #FFFFFF 0%, var(--orange-soft) 100%);
+  border-color: var(--orange);
+  box-shadow: 0 16px 36px -18px rgba(255,107,26,0.45);
+}
+.filter-card .fc-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px;
+}
+.filter-card .fc-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 17px; flex: 0 0 auto;
+  line-height: 1;
+}
+.filter-card .fc-title {
+  font-weight: 600; font-size: 15px; color: var(--ink);
+}
+.filter-card .fc-pulse {
+  margin-left: auto;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--orange);
+  opacity: 0; transition: opacity 0.2s;
+  box-shadow: 0 0 0 0 rgba(255,107,26,0.6);
+}
+.filter-card.active .fc-pulse {
+  opacity: 1;
+  animation: fcPulse 1.8s infinite;
+}
+@keyframes fcPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255,107,26,0.55); }
+  70%  { box-shadow: 0 0 0 10px rgba(255,107,26,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,107,26,0); }
+}
+.filter-card .fc-places {
+  font-size: 12.5px; color: var(--ink-soft);
+  line-height: 1.55; margin-bottom: 8px;
+  opacity: 0.8;
+}
+.filter-card .fc-stat {
+  font-size: 12.5px; color: var(--orange-deep); font-weight: 500;
+}
+.filter-card .fc-stat strong { font-weight: 700; }
+
+.map-footnote {
+  max-width: 1100px; margin: 22px auto 0;
+  font-size: 12.5px; color: var(--ink-soft);
+  opacity: 0.65; line-height: 1.65; text-align: center;
+  padding: 0 20px;
+}
+.map-footnote strong { color: var(--orange-deep); font-weight: 600; }
+
+@media (max-width: 1100px) {
+  .map-layout { grid-template-columns: 1fr 380px; gap: 20px; }
+  #vitrox-map { height: 680px; }
+}
+@media (max-width: 900px) {
+  .map-layout { grid-template-columns: 1fr; gap: 18px; }
+  #vitrox-map { height: 520px; }
+  .map-canvas { border-radius: 20px; }
+  .map-filters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .filter-head {
+    grid-column: 1 / -1;
+    padding: 0 2px 2px;
+  }
+  .filter-card { padding: 14px 14px; }
+  .filter-card .fc-icon { width: 32px; height: 32px; font-size: 15px; border-radius: 8px; }
+  .filter-card .fc-title { font-size: 14px; }
+  .filter-card .fc-places, .filter-card .fc-stat { font-size: 12px; }
+  .map-overlay-top { left: 56px; right: 14px; top: 14px; }
+  .map-stat-chip { font-size: 11px; padding: 6px 12px; }
+  .map-overlay-bottom { display: none; }
+}
+@media (max-width: 560px) {
+  .map-section::before { width: 320px; height: 320px; top: -120px; right: -120px; }
+  .market-badge { font-size: 10px; padding: 8px 14px; letter-spacing: 0.15em; }
+  .map-header { margin-bottom: 24px; }
+  #vitrox-map { height: 440px; }
+  .map-canvas { border-radius: 18px; }
+  .map-filters { grid-template-columns: 1fr; }
+  .filter-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .show-all { width: 100%; justify-content: flex-start; }
+  .map-pin-label { font-size: 11px; padding: 5px 10px; }
+  .map-pin.home { width: 38px; height: 38px; font-size: 15px; }
+  .map-footnote { font-size: 11.5px; }
+  .map-overlay-top { display: none; }
+}
+
+/* ---------- TESTIMONIALS ---------- */
+.testimonials { background: var(--paper); }
+.t-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.t-card {
+  background: white; border-radius: 24px;
+  padding: 32px; position: relative;
+  border: 1px solid var(--line);
+  transition: all 0.3s;
+}
+.t-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.t-card .quote-mark {
+  position: absolute; top: -12px; left: 24px;
+  background: var(--orange); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Poppins', sans-serif; font-size: 32px;
+  line-height: 1; padding-top: 12px; font-style: italic;
+}
+.t-card .stars { color: var(--orange); margin-bottom: 14px; font-size: 14px; }
+.t-card p { font-style: italic; color: var(--ink-soft); margin-bottom: 24px; line-height: 1.6; }
+.t-card .person { display: flex; align-items: center; gap: 12px; }
+.t-card .av {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--orange-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--orange-deep);
+}
+.t-card .pname { font-weight: 500; font-size: 14px; }
+.t-card .prole { font-size: 12px; color: var(--ink-soft); opacity: 0.7; }
+
+@media (max-width: 900px) { .t-grid { grid-template-columns: 1fr; } }
+
+/* ---------- BOOK CTA ---------- */
+.book {
+  padding: 100px 40px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+  color: white; position: relative; overflow: hidden;
+}
+.book::before {
+  content: ''; position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+}
+.book::after {
+  content: ''; position: absolute;
+  bottom: -150px; left: -150px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.book-content {
+  max-width: 900px; margin: 0 auto;
+  position: relative; z-index: 2; text-align: center;
+}
+.book h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(40px, 5.5vw, 72px); line-height: 1;
+  letter-spacing: -0.03em; margin-bottom: 24px;
+}
+.book h2 em { font-style: italic; }
+.book p {
+  font-size: 18px; line-height: 1.5;
+  max-width: 600px; margin: 0 auto 40px; opacity: 0.95;
+}
+.book-contacts {
+  display: flex; gap: 40px; justify-content: center;
+  margin-bottom: 40px; flex-wrap: wrap;
+}
+.contact-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px;
+}
+.contact-item .ci-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+}
+.contact-item a { color: white; text-decoration: none; font-weight: 500; }
+.contact-item .ci-label { display: block; font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.book-qr {
+  margin-top: 36px;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.book-qr-card {
+  background: white; padding: 14px; border-radius: 18px;
+  box-shadow: 0 14px 36px -10px rgba(14,14,16,0.25);
+  width: 160px; height: 160px;
+  display: flex; align-items: center; justify-content: center;
+}
+.book-qr-card img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.book-qr-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.9);
+}
+
+.book-cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.book-cta-row .cta-btn {
+  background: white; color: var(--ink); font-size: 15px; padding: 16px 32px;
+}
+.book-cta-row .cta-btn:hover { background: var(--ink); color: white; transform: translateY(-2px); }
+.book-cta-row .cta-btn.outline {
+  background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.5);
+}
+.book-cta-row .cta-btn.outline:hover { background: white; color: var(--orange-deep); border-color: white; }
+
+/* ---------- FOOTER ---------- */
+footer {
+  background: var(--ink); color: rgba(250,247,242,0.6);
+  padding: 50px 40px 30px;
+  font-size: 13px;
+}
+.foot {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+}
+.foot .brand { color: var(--paper); font-size: 20px; flex-direction: row; align-items: center; gap: 14px; }
+.foot .brand .x { color: rgba(250,247,242,0.5); }
+.foot .legal { font-size: 11px; }
+
+/* ---------- UTILITY ---------- */
+.fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ---------- FLOATING BOOK NOW BUTTON ---------- */
+/* Motion matches the Vitrox College site, which uses the same artwork.
+   z-index 1500 clears Leaflet's control containers (they default to 1000, and
+   this page has a Leaflet map) and stays below the lightbox at 9999. */
+.booking-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 1500;
+  display: block; line-height: 0;
+  transition: transform 0.25s ease;
+}
+/* Pulse lives on the img so it composes with the hover transform on the anchor
+   instead of overriding it. */
+.booking-float img {
+  width: 168px; height: auto; display: block;
+  filter: drop-shadow(0 8px 20px rgba(14, 14, 16, 0.28));
+  transform-origin: bottom center;
+  animation: float-book-pulse 2.4s ease-in-out infinite;
+}
+@keyframes float-book-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+/* Hold still while the user is actually aiming at it. */
+.booking-float:hover img,
+.booking-float:focus-visible img { animation-play-state: paused; }
+.booking-float:hover { transform: translateY(-4px) scale(1.04); }
+.booking-float:focus-visible {
+  outline: 3px solid var(--orange); outline-offset: 4px; border-radius: 12px;
+}
+@media (max-width: 768px) {
+  .booking-float { right: 12px; bottom: 12px; }
+  .booking-float img { width: 108px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .booking-float { transition: none; }
+  .booking-float:hover { transform: none; }
+  .booking-float img { animation: none; }
+}
+@media print { .booking-float { display: none; } }
+
+/* ---------- LIGHTBOX (click condo images to enlarge) ---------- */
+.residences .res-photo img,
+.residences .res-facility-photos img,
+.residences .res-getting-there img,
+.residences .room-img img,
+.residences .common-img img { cursor: zoom-in; }
+.lightbox {
+  position: fixed; inset: 0; z-index: 9999;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(10,10,12,0.92); padding: 4vw; cursor: zoom-out;
+  animation: fadeIn 0.2s ease;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 94vw; max-height: 90vh;
+  border-radius: 12px; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.8);
+  cursor: default;
+}
+.lightbox-close {
+  position: absolute; top: 18px; right: 26px;
+  font-size: 42px; line-height: 1; color: #fff;
+  background: none; border: none; cursor: pointer; opacity: 0.85;
+}
+.lightbox-close:hover { opacity: 1; }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="brand">
+    <div class="brand-logos">
+      <img class="logo-vitrox" src="inceif-logo-black.png" alt="INCEIF University">
+      <span class="x">×</span>
+      <img class="logo-belive" src="beLive_Logo_F_fit.png" alt="beLive">
+    </div>
+    <span class="brand-tagline">Premium Student Living Partnership</span>
+  </div>
+  <ul>
+    <li><a href="#why-belive">Why BeLive</a></li>
+    <li><a href="#map">Market Insights</a></li>
+    <li><a href="#residences">Residences</a></li>
+    <li><a href="#difference">BeLive Difference</a></li>
+    <li><a href="#how-to-book">How to Book</a></li>
+  </ul>
+  <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn">Book Now <span class="arrow">→</span></a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">
+      Exclusive <span class="underline">Co-Living</span> for<br>
+      <em>INCEIF University</em> Students
+    </h1>
+    <p class="lede">
+      Modern fully furnished rooms designed for student comfort, convenience, and community living — powered by BeLive.
+    </p>
+    <div class="hero-ctas">
+      <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn orange">Book a Room Now <span class="arrow">→</span></a>
+      <a href="#residences" class="cta-btn outline">Explore Room Types</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">4,500+</div><div class="label">Spaces Managed</div></div>
+      <div class="stat"><div class="num">2</div><div class="label">Premium Residences</div></div>
+      <div class="stat"><div class="num">RM560</div><div class="label">From / month</div></div>
+    </div>
+  </div>
+  <div class="hero-visual" hidden></div>
+</section>
+
+<!-- BUILT TOGETHER WITH INCEIF UNIVERSITY -->
+<section class="built-together" id="built-together">
+  <div class="built-together-card">
+    <div class="built-together-top">
+      <div class="built-together-logos">
+        <img src="inceif-logo-black.png" alt="INCEIF University">
+        <span class="bt-x">×</span>
+        <img src="beLive_Logo_F_fit.png" alt="beLive">
+      </div>
+      <div class="built-together-text">
+        <div class="kicker">Partnership</div>
+        <h2>Built Together with <em>INCEIF University.</em></h2>
+        <p>An exclusive co-living programme co-designed by BeLive and INCEIF University — built around how students actually live, study and unwind in Batu Kawan.</p>
+      </div>
+    </div>
+    <div class="built-together-photos">
+      <figure style="grid-column:1/-1;"><img src="BeLivexInceif_photo.jpeg" alt="BeLive × INCEIF University"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE BELIVE -->
+<section class="why-belive" id="why-belive">
+  <div class="section-head">
+    <div class="kicker">Why Choose BeLive</div>
+    <h2>Why INCEIF Students <em>Choose BeLive.</em></h2>
+    <p>Built for student life — smart, comfortable and worry-free, all in one address.</p>
+  </div>
+  <div class="why-groups">
+    <div class="why-group group-smart">
+      <div class="why-group-head">
+        <span class="why-group-title"><em>Smart</em> Living</span>
+        <span class="why-group-sub">Tech that quietly takes care of you.</span>
+      </div>
+      <div class="why-group-grid">
+        <div class="why-tile">
+          <div class="tile-icon">🔐</div>
+          <h4>Smart Lock</h4>
+          <p>IoT lock on the unit and bedroom — no keys to lose.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🚨</div>
+          <h4>Emergency Hotline in App</h4>
+          <p>One-tap access to urgent support, 24/7.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">⚡</div>
+          <h4>Electricity Tracking by Meter</h4>
+          <p>Monitor your own electricity usage and top up easily from the app.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🌐</div>
+          <h4>Free WiFi</h4>
+          <p>High-speed internet included in every unit.</p>
+        </div>
+      </div>
+    </div>
+    <div class="why-group group-comfort">
+      <div class="why-group-head">
+        <span class="why-group-title"><em>Comfortable</em> Living</span>
+        <span class="why-group-sub">Ready-to-live spaces.</span>
+      </div>
+      <div class="why-group-grid">
+        <div class="why-tile">
+          <div class="tile-icon">🧊</div>
+          <h4>Personal Fridge</h4>
+          <p>Your own fridge in the room — snacks and drinks always close by.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🛋️</div>
+          <h4>Fully Furnished</h4>
+          <p>Move in with your suitcase — bed, wardrobe, desk done.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🧹</div>
+          <h4>2× Weekly Cleaning</h4>
+          <p>Common areas cleaned twice a week, every week.</p>
+        </div>
+      </div>
+    </div>
+    <div class="why-group group-worry">
+      <div class="why-group-head">
+        <span class="why-group-title"><em>Worry-Free</em> Living</span>
+        <span class="why-group-sub">Designed for students and parents.</span>
+      </div>
+      <div class="why-group-grid">
+        <div class="why-tile">
+          <div class="tile-icon">💸</div>
+          <h4>Zero Deposit</h4>
+          <p>Move in easier with a much lower upfront cost.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🛠️</div>
+          <h4>24/7 Support</h4>
+          <p>BeLive community managers, day and night.</p>
+        </div>
+        <div class="why-tile">
+          <div class="tile-icon">🚆</div>
+          <h4>Public Transport (KTM, MRT, LRT)</h4>
+          <p>Rail connections between residence and campus, with the route mapped for each address.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-cta-row">
+    <a href="#residences" class="cta-btn orange">Explore Room Types <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section" id="map">
+  <div class="map-wrap">
+    <div class="map-header">
+      <span class="market-badge">Market Insights</span>
+      <h2 class="catchment-title">Catchment Map · <em>Kuala Lumpur</em></h2>
+      <p class="catchment-sub">Everything around INCEIF University — at a glance.</p>
+    </div>
+
+    <div class="map-layout">
+      <div class="map-canvas">
+        <div id="vitrox-map" role="application" aria-label="Map of INCEIF University and surrounding residences and amenities"></div>
+        <div class="map-overlay map-overlay-top">
+          <span class="map-stat-chip"><span class="chip-dot"></span><strong>5 km</strong> &amp; <strong>10 km</strong> catchment</span>
+          <span class="map-stat-chip"><span class="chip-dot"></span><strong>Central</strong> Kuala Lumpur</span>
+          <span class="map-stat-chip"><span class="chip-dot"></span><strong>5 min</strong> to Hospital Kuala Lumpur</span>
+        </div>
+        <div class="map-overlay map-overlay-bottom">
+          <div class="map-legend-card">
+            <h4>Map Legend</h4>
+            <div class="map-legend-row"><span class="lg-star">★</span> INCEIF University</div>
+            <div class="map-legend-row"><span class="lg-dot" style="background:#FF6B1A"></span> Active category pin</div>
+            <div class="map-legend-row"><span class="lg-ring"></span> 5 km inner catchment</div>
+            <div class="map-legend-row"><span class="lg-ring lg-ring-outer"></span> 10 km outer catchment</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="map-filters" id="map-filters">
+        <div class="filter-head">
+          <span class="f-label">Filter Map</span>
+          <label class="show-all">
+            <input type="checkbox" id="map-show-all"> Show all
+          </label>
+        </div>
+        <!-- filter cards injected by JS -->
+      </aside>
+    </div>
+
+    <p class="map-footnote">
+      Click a category card to filter the map — by default only nearby residences are shown.
+      Tick <strong>Show all</strong> to see every catchment pin at once. The ★ pin marks INCEIF University.
+    </p>
+  </div>
+</section>
+
+<!-- RESIDENCES -->
+<section class="residences" id="residences">
+  <div class="section-head">
+    <div class="kicker">Three Iconic Residences</div>
+    <h2 style="color:var(--paper);">Pick the address that <em>feels</em><br>like you.</h2>
+    <p>Each residence has its own personality — from family-friendly mid-rises to resort-style towers.</p>
+  </div>
+
+  <div class="res-tabs">
+    <button class="res-tab active" data-tab="rica">Rica Residence Sentul</button>
+    <button class="res-tab" data-tab="birch">The Birch</button>
+    <!-- Duta Park Residences hidden
+    <button class="res-tab" data-tab="duta">Duta Park Residences</button>
+    -->
+    <button class="res-tab" data-tab="unio">Unio Residence @ Kepong</button>
+  </div>
+
+  <!-- RICA RESIDENCE SENTUL -->
+  <div class="res-panel active" data-panel="rica">
+    <div class="res-photo">
+      <img src="rica_condo1.jpg" alt="Rica Residence Sentul">
+      <span class="photo-tag">Rica Residence · Sentul</span>
+    </div>
+    <div class="res-info">
+      <div class="res-name">Rica Residence <em>Sentul</em></div>
+      <div class="res-vibe">~ Sentul · connected city living ~</div>
+      <div class="res-desc">A serviced residence in Sentul's revitalised quarter — about 2 km from INCEIF University and a short hop from the KL city core, with quick links to KTM/LRT and the northern expressways.</div>
+      <div class="res-facilities">
+        <span>Sauna</span><span>Gym</span><span>BBQ Area</span>
+      </div>
+      <div class="res-facility-photos">
+        <figure><img src="rica_sauna.jpg" alt="Rica Residence facility — sauna"><figcaption>Sauna</figcaption></figure>
+        <figure><img src="rica_gym.png" alt="Rica Residence facility — gym"><figcaption>Gym</figcaption></figure>
+        <figure><img src="rica_bbq.jpg" alt="Rica Residence facility — BBQ area"><figcaption>BBQ Area</figcaption></figure>
+      </div>
+    </div>
+    <div class="res-getting-there">
+      <div class="gt-head">Getting to INCEIF University</div>
+      <figure>
+        <img src="BeLive_Rica_Inceif.jpg" loading="lazy" decoding="async"
+             alt="Route guide from Rica Residence Sentul to INCEIF University">
+        <figcaption>Tap to enlarge</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- THE BIRCH, JALAN IPOH -->
+  <div class="res-panel" data-panel="birch">
+    <div class="res-photo">
+      <img src="TB_condo.png" alt="The Birch, Jalan Ipoh">
+      <span class="photo-tag">The Birch · Jalan Ipoh</span>
+    </div>
+    <div class="res-info">
+      <div class="res-name">The <em>Birch</em></div>
+      <div class="res-vibe">~ Jalan Ipoh · vibrant &amp; central ~</div>
+      <div class="res-desc">A freehold residential tower on Jalan Ipoh, roughly 2 km from campus and minutes from the KL city centre — surrounded by markets, eateries and transit on the city's northern fringe.</div>
+      <div class="res-facilities">
+        <span>Swimming Pool</span><span>Gym</span><span>BBQ Area</span>
+      </div>
+      <div class="res-facility-photos">
+        <figure><img src="TB-Swimming-Pool.jpeg" alt="The Birch facility — swimming pool"><figcaption>Swimming Pool</figcaption></figure>
+        <figure><img src="TB-Gymnasium.jpeg" alt="The Birch facility — gymnasium"><figcaption>Gym</figcaption></figure>
+        <figure><img src="TB-BBQ-Area.jpeg" alt="The Birch facility — BBQ area"><figcaption>BBQ Area</figcaption></figure>
+      </div>
+    </div>
+    <div class="res-getting-there">
+      <div class="gt-head">Getting to INCEIF University</div>
+      <figure>
+        <img src="BeLive_The_Birch_Inceif.jpg" loading="lazy" decoding="async"
+             alt="Route guide from The Birch, Jalan Ipoh to INCEIF University">
+        <figcaption>Tap to enlarge</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- DUTA PARK RESIDENCES — hidden -->
+  <!--
+  <div class="res-panel" data-panel="duta">
+    <div class="res-photo">
+      <img src="duta_park_condo.jpg" alt="Duta Park Residences">
+      <span class="photo-tag">Duta Park · Sentul</span>
+    </div>
+    <div class="res-info">
+      <div class="res-name">Duta Park <em>Residences</em></div>
+      <div class="res-vibe">~ Sentul · close-to-campus convenience ~</div>
+      <div class="res-desc">High-rise living off Jalan Sentul / Jalan Kuching — the closest of the four to INCEIF University at about 1.3 km, with the city centre, parks and transit all within easy reach.</div>
+      <div class="res-facilities">
+        <span>Swimming Pool</span><span>Reading Lounge</span><span>Gym</span>
+      </div>
+      <div class="res-facility-photos">
+        <figure><img src="Duta_park_pool.jpg" alt="Duta Park facility — swimming pool"><figcaption>Swimming Pool</figcaption></figure>
+        <figure><img src="Duta_Park_Reading-Lounge.jpg" alt="Duta Park facility — reading lounge"><figcaption>Reading Lounge</figcaption></figure>
+        <figure><img src="Duta_Park_Gym.jpg" alt="Duta Park facility — gym"><figcaption>Gym</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  -->
+
+  <!-- UNIO RESIDENCE @ KEPONG -->
+  <div class="res-panel" data-panel="unio">
+    <div class="res-photo">
+      <img src="UNIO_condo.jpg" alt="Unio Residence @ Kepong">
+      <span class="photo-tag">Unio Residence · Kepong</span>
+    </div>
+    <div class="res-info">
+      <div class="res-name">Unio Residence <em>@ Kepong</em></div>
+      <div class="res-vibe">~ Kepong · modern &amp; spacious ~</div>
+      <div class="res-desc">A modern condominium in Kepong, around 7 km from campus, offering generous facilities and leafy surrounds with shopping, dining and the Kepong Metropolitan Park close by.</div>
+      <div class="res-facilities">
+        <span>Games Room</span><span>Hot Dip Pool</span><span>Floating Gym</span>
+      </div>
+      <div class="res-facility-photos">
+        <figure><img src="UNIO_games_room.png" alt="Unio Residence facility — games room"><figcaption>Games Room</figcaption></figure>
+        <figure><img src="UNIO_Hot_Dip_Pool.png" alt="Unio Residence facility — hot dip pool"><figcaption>Hot Dip Pool</figcaption></figure>
+        <figure><img src="UNIO_Floating_Gym.png" alt="Unio Residence facility — floating gym"><figcaption>Floating Gym</figcaption></figure>
+      </div>
+    </div>
+    <div class="res-videos">
+      <div class="rv-head">Video Tour</div>
+      <div class="rv-grid">
+        <figure>
+          <video controls preload="metadata" playsinline>
+            <source src="Unio%20Residence,%20Kepong_compressed.mp4#t=0.5" type="video/mp4">
+            Your browser does not support embedded video.
+          </video>
+          <figcaption>Residence Tour</figcaption>
+        </figure>
+        <figure>
+          <video controls preload="metadata" playsinline>
+            <source src="Unio_Residence_Facilities_compressed.mp4#t=0.5" type="video/mp4">
+            Your browser does not support embedded video.
+          </video>
+          <figcaption>Facilities</figcaption>
+        </figure>
+        <figure>
+          <video controls preload="metadata" playsinline>
+            <source src="Unio_Pool_compressed.mp4#t=0.5" type="video/mp4">
+            Your browser does not support embedded video.
+          </video>
+          <figcaption>Pool</figcaption>
+        </figure>
+        <figure>
+          <video controls preload="metadata" playsinline>
+            <source src="Unio_Residence_MRT_compressed.mp4#t=0.5" type="video/mp4">
+            Your browser does not support embedded video.
+          </video>
+          <figcaption>MRT Connectivity</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="res-getting-there">
+      <div class="gt-head">Getting to INCEIF University</div>
+      <figure>
+        <img src="BeLive_Unio_Inceif.jpg" loading="lazy" decoding="async"
+             alt="Route guide from Unio Residence @ Kepong to INCEIF University">
+        <figcaption>Tap to enlarge</figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <!-- ROOM CARDS -->
+  <div class="rooms-strip" id="rooms-strip">
+    <!-- Populated by JS -->
+  </div>
+
+  <!-- COMMON AREAS -->
+  <div class="common-strip">
+    <div class="kicker">Beyond Your Room</div>
+    <h3>Shared <em>spaces</em> — at home beyond your room</h3>
+    <p class="common-desc">Life at BeLive doesn't stop at your door. Cook and hang out in a fully equipped shared kitchen, unwind in the bright common lounge, and handle laundry in the dedicated yard — all designed for easy, sociable student living.</p>
+    <span class="common-clean">🧹 <strong>2× weekly cleaning</strong> — shared spaces kept fresh and move-in ready</span>
+    <div class="common-grid" id="common-grid"><!-- populated by JS --></div>
+  </div>
+
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits" id="benefits">
+  <div class="section-head">
+    <div class="kicker">Why Co-Living</div>
+    <h2>More than a room. <em>A community.</em></h2>
+    <p>Co-living turns university life into something shared — connections, conveniences and savings, all in one address.</p>
+  </div>
+  <div class="benefits-grid">
+    <div class="benefit">
+      <div class="num">01</div>
+      <h3>Sense of community</h3>
+      <p>Living with like-minded students fosters belonging and support. Regular social events and networking help you build lasting relationships during your study years.</p>
+    </div>
+    <div class="benefit">
+      <div class="num">02</div>
+      <h3>Shared amenities</h3>
+      <p>Pools, gyms, communal lounges and study rooms — high-quality facilities at your doorstep that you'd never get from a regular rental.</p>
+    </div>
+    <div class="benefit">
+      <div class="num">03</div>
+      <h3>Cost savings</h3>
+      <p>Co-living arrangements bundle utilities, internet and maintenance into the rent — making budgeting easier and often more affordable than traditional rentals.</p>
+    </div>
+  </div>
+  <div class="section-cta-row">
+    <a href="#residences" class="cta-btn orange">Reserve Your Spot <span class="arrow">→</span></a>
+    <a href="#map" class="cta-btn outline">See What's Around</a>
+  </div>
+</section>
+
+<!-- WHY RENT FROM BELIVE -->
+<section>
+  <div class="why">
+    <div>
+      <div class="kicker" style="color:var(--orange-deep);font-size:12px;text-transform:uppercase;letter-spacing:0.2em;font-weight:600;margin-bottom:18px;">Why Rent From beLive</div>
+      <h2 class="display" style="font-size:clamp(36px,4.5vw,52px);margin-bottom:32px;">Experience student living, <em style="font-style:italic;color:var(--orange);">done right.</em></h2>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <div><h4>Expert management team</h4><p>Professional team with years of experience in student housing.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          </div>
+          <div><h4>Comprehensive support</h4><p>On-site community managers available to assist with any issue.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-2 14H7L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+          </div>
+          <div><h4>Hassle-free move-in</h4><p>Streamlined rental process for all tenants — sign and settle in.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <div><h4>Flexible lease terms</h4><p>Tailored to fit student schedules and academic calendars.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div><h4>High-quality standards</h4><p>Commitment to clean, safe and well-maintained living spaces.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual">
+      <div class="why-stat-card">
+        <span class="badge">award-winning ✨</span>
+        <div class="label">Trusted experience</div>
+        <div class="big">4,500<em>+</em></div>
+        <div class="desc">spaces managed across Malaysia by our experienced student-housing team. Yours could be next.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section class="awards" hidden>
+  <div class="awards-wrap">
+    <div class="awards-copy">
+      <div class="kicker">Recognition</div>
+      <h3>Award Winning <em>Team</em></h3>
+      <div class="awards-grid">
+        <img src="Logo_MY2a.png" alt="Award logo">
+        <img src="WLOGO-02.png" alt="Award logo">
+        <img src="WLOGO-03.png" alt="Award logo">
+        <img src="WLOGO-04.png" alt="Award logo">
+        <img src="WLOGO-05.png" alt="Award logo">
+        <img src="WLOGO-06.png" alt="Award logo">
+        <img src="WLOGO-07.png" alt="Award logo">
+        <img src="WLOGO-08.png" alt="Award logo">
+        <img src="WLOGO-09.png" alt="Award logo">
+        <img src="WLOGO-10.png" alt="Award logo">
+      </div>
+    </div>
+    <div class="awards-team-photo">
+      <img src="BeLiveXMas2025.jpg" alt="beLive team — Christmas 2025">
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<!-- SMART LOCK + CCTV SPOTLIGHT -->
+<section class="lock-spotlight" id="difference">
+  <div class="lock-wrap">
+    <div class="lock-photos">
+      <div class="lock-photo">
+        <img src="main_room_door_lock_cctv.png" alt="IoT smart lock on the main door and bedroom door, plus CCTV in the common area">
+        <span class="lock-tag">Main Door · Bedroom · CCTV</span>
+      </div>
+    </div>
+    <div class="lock-copy">
+      <div class="kicker">The BeLive Difference</div>
+      <h2>Smart Living,<br><em>Protected by BeLive.</em></h2>
+      <p>More than just a room — every BeLive space is designed with smart security, privacy, and peace of mind in mind. From the moment you step into the building until you enter your own room, BeLive's IoT-powered security system helps you feel safer, more comfortable, and more in control.</p>
+      <ul class="lock-points">
+        <li><strong>Dual Smart Lock Protection</strong> — Every unit comes with 2 IoT smart locks: one at the main entrance and one for your own bedroom, giving you an extra layer of personal privacy and security.</li>
+        <li><strong>Private Access Control</strong> — Unique PIN access, temporary guest codes, and app-controlled entry let you manage access easily without worrying about lost keys or access cards.</li>
+        <li><strong>24/7 CCTV Monitoring</strong> — CCTV coverage at the shared living area helps create a safer and more secure co-living environment for all tenants.</li>
+        <li><strong>Smart App Integration</strong> — Lock, unlock, and track entry activity directly from your phone, anytime, anywhere.</li>
+        <li><strong>Auto-Lock Technology</strong> — Doors automatically secure themselves, with battery alerts sent early to ensure uninterrupted protection.</li>
+      </ul>
+      <p class="lock-outro">Smart technology isn't just about convenience — it's about creating a <strong>safer, worry-free co-living experience</strong> where tenants can truly feel at home.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SMART UTILITIES SPOTLIGHT -->
+<section class="utility-spotlight">
+  <div class="utility-wrap">
+    <div class="utility-copy">
+      <div class="kicker">The BeLive Difference</div>
+      <h2>Smart Utilities,<br><em>Powered by BeLive.</em></h2>
+      <p>More than just electricity — every BeLive space is designed with smarter utility management to create a more transparent, efficient, and worry-free student living experience. With BeLive's smart meter system, tenants can easily monitor usage, manage electricity top-ups, and enjoy better control over their monthly living expenses.</p>
+      <ul class="utility-points">
+        <li><strong>Smart TopUp Meter System</strong> — Easily monitor and manage your own electricity usage directly from the BeLive ecosystem.</li>
+        <li><strong>Transparent Utility Tracking</strong> — Clear usage visibility helps avoid unexpected electricity charges and encourages smarter energy consumption.</li>
+        <li><strong>Aircond-Friendly Living</strong> — Enjoy comfortable daily living with better control over your room's energy usage.</li>
+        <li><strong>Convenient Digital Management</strong> — Top up and monitor utilities more conveniently without complicated manual processes.</li>
+        <li><strong>Optimised Shared Living Experience</strong> — Designed to create fairer and more efficient utility management for every tenant.</li>
+      </ul>
+      <p class="utility-outro">Smarter utilities create a <strong>more comfortable, transparent, and stress-free co-living experience.</strong></p>
+    </div>
+    <div class="utility-photo">
+      <img src="Top_Up_Meter_1.png" alt="BeLive smart meter and TopUp app on a mobile device">
+      <span class="utility-chip">Smart Meter · Utility Control · TopUp System</span>
+    </div>
+  </div>
+</section>
+
+<!-- EMERGENCY SUPPORT SPOTLIGHT -->
+<section class="emergency-spotlight">
+  <div class="emergency-wrap">
+    <div class="emergency-photo">
+      <img src="Emergency_Hotline.png" alt="BeLive in-app emergency hotline screen">
+      <span class="emergency-chip">Emergency Hotline · 24/7 Support · Fast Response</span>
+    </div>
+    <div class="emergency-copy">
+      <div class="kicker">The BeLive Difference</div>
+      <h2>Emergency Support,<br><em>Always Within Reach.</em></h2>
+      <p>At BeLive, your safety and peace of mind come first. Whether it's a lock issue, maintenance emergency, power disruption, or urgent assistance, help is always just a tap away through the BeLive App Emergency Hotline system.</p>
+      <ul class="emergency-points">
+        <li><strong>24/7 Emergency Hotline Access</strong> — Reach our support team anytime for urgent living-related assistance.</li>
+        <li><strong>Fast Response Support</strong> — Immediate escalation for emergencies to ensure quicker resolution and better tenant safety.</li>
+        <li><strong>In-App Emergency Button</strong> — Easily access support directly through the BeLive app without complicated processes.</li>
+        <li><strong>Maintenance &amp; Safety Assistance</strong> — Get help for urgent maintenance, access issues, or unexpected situations.</li>
+        <li><strong>Peace of Mind for Students &amp; Parents</strong> — Designed to create a safer and more reliable student co-living experience.</li>
+      </ul>
+      <p class="emergency-outro">Smart support creates a <strong>safer, more comfortable, and worry-free co-living environment.</strong></p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider" />
+
+<!-- COMPARISON -->
+<section class="compare-section" id="compare">
+  <div class="section-head">
+    <div class="kicker">Side by Side</div>
+    <h2>Compare your <em>options.</em></h2>
+    <p>A quick look at how the three residences stack up.</p>
+  </div>
+  <div class="compare-table-wrap">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>Detail</th>
+          <th>Rica Residence Sentul <span class="tag">Sentul</span></th>
+          <th>The Birch <span class="tag">Jalan Ipoh</span></th>
+          <!-- <th>Duta Park Residences <span class="tag">Sentul</span></th> -->
+          <th>Unio Residence @ Kepong <span class="tag">Kepong</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Community Atmosphere</td>
+          <td>Connected city living in Sentul.</td>
+          <td>Vibrant &amp; central, on Jalan Ipoh.</td>
+          <!-- <td>Close-to-campus convenience in Sentul.</td> -->
+          <td>Modern &amp; spacious in Kepong.</td>
+        </tr>
+        <tr>
+          <td>Distance from INCEIF University</td>
+          <td><span class="num-cell">5.5 km</span><br><span class="td-sub">~13-min drive</span></td>
+          <td><span class="num-cell">3.7 km</span><br><span class="td-sub">~16-min drive</span></td>
+          <!-- <td><span class="num-cell">4.8 km</span><br><span class="td-sub">~11-min drive</span></td> -->
+          <td><span class="num-cell">8.6 km</span><br><span class="td-sub">~20-min drive</span></td>
+        </tr>
+        <tr>
+          <td>Room Pricing <span class="td-sub">per month, from</span></td>
+          <td><ul>
+            <li>Master — RM1,100</li>
+            <li>Queen Balcony — RM850</li>
+            <li>Queen — RM800</li>
+            <li>Single — RM650–700</li>
+          </ul></td>
+          <td><ul>
+            <li>Master — RM1,100</li>
+            <li>Queen Balcony — RM850</li>
+            <li>Queen — RM800</li>
+            <li>Single — RM700</li>
+          </ul></td>
+          <!-- <td><ul>
+            <li>Master — RM1,100</li>
+            <li>Queen — RM800</li>
+            <li>Single — RM700</li>
+          </ul></td> -->
+          <td><ul>
+            <li>Master — RM1,100</li>
+            <li>Queen Balcony — RM850</li>
+            <li>Single — RM700</li>
+            <li>Mini Single — RM650</li>
+          </ul></td>
+        </tr>
+        <tr>
+          <td>Key Facilities</td>
+          <td><ul><li>Sauna</li><li>Gym</li><li>BBQ Area</li></ul></td>
+          <td><ul><li>Swimming Pool</li><li>Gym</li><li>BBQ Area</li></ul></td>
+          <!-- <td><ul><li>Swimming Pool</li><li>Reading Lounge</li><li>Gym</li></ul></td> -->
+          <td><ul><li>Games Room</li><li>Hot Dip Pool</li><li>Floating Gym</li></ul></td>
+        </tr>
+        <tr>
+          <td>Accessibility</td>
+          <td colspan="3">All three are well-connected within Kuala Lumpur — close to KTM/LRT/MRT stations, major roads (Jalan Kuching, DUKE, MRR2) and the city centre.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section-cta-row">
+    <a href="#how-to-book" class="cta-btn orange">Secure Your Room Today <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- HOW TO BOOK -->
+<section class="how-to-book" id="how-to-book">
+  <div class="section-head">
+    <div class="kicker">How to Book</div>
+    <h2>Reserve your room in <em>four steps.</em></h2>
+    <p>Straightforward from enquiry to move-in day — with BeLive supporting you at every step.</p>
+  </div>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-top"><div class="step-num">1</div><span class="step-emoji">💬</span></div>
+      <h4>Enquire</h4>
+      <p>Tell us your preferred residence, room type and move-in month via the enquiry form.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-top"><div class="step-num">2</div><span class="step-emoji">🔑</span></div>
+      <h4>Schedule a Viewing</h4>
+      <p>We'll arrange a physical or virtual tour with a BeLive community manager.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-top"><div class="step-num">3</div><span class="step-emoji">✍️</span></div>
+      <h4>Reserve &amp; Sign</h4>
+      <p>Place a booking, e-sign the tenancy and pay the first month's rent — zero deposit required.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-top"><div class="step-num">4</div><span class="step-emoji">🎉</span></div>
+      <h4>Move In</h4>
+      <p>Collect your IoT smart-lock PIN on day one and step into your fully furnished BeLive room.</p>
+    </div>
+  </div>
+  <div class="section-cta-row">
+    <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn orange">Enquire Now <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- REFERENCE CALCULATION OF PAYMENT -->
+<section class="payment-ref" id="payment-ref">
+  <div class="section-head">
+    <div class="kicker">Reference Calculation of Payment</div>
+    <h2>What you actually <em>pay</em>.</h2>
+    <p>Pick your tenant type, residence and room type for an estimated first-payment breakdown — based on a 12-month tenancy, all SST-inclusive.</p>
+  </div>
+  <div class="calc-wrap">
+    <div class="calc-controls">
+      <label class="calc-field">
+        <span>Tenant Type</span>
+        <select id="calc-tenant">
+          <option value="intl-student">International Student</option>
+          <option value="local-student">Local Student</option>
+          <option value="intl-staff">International Staff</option>
+          <option value="local-staff">Local Staff</option>
+        </select>
+      </label>
+      <label class="calc-field">
+        <span>Residence</span>
+        <select id="calc-condo">
+          <option value="rica">Rica Residence Sentul</option>
+          <option value="birch">The Birch</option>
+          <!-- <option value="duta">Duta Park Residences</option> -->
+          <option value="unio">Unio Residence @ Kepong</option>
+        </select>
+      </label>
+      <label class="calc-field">
+        <span>Room Type</span>
+        <select id="calc-room"></select>
+      </label>
+      <label class="calc-field">
+        <span>Car Park</span>
+        <select id="calc-carpark">
+          <option value="no">Not required</option>
+          <option value="yes">Add reserved bay (+RM100/mo)</option>
+        </select>
+      </label>
+    </div>
+    <div class="payment-card" id="calc-breakdown"><!-- injected by JS --></div>
+    <p class="payment-disclaimer">
+      <strong>Note:</strong> Prices are inclusive of 8% SST. Any adjustments or changes will be determined based on the monthly rental amount and the agreed rental terms.<br><br>
+      <strong>Terms &amp; Conditions:</strong> Prices shown are for reference only. Figures are based on a <strong>12-month tenancy</strong>; tenancies of less than 12 months carry a different rental rate. Final figures will be confirmed by the BeLive team before signing.<br><br>
+      <strong>Tenant Type:</strong> Local students and local staff pay the same rate — an RM120 discount on the rental charges, with the security deposit waived. International students and international staff also pay the same rate as each other. Select your tenant type above for the applicable breakdown.
+    </p>
+  </div>
+  <div class="section-cta-row">
+    <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="cta-btn orange">Check Availability <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- FINAL CTA — RENT SAFE, STAY HAPPY -->
+<section class="final-cta" id="final-cta">
+  <div class="final-cta-wrap">
+    <h2>Rent Safe, <em>Stay Happy.</em></h2>
+    <p>Smart student co-living designed for comfort, convenience, and peace of mind.</p>
+    <div class="final-cta-buttons">
+      <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="fcta-btn primary">Book a Room Now <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div class="brand">
+      <img class="logo-vitrox" src="inceif-logo-white.png" alt="INCEIF University">
+      <span class="x">×</span>
+      <img class="logo-belive" src="beLive_Logo_F_fit_w.png" alt="beLive">
+    </div>
+    <div class="legal">© 2026 beLive. T&C apply. Prices subject to administration and monthly rent charges.</div>
+  </div>
+</footer>
+
+<!-- Floating Book Now CTA -->
+<a class="booking-float" href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener">
+  <img src="Booking_Button.png" width="1024" height="1536"
+       alt="Book now — enquire about a BeLive room at INCEIF University">
+</a>
+
+<!-- Lightbox for enlarging condo images -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+  <button class="lightbox-close" type="button" aria-label="Close">×</button>
+  <img class="lightbox-img" src="" alt="">
+</div>
+
+<script>
+// --- Tab switching for residences ---
+const tabs = document.querySelectorAll('.res-tab');
+const panels = document.querySelectorAll('.res-panel');
+const roomsStrip = document.getElementById('rooms-strip');
+
+// Room images currently reuse each condo's building photo as a placeholder —
+// swap in per-room bedroom photos when available. Prices per BeLive (RM/month).
+const roomData = {
+  rica: {
+    label: 'Rica Residence Sentul',
+    rooms: [
+      { name: 'Master Room',          rent: 1100, disp: 'RM1,100',     img: 'Rica_QP.jpg' },
+      { name: 'Queen Balcony Bedroom', rent: 850, disp: 'RM850',       img: 'Rica_QCB.jpg' },
+      { name: 'Queen Bedroom',         rent: 800, disp: 'RM800',       img: 'Rica_QC.jpg' },
+      { name: 'Single Bedroom',        rent: 650, disp: 'RM650 – 700', img: 'Rica_SC.jpg' },
+    ],
+    common: [
+      { img: 'Rica_Kitchen_Dining.jpeg', label: 'Kitchen & Dining', alt: 'Rica Residence shared kitchen & dining' },
+      { img: 'Rica_Yard.jpeg',           label: 'Yard',             alt: 'Rica Residence yard' },
+    ],
+  },
+  birch: {
+    label: 'The Birch',
+    rooms: [
+      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'TB_QP.jpg' },
+      { name: 'Queen Balcony Bedroom',  rent: 850, disp: 'RM850',   img: 'TB_QCB.jpg' },
+      { name: 'Queen Bedroom',          rent: 800, disp: 'RM800',   img: 'TB_QC.jpg' },
+      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'TB_SC.jpg' },
+    ],
+    common: [
+      { img: 'TB_Kitchen.jpeg', label: 'Shared Kitchen', alt: 'The Birch shared kitchen' },
+      { img: 'TB_Dining.jpg',   label: 'Dining Area',    alt: 'The Birch dining area' },
+      { img: 'TB_Yard.jpeg',    label: 'Yard',           alt: 'The Birch yard' },
+    ],
+  },
+  // Duta Park Residences hidden
+  // duta: {
+  //   label: 'Duta Park Residences',
+  //   rooms: [
+  //     { name: 'Master Room',   rent: 1100, disp: 'RM1,100', img: 'DP_QP.jpg' },
+  //     { name: 'Queen Bedroom',  rent: 800, disp: 'RM800',   img: 'DP_QC.jpg' },
+  //     { name: 'Single Bedroom', rent: 700, disp: 'RM700',   img: 'DP_SC.JPG' },
+  //   ],
+  //   common: [
+  //     { img: 'DP_Entrance.jpg', label: 'Entrance',                 alt: 'Duta Park unit entrance' },
+  //     { img: 'DP_Dining.jpg',   label: 'Dining Area',              alt: 'Duta Park dining area' },
+  //     { img: 'DP_Kitchen.jpg',  label: 'Shared Kitchen & Laundry', alt: 'Duta Park shared kitchen and laundry' },
+  //   ],
+  // },
+  unio: {
+    label: 'Unio Residence @ Kepong',
+    rooms: [
+      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'UNIO_QP.jpg' },
+      { name: 'Queen Balcony Bedroom',  rent: 850, disp: 'RM850',   img: 'UNIO_QCB.jpg' },
+      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'UNIO_SC.jpg' },
+      { name: 'Mini Single Bedroom',    rent: 650, disp: 'RM650',   img: 'UNIO_MSC.jpg' },
+    ],
+    common: [
+      { img: 'Unio_Common_Area.JPG', label: 'Common Area', alt: 'Unio Residence common area' },
+      { img: 'Unio_Kitchen.JPG',     label: 'Kitchen',     alt: 'Unio Residence kitchen' },
+      { img: 'Unio_Yard.JPG',        label: 'Yard',        alt: 'Unio Residence yard' },
+    ],
+  },
+};
+
+function renderRooms(key) {
+  const d = roomData[key];
+  const cardsHtml = d.rooms.map(r => `
+    <div class="room-card">
+      <div class="room-img"><img src="${r.img}" alt="${r.name}"></div>
+      <div class="room-body">
+        <div class="rt">${r.name}</div>
+        ${r.size ? `<div class="rsize">${r.size}</div>` : ''}
+        <div class="rprice">
+          <span class="per">from</span>
+          <span class="now">${r.disp}</span>
+          <span class="per">/ month</span>
+        </div>
+        <a href="https://bit.ly/BeLive_INCEIF" target="_blank" rel="noopener" class="room-cta">Book This Room <span class="arrow">→</span></a>
+      </div>
+    </div>
+  `).join('');
+  roomsStrip.innerHTML = `
+    <h3>${d.label} <em>rooms</em> — modern & furnished</h3>
+    <p class="rooms-desc">Move in with just your suitcase. Every BeLive room comes fully furnished and tech-ready — thoughtfully fitted out for comfortable study, rest and everyday living, with no extra setup or hidden furnishing costs.</p>
+    <div class="rooms-included">
+      <span class="ri-intro">Every room includes:</span>
+      <span>🧊 Personal Fridge</span>
+      <span>🛏️ Bedframe</span>
+      <span>😴 Mattress</span>
+      <span>🚪 Wardrobe</span>
+      <span>🪑 Desk</span>
+      <span>❄️ Aircond</span>
+      <span>🌀 Fan</span>
+      <span>💡 Light</span>
+      <span>⚡ Smart Meter</span>
+      <span>🔐 Smart Room Door Lock</span>
+    </div>
+    <div class="rooms-carousel">
+      <button class="carousel-arrow prev" aria-label="Previous rooms">‹</button>
+      <div class="rooms-viewport"><div class="rooms-track">${cardsHtml}</div></div>
+      <button class="carousel-arrow next" aria-label="Next rooms">›</button>
+    </div>
+  `;
+  initRoomsCarousel(d.rooms.length);
+}
+
+function renderCommon(key) {
+  const commonGrid = document.getElementById('common-grid');
+  if (!commonGrid) return;
+  const common = (roomData[key] && roomData[key].common) || [];
+  commonGrid.innerHTML = common.map(c => `
+    <div class="common-card">
+      <div class="common-img"><img src="${c.img}" alt="${c.alt}"></div>
+      <div class="common-label">${c.label}</div>
+    </div>
+  `).join('');
+}
+
+let roomsCarouselResizeHandler = null;
+function initRoomsCarousel(total) {
+  const root = roomsStrip.querySelector('.rooms-carousel');
+  if (!root) return;
+  const track = root.querySelector('.rooms-track');
+  const prev = root.querySelector('.carousel-arrow.prev');
+  const next = root.querySelector('.carousel-arrow.next');
+  let index = 0;
+
+  const visibleCount = () => {
+    if (window.innerWidth <= 540) return 1;
+    if (window.innerWidth <= 900) return 2;
+    return 3;
+  };
+
+  const update = () => {
+    const v = visibleCount();
+    const maxIndex = Math.max(0, total - v);
+    if (index > maxIndex) index = maxIndex;
+    const card = track.querySelector('.room-card');
+    const cardWidth = card ? card.getBoundingClientRect().width : 0;
+    const gap = 20;
+    track.style.transform = `translateX(-${index * (cardWidth + gap)}px)`;
+    prev.disabled = index <= 0;
+    next.disabled = index >= maxIndex;
+  };
+
+  prev.addEventListener('click', () => { index = Math.max(0, index - 1); update(); });
+  next.addEventListener('click', () => { index = index + 1; update(); });
+
+  if (roomsCarouselResizeHandler) window.removeEventListener('resize', roomsCarouselResizeHandler);
+  roomsCarouselResizeHandler = update;
+  window.addEventListener('resize', roomsCarouselResizeHandler);
+
+  requestAnimationFrame(update);
+}
+
+function activateResidence(key) {
+  tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === key));
+  panels.forEach(p => p.classList.toggle('active', p.dataset.panel === key));
+  if (roomData[key]) { renderRooms(key); renderCommon(key); }
+}
+tabs.forEach(t => {
+  t.addEventListener('click', () => activateResidence(t.dataset.tab));
+});
+
+// Map popup "View details" buttons → switch tab and scroll to residences
+document.addEventListener('click', e => {
+  const cta = e.target.closest('.pop-cta[data-restab]');
+  if (!cta) return;
+  e.preventDefault();
+  activateResidence(cta.dataset.restab);
+  const target = document.getElementById('residences');
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// Initial render
+renderRooms('rica');
+renderCommon('rica');
+
+// --- Lightbox: click any condo image (building, facility, room, shared space) to enlarge ---
+(function initLightbox() {
+  const residences = document.getElementById('residences');
+  const lightbox = document.getElementById('lightbox');
+  if (!residences || !lightbox) return;
+  const lightboxImg = lightbox.querySelector('.lightbox-img');
+
+  const open = (src, alt) => {
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+  const close = () => {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+  };
+
+  residences.addEventListener('click', e => {
+    const img = e.target.closest('img');
+    if (!img || !residences.contains(img)) return;
+    open(img.currentSrc || img.src, img.alt);
+  });
+  lightbox.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
+// --- Residence videos: drop any tile whose file is missing ---
+// preload="metadata" means a 404 surfaces before the user clicks play, so a
+// missing file collapses its tile instead of showing a dead player.
+(function initResidenceVideos() {
+  document.querySelectorAll('.res-videos source').forEach(source => {
+    source.addEventListener('error', () => {
+      const figure = source.closest('figure');
+      const gallery = source.closest('.res-videos');
+      if (figure) figure.remove();
+      if (gallery && !gallery.querySelector('figure')) gallery.remove();
+    });
+  });
+})();
+
+// --- Payment calculator ---
+(function initPaymentCalculator() {
+  const tenantSel = document.getElementById('calc-tenant');
+  const condoSel = document.getElementById('calc-condo');
+  const roomSel = document.getElementById('calc-room');
+  const carparkSel = document.getElementById('calc-carpark');
+  const breakdown = document.getElementById('calc-breakdown');
+  if (!tenantSel || !condoSel || !roomSel || !carparkSel || !breakdown) return;
+
+  // Pricing depends only on local vs international: students and staff of the
+  // same origin pay the same rate.
+  const TENANT_TYPES = {
+    'intl-student':  { label: 'International Student', local: false },
+    'local-student': { label: 'Local Student',         local: true  },
+    'intl-staff':    { label: 'International Staff',   local: false },
+    'local-staff':   { label: 'Local Staff',           local: true  },
+  };
+
+  const condoLabels = {
+    rica: 'Rica Residence Sentul',
+    birch: 'The Birch',
+    // duta: 'Duta Park Residences',   // hidden
+    unio: 'Unio Residence @ Kepong',
+  };
+  const FEES = {
+    adminMoveIn: 529,      // one-time admin & move-in fee (SST-inclusive)
+    carPark: 100,
+    accessCard: 150,
+    inceifProcessing: 150, // INCEIF processing fee — charged to every tenant type
+    rentalAddOn: 200,      // added to room price for all tenants
+    localDiscount: 120,    // deducted for local students & local staff
+    depositMultiple: 2,    // security deposit = room rental x 2 (multiple not shown to users)
+  };
+  const fmt = (n) => 'RM ' + n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const rentOf = (room) => room.rent || 0;
+
+  function populateRooms() {
+    const rooms = roomData[condoSel.value].rooms;
+    roomSel.innerHTML = rooms.map((r, i) => `<option value="${i}">${r.name} — from ${r.disp}/mo</option>`).join('');
+  }
+
+  function render() {
+    const rooms = roomData[condoSel.value].rooms;
+    const room = rooms[roomSel.value] || rooms[0];
+    const rent = rentOf(room);
+    const tenant = TENANT_TYPES[tenantSel.value] || TENANT_TYPES['intl-student'];
+    const isLocal = tenant.local;
+    const rentalCharges = rent + FEES.rentalAddOn;
+    const discount = isLocal ? FEES.localDiscount : 0;
+    const wantsCarpark = carparkSel.value === 'yes';
+    const carpark = wantsCarpark ? FEES.carPark : 0;
+    // Deposit follows the room rental; waived for local students & local staff.
+    const depositBeforeWaiver = rent * FEES.depositMultiple;
+    const securityDeposit = isLocal ? 0 : depositBeforeWaiver;
+    const total = FEES.adminMoveIn + FEES.inceifProcessing
+      + rentalCharges - discount + carpark + securityDeposit + FEES.accessCard;
+
+    breakdown.innerHTML = `
+      <div class="payment-row group-head"><span class="pr-label">One-Time &amp; Monthly Fees</span></div>
+      <div class="payment-row"><div><span class="pr-label">Admin &amp; Move-In Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.adminMoveIn)}</span></div>
+      <div class="payment-row"><div><span class="pr-label">INCEIF Processing Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.inceifProcessing)}</span></div>
+      <div class="payment-row"><div><span class="pr-label">Rental Charges</span><span class="pr-note">${condoLabels[condoSel.value]} — ${room.name} · incl. SST</span></div><span class="pr-value">${fmt(rentalCharges)}</span></div>
+      ${isLocal ? `<div class="payment-row"><div><span class="pr-label">Discount</span><span class="pr-note">${tenant.label} rate</span></div><span class="pr-value discount">− ${fmt(discount)}</span></div>` : ''}
+      <div class="payment-row"><div><span class="pr-label">Car Park (Monthly)</span><span class="pr-note">${wantsCarpark ? 'Reserved bay added · incl. SST' : 'Not included'}</span></div><span class="pr-value${wantsCarpark ? '' : ' muted'}">${wantsCarpark ? fmt(FEES.carPark) : '—'}</span></div>
+      <div class="payment-row group-head"><span class="pr-label">Refundable</span></div>
+      <div class="payment-row"><div><span class="pr-label">Security Deposit</span><span class="pr-note">${isLocal ? 'Waived for local students &amp; local staff' : 'Based on room rental · refundable · incl. SST'}</span></div><span class="pr-value${isLocal ? ' discount' : ''}">${isLocal ? `<span class="pr-was">${fmt(depositBeforeWaiver)}</span>${fmt(0)}` : fmt(securityDeposit)}</span></div>
+      <div class="payment-row"><div><span class="pr-label">Access Card Deposit</span><span class="pr-note">Refundable · incl. SST</span></div><span class="pr-value">${fmt(FEES.accessCard)}</span></div>
+      <div class="payment-row note"><span class="pr-foot">Refundable upon successful move-out inspection and subject to the tenancy agreement &amp; applicable T&amp;Cs.</span></div>
+      <div class="payment-row total"><div><span class="pr-label">Total First Payment</span><span class="pr-note">12-month tenancy · ${tenant.label} · incl. SST</span></div><span class="pr-value">${fmt(total)}</span></div>
+    `;
+  }
+
+  tenantSel.addEventListener('change', render);
+  condoSel.addEventListener('change', () => { populateRooms(); render(); });
+  roomSel.addEventListener('change', render);
+  carparkSel.addEventListener('change', render);
+  populateRooms();
+  render();
+})();
+
+// --- Smooth scroll for nav ---
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+// --- Catchment map (Leaflet) ---
+window.addEventListener('load', () => {
+  if (typeof L === 'undefined') return;
+
+  // Subject: INCEIF University — central Kuala Lumpur (Google Plus Code 5M6R+29, off Jalan Raja Laut / Jalan Tun Ismail).
+  // NOTE: surrounding coordinates are approximate (KL city-centre landmarks).
+  const INCEIF = [3.16006, 101.69094];
+
+  const CATEGORIES = {
+    residence: {
+      label: 'Residences', icon: '🏠', color: '#FF6B1A',
+      places: 'INCEIF University (★) · Rica Residence Sentul · The Birch · Unio Residence @ Kepong',
+      stat: '<strong>City-centre campus</strong> with student living all around',
+      defaultOn: true,
+    },
+    healthcare: {
+      label: 'Healthcare', icon: '⚕️', color: '#DC2626',
+      places: 'Hospital Kuala Lumpur · National Heart Institute (IJN) · KPJ Tawakkal · Gleneagles KL · Prince Court · Pusrawi',
+      stat: '<strong>Top hospitals</strong> minutes away',
+    },
+    commercial: {
+      label: 'Commercial', icon: '🛍️', color: '#14B8A6',
+      places: 'Sunway Putra Mall · Quill City Mall · Sogo KL · Suria KLCC · Pavilion KL · The Exchange TRX · Berjaya Times Square · Chow Kit Market',
+      stat: '<strong>Malls, markets & F&B</strong> all around',
+    },
+    industrial: {
+      label: 'Business & Finance', icon: '🏦', color: '#F59E0B',
+      places: 'Bank Negara Malaysia · KLCC · Tun Razak Exchange (TRX) · KL Sentral · PWTC · Menara Maybank · Tabung Haji',
+      stat: "<strong>KL's financial & business core</strong>",
+    },
+  };
+
+  const PLACES = [
+    // Residences
+    { cat:'residence',  name:'INCEIF University',                    desc:'Your campus — the ★ subject property in central Kuala Lumpur.', coords:INCEIF, home:true },
+    { cat:'residence',  name:'Rica Residence Sentul',               desc:'Serviced residence in the Sentul regeneration zone.', coords:[3.1778074, 101.6847228], dist:5.5 },
+    { cat:'residence',  name:'The Birch',                            desc:'Freehold residential tower on Jalan Ipoh.', coords:[3.1763944, 101.6815058], dist:3.7 },
+    // { cat:'residence',  name:'Duta Park Residences',                 desc:'High-rise living off Jalan Sentul / Jalan Kuching.', coords:[3.1702492, 101.6858202], dist:4.8 },   // hidden
+    { cat:'residence',  name:'Unio Residence @ Kepong',              desc:'Modern condominium in Kepong.', coords:[3.2088385, 101.6492117], dist:8.6 },
+
+    // Healthcare
+    { cat:'healthcare', name:'Hospital Kuala Lumpur (HKL)',          desc:'Malaysia\'s largest public referral hospital.', coords:[3.17350, 101.70100], dist:3 },
+    { cat:'healthcare', name:'Institut Jantung Negara (IJN)',        desc:'National Heart Institute.', coords:[3.17120, 101.69980], dist:3.6 },
+    { cat:'healthcare', name:'KPJ Tawakkal Specialist Hospital',    desc:'Private specialist hospital on Jalan Pahang.', coords:[3.17580, 101.69380], dist:3.4 },
+    { cat:'healthcare', name:'Gleneagles Hospital KL',               desc:'Private tertiary hospital, Ampang.', coords:[3.16200, 101.73000], dist:9.6 },
+    { cat:'healthcare', name:'Prince Court Medical Centre',          desc:'Premium private hospital, Jalan Kia Peng.', coords:[3.15880, 101.72280], dist:5 },
+    { cat:'healthcare', name:'Hospital Pusrawi',                     desc:'Private hospital near Jalan Tun Razak.', coords:[3.14500, 101.69580], dist:4 },
+
+    // Commercial
+    { cat:'commercial', name:'Sunway Putra Mall',                    desc:'Major mall beside PWTC & Putra LRT.', coords:[3.16620, 101.69120], dist:3.4 },
+    { cat:'commercial', name:'Quill City Mall',                      desc:'Lifestyle mall on Jalan Sultan Ismail.', coords:[3.16220, 101.69820], dist:2.8 },
+    { cat:'commercial', name:'Sogo Kuala Lumpur',                    desc:'Department store on Jalan Tuanku Abdul Rahman.', coords:[3.15680, 101.69480], dist:2.2 },
+    { cat:'commercial', name:'Suria KLCC',                           desc:'Flagship mall beneath the Petronas Towers.', coords:[3.15800, 101.71230], dist:5.3 },
+    { cat:'commercial', name:'Pavilion Kuala Lumpur',                desc:'Premier Bukit Bintang shopping destination.', coords:[3.14900, 101.71300], dist:4.4 },
+    { cat:'commercial', name:'Berjaya Times Square',                 desc:'Mega mall & indoor theme park.', coords:[3.14270, 101.71060], dist:4.4 },
+    { cat:'commercial', name:'Chow Kit Market',                      desc:'KL\'s largest wet market for daily essentials.', coords:[3.16450, 101.69680], dist:2.5 },
+    { cat:'commercial', name:'The Exchange TRX',                     desc:'Premium retail mall at Tun Razak Exchange.', coords:[3.14200, 101.71900], dist:5.2 },
+
+    // Business & Finance
+    { cat:'industrial', name:'Bank Negara Malaysia',                 desc:'Central bank & Islamic-finance regulator.', coords:[3.15450, 101.69180], dist:0.7 },
+    { cat:'industrial', name:'Petronas Twin Towers (KLCC)',          desc:'KLCC business & financial district.', coords:[3.15790, 101.71230], dist:4 },
+    { cat:'industrial', name:'Tun Razak Exchange (TRX)',             desc:'KL\'s international financial district.', coords:[3.14200, 101.71900], dist:5.2 },
+    { cat:'industrial', name:'KL Sentral',                           desc:'Transit hub & corporate office district.', coords:[3.13380, 101.68690], dist:3.9 },
+    { cat:'industrial', name:'Putra World Trade Centre (PWTC)',      desc:'Convention & exhibition centre on Jalan Tun Ismail.', coords:[3.17270, 101.69350], dist:4.8 },
+    { cat:'industrial', name:'Menara Maybank',                       desc:'Maybank headquarters tower.', coords:[3.14650, 101.70000], dist:2.2 },
+    { cat:'industrial', name:'Bangunan Tabung Haji',                 desc:'Iconic Lembaga Tabung Haji HQ tower.', coords:[3.16220, 101.71650], dist:5.8 },
+  ];
+
+  const map = L.map('vitrox-map', { scrollWheelZoom: false, zoomControl: true }).setView(INCEIF, 13);
+  // OpenStreetMap standard tiles: free, no API key, no account. Replaces CARTO's
+  // basemaps.cartocdn.com light_all, which rate-limits anonymous use.
+  // The {s} subdomain and {r} retina placeholders are dropped — OSM serves from a
+  // single host and has no @2x tiles.
+  // OSM standard is a full-colour style, so .leaflet-tile-pane carries a filter
+  // that mutes it back toward the pale basemap this page was designed against.
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Catchment rings around the subject — inner 5 km + outer 10 km
+  const ring5km = L.circle(INCEIF, {
+    radius: 5000,
+    color: '#FF6B1A', weight: 1.5, opacity: 0.55,
+    fillColor: '#FF6B1A', fillOpacity: 0.05,
+    dashArray: '6 8',
+  }).addTo(map);
+  const ring10km = L.circle(INCEIF, {
+    radius: 10000,
+    color: '#FF6B1A', weight: 1.2, opacity: 0.35,
+    fillColor: '#FF6B1A', fillOpacity: 0.02,
+    dashArray: '3 7',
+  }).addTo(map);
+  // Small ring labels
+  const ringLabel = (latlng, text) => L.marker(latlng, {
+    icon: L.divIcon({
+      className: '',
+      html: `<div class="ring-label">${text}</div>`,
+      iconSize: [0, 0], iconAnchor: [0, 0],
+    }),
+    interactive: false, keyboard: false,
+  }).addTo(map);
+  // Compute label positions north of subject for each ring
+  const metersPerDegLat = 111320;
+  ringLabel([INCEIF[0] + 5000 / metersPerDegLat, INCEIF[1]], '5 km');
+  ringLabel([INCEIF[0] + 10000 / metersPerDegLat, INCEIF[1]], '10 km');
+
+  const makeIcon = (color, isHome) => L.divIcon({
+    className: '',
+    html: isHome
+      ? `<div class="map-pin home">★</div>`
+      : `<div class="map-pin" style="background:${color}"></div>`,
+    iconSize: isHome ? [40, 40] : [28, 28],
+    iconAnchor: isHome ? [20, 20] : [14, 14],
+    popupAnchor: [0, -16],
+  });
+
+  const subjectLabel = L.divIcon({
+    className: '',
+    html: `<div class="map-pin-label"><span class="star">★</span> INCEIF University</div>`,
+    iconSize: [0, 0], iconAnchor: [-22, 8],
+  });
+  L.marker(INCEIF, { icon: subjectLabel, interactive: false, keyboard: false }).addTo(map);
+
+  const layers = {};
+  Object.keys(CATEGORIES).forEach(k => { layers[k] = L.layerGroup(); });
+
+  const formatDistance = (m) => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(m < 10000 ? 1 : 0)} km`;
+
+  PLACES.forEach(p => {
+    const cat = CATEGORIES[p.cat];
+    const marker = L.marker(p.coords, { icon: makeIcon(cat.color, !!p.home) });
+    // Prefer an explicit (Google Maps) distance when provided; otherwise estimate straight-line.
+    const distanceText = p.home ? null
+      : (p.dist != null ? `${p.dist} km` : `~${formatDistance(L.latLng(INCEIF).distanceTo(L.latLng(p.coords)))}`);
+    marker.bindPopup(`
+      <div class="pop-cat" style="color:${cat.color}">${cat.label}</div>
+      <div class="pop-title">${p.name}</div>
+      <div class="pop-desc">${p.desc}</div>
+      ${distanceText ? `<div class="pop-distance"><span class="pop-distance-icon">↔</span> <strong>${distanceText}</strong> from INCEIF University</div>` : ''}
+      ${p.tab ? `<a href="#residences" class="pop-cta" data-restab="${p.tab}">View More <span class="arrow">→</span></a>` : ''}
+    `);
+    // Permanent label above each pin: residences show their name (+ distance);
+    // other categories show the distance pill.
+    const isResidence = p.cat === 'residence' && !p.home;
+    const labelText = isResidence
+      ? `${p.name}${distanceText ? ' · ' + distanceText : ''}`
+      : distanceText;
+    if (labelText) {
+      marker.bindTooltip(labelText, {
+        permanent: true, direction: 'top',
+        className: isResidence ? 'dist-label name-label' : 'dist-label',
+        offset: [0, -16], opacity: 1,
+      });
+    }
+    marker.addTo(layers[p.cat]);
+  });
+
+  // Build filter cards
+  const filters = document.getElementById('map-filters');
+  const showAllInput = document.getElementById('map-show-all');
+  const cards = {};
+  let activeKey = 'residence';
+
+  const setVisibility = () => {
+    const showAll = showAllInput.checked;
+    Object.keys(layers).forEach(k => {
+      const shouldShow = showAll || k === activeKey;
+      if (shouldShow) { if (!map.hasLayer(layers[k])) map.addLayer(layers[k]); }
+      else            { if (map.hasLayer(layers[k]))  map.removeLayer(layers[k]); }
+    });
+    Object.entries(cards).forEach(([k, el]) => {
+      el.classList.toggle('active', k === activeKey && !showAll);
+    });
+  };
+
+  Object.entries(CATEGORIES).forEach(([key, c]) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'filter-card';
+    btn.dataset.cat = key;
+    btn.innerHTML = `
+      <div class="fc-head">
+        <span class="fc-icon" style="background:${c.color}1A;color:${c.color}">${c.icon}</span>
+        <span class="fc-title">${c.label}</span>
+        <span class="fc-pulse"></span>
+      </div>
+      <div class="fc-places">${c.places}</div>
+      <div class="fc-stat">${c.stat}</div>
+    `;
+    btn.addEventListener('click', () => {
+      activeKey = key;
+      if (showAllInput.checked) showAllInput.checked = false;
+      setVisibility();
+    });
+    cards[key] = btn;
+    filters.appendChild(btn);
+  });
+
+  showAllInput.addEventListener('change', setVisibility);
+  setVisibility();
+
+  // Fit bounds to show subject + immediate residences with generous padding
+  // Fit to a 22 km square around INCEIF so the entire 10 km ring is comfortably visible
+  map.fitBounds(L.latLng(INCEIF).toBounds(22000), { padding: [20, 20] });
+});
+</script>
+
+</body>
+</html>
