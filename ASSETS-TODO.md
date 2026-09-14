@@ -28,8 +28,8 @@ code change needed.
 
 | File | Where it appears | Status |
 | --- | --- | --- |
-| `Akasia_condo.jpg` | Building photo on the Akasia tab | still needed |
-| `AK_pool.jpg`, `AK_gym.jpg`, `AK_jogging.jpg` | Facility strip | still needed |
+| `Akasia_condo.jpg` | Building photo on the Akasia tab | in repo |
+| `AK_pool.jpg`, `AK_gym.jpg`, `AK_playground.jpg` | Facility strip | in repo |
 | `AK_master.jpg`, `AK_double.jpg`, `AK_single.jpg` | Room cards | in repo |
 | `AK_kitchen.jpg`, `AK_living.jpg`, `AK_yard.jpg` | Shared spaces | in repo |
 | `BeLive_Akasia_INTI.jpg` | "Getting to INTI International University" route guide | still needed |
