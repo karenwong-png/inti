@@ -366,7 +366,23 @@ section { padding: 100px 40px; position: relative; }
   border-radius: 16px; padding: 18px 20px;
   transition: border-color 0.3s, background 0.3s, transform 0.3s;
 }
-.t-stat:hover { border-color: rgba(255,107,26,0.5); background: rgba(255,107,26,0.07); transform: translateY(-3px); }
+.t-stat { position: relative; overflow: hidden; }
+/* accent sweeps in along the bottom edge */
+.t-stat::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: linear-gradient(90deg, var(--orange), var(--teal));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+}
+.t-stat:hover::after { transform: scaleX(1); }
+.t-stat:hover {
+  border-color: rgba(255,107,26,0.5); background: rgba(255,107,26,0.07);
+  transform: translateY(-4px); box-shadow: 0 20px 34px -24px rgba(255,107,26,0.55);
+}
+.t-stat .ts-num { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); transform-origin: left; }
+.t-stat:hover .ts-num { transform: scale(1.06); }
+.t-stat .ts-l { transition: color 0.3s; }
+.t-stat:hover .ts-l { color: rgba(250,247,242,0.88); }
 .t-stat .ts-num {
   display: block; font-family: 'Poppins', sans-serif; font-weight: 500;
   font-size: 26px; line-height: 1.05; color: var(--orange); letter-spacing: -0.02em;
@@ -379,7 +395,9 @@ section { padding: 100px 40px; position: relative; }
   border: 1px solid rgba(250,247,242,0.10);
   border-radius: 22px; padding: 26px 28px 22px;
   margin-bottom: 40px;
+  transition: border-color 0.35s, background 0.35s;
 }
+.line-map:hover { border-color: rgba(255,107,26,0.28); background: rgba(255,107,26,0.035); }
 .line-map-head {
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 26px;
 }
@@ -411,7 +429,18 @@ section { padding: 100px 40px; position: relative; }
   background: var(--orange); border-color: #FFD9C2;
   box-shadow: 0 0 0 6px rgba(255,107,26,0.18);
 }
-.line-stop:hover .dot { transform: translateX(-50%) scale(1.22); }
+.line-stop { cursor: default; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); }
+.line-stop:hover { transform: translateY(-3px); }
+.line-stop:hover .dot {
+  transform: translateX(-50%) scale(1.35);
+  box-shadow: 0 0 0 7px rgba(255,107,26,0.22);
+}
+.line-stop.key:hover .dot { box-shadow: 0 0 0 11px rgba(255,107,26,0.26); }
+/* the rail segment lights up under the stop you are on */
+.line-stop::before { transition: opacity 0.3s, filter 0.3s; }
+.line-stop:hover::before { opacity: 1; filter: drop-shadow(0 0 6px rgba(255,107,26,0.6)); }
+.line-stop .stop-name { transition: color 0.3s; }
+.line-stop:hover .stop-name { color: var(--paper); }
 .line-stop .stop-name {
   font-size: 11.5px; line-height: 1.35; color: rgba(250,247,242,0.62);
   padding: 0 4px; word-break: break-word;
@@ -431,7 +460,12 @@ section { padding: 100px 40px; position: relative; }
   padding: 9px 16px; border-radius: 100px;
   transition: all 0.25s;
 }
-.mode-chip:hover { color: var(--paper); border-color: rgba(255,107,26,0.5); }
+.mode-chip:hover {
+  color: var(--paper); border-color: rgba(255,107,26,0.5);
+  background: rgba(255,107,26,0.10); transform: translateY(-2px);
+}
+.mode-chip:active { transform: translateY(0); }
+.mode-chip:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 .mode-chip.active { background: var(--orange); border-color: var(--orange); color: white; font-weight: 500; }
 
 /* route cards */
@@ -445,10 +479,31 @@ section { padding: 100px 40px; position: relative; }
   animation: route-in 0.4s ease both;
 }
 @keyframes route-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.route-card { position: relative; overflow: hidden; }
+/* soft glow that follows the card up */
+.route-card::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(60% 50% at 50% 0%, rgba(255,107,26,0.18), transparent 70%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.route-card:hover::before { opacity: 1; }
 .route-card:hover {
   border-color: rgba(255,107,26,0.45); background: rgba(255,107,26,0.06);
-  transform: translateY(-5px); box-shadow: 0 24px 40px -28px rgba(0,0,0,0.9);
+  transform: translateY(-6px); box-shadow: 0 28px 46px -28px rgba(0,0,0,0.95);
 }
+.route-card > * { position: relative; z-index: 1; }
+.route-card .rt-mode { transition: background 0.3s, border-color 0.3s, transform 0.3s; }
+.route-card:hover .rt-mode { background: var(--orange); border-color: var(--orange); color: white; }
+/* the dotted origin-to-destination link draws itself */
+.route-card .rt-link { transition: border-color 0.3s; }
+.route-card:hover .rt-link { border-left-color: var(--orange); }
+.route-card .rt-point i { transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s; }
+.route-card:hover .rt-point i { box-shadow: 0 0 0 4px rgba(255,107,26,0.18); }
+.route-card:hover .rt-point.to i { transform: scale(1.25); }
+.route-card .rt-fact { transition: background 0.3s, color 0.3s; }
+.route-card:hover .rt-fact { background: rgba(250,247,242,0.12); }
+.route-card .rt-desc { transition: color 0.3s; }
+.route-card:hover .rt-desc { color: rgba(250,247,242,0.8); }
 .route-card .rt-mode {
   display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
   font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
@@ -506,6 +561,110 @@ section { padding: 100px 40px; position: relative; }
   .line-stop:hover .dot { transform: scale(1.15); }
   .line-stop .stop-name { padding: 0; font-size: 13px; }
   .line-stop .stop-tag { display: inline-block; margin: 0 0 0 8px; }
+}
+
+/* transit map */
+.transit-map-wrap {
+  position: relative; margin-bottom: 40px;
+  border-radius: 22px; overflow: hidden;
+  border: 1px solid rgba(250,247,242,0.12);
+  box-shadow: 0 40px 70px -40px rgba(0,0,0,0.95);
+}
+#transit-map { height: 480px; width: 100%; background: #0B0B0D; z-index: 0; }
+/* dark basemap: invert the OSM raster, then correct the hue back */
+#transit-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.86) contrast(1.06) saturate(0.42);
+}
+#transit-map .leaflet-control-attribution {
+  background: rgba(14,14,16,0.75); color: rgba(250,247,242,0.5);
+  font-size: 10px; border-radius: 6px 0 0 0;
+}
+#transit-map .leaflet-control-attribution a { color: rgba(255,107,26,0.8); }
+#transit-map .leaflet-control-zoom a {
+  background: rgba(14,14,16,0.85); color: var(--paper);
+  border: 1px solid rgba(250,247,242,0.14);
+}
+#transit-map .leaflet-control-zoom a:hover { background: var(--orange); border-color: var(--orange); }
+.tm-pin {
+  width: 13px; height: 13px; border-radius: 50%;
+  border: 2.5px solid var(--ink); box-shadow: 0 0 0 2px currentColor;
+}
+.tm-pin.home {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--orange); border: 3px solid #FFD9C2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: white; box-shadow: 0 0 0 7px rgba(255,107,26,0.22);
+}
+.tm-label {
+  background: rgba(14,14,16,0.9); color: var(--paper);
+  border: 1px solid rgba(250,247,242,0.16); border-radius: 100px;
+  padding: 3px 9px; font-size: 10.5px; font-weight: 500; white-space: nowrap;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+.tm-label::before { display: none !important; }
+.tm-label.is-campus { background: var(--orange); border-color: var(--orange); font-weight: 600; }
+#transit-map .leaflet-popup-content-wrapper {
+  background: #16161A; color: var(--paper); border-radius: 14px;
+  border: 1px solid rgba(250,247,242,0.14);
+}
+#transit-map .leaflet-popup-tip { background: #16161A; }
+#transit-map .leaflet-popup-content { margin: 13px 15px; font-size: 12.5px; line-height: 1.55; }
+#transit-map .leaflet-popup-content b { color: var(--orange); }
+#transit-map .leaflet-popup-close-button { color: rgba(250,247,242,0.6) !important; }
+.tm-legend {
+  position: absolute; left: 16px; bottom: 16px; z-index: 400;
+  background: rgba(14,14,16,0.86); backdrop-filter: blur(10px);
+  border: 1px solid rgba(250,247,242,0.14); border-radius: 14px;
+  padding: 13px 15px; display: flex; flex-direction: column; gap: 8px;
+  pointer-events: none;
+}
+.tm-legend .tl-row { display: flex; align-items: center; gap: 9px; font-size: 11.5px; color: rgba(250,247,242,0.78); }
+.tm-legend .tl-line { width: 20px; height: 3px; border-radius: 3px; flex-shrink: 0; }
+.tm-legend .tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* per-card links + trip planners */
+.route-card .rt-links { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid rgba(250,247,242,0.09); }
+.route-card .rt-link-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500; text-decoration: none;
+  color: rgba(250,247,242,0.72);
+  background: rgba(250,247,242,0.07); border: 1px solid rgba(250,247,242,0.12);
+  padding: 6px 10px; border-radius: 100px;
+  transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+.route-card .rt-link-btn:hover {
+  color: white; background: var(--orange); border-color: var(--orange);
+  transform: translateY(-2px);
+}
+.route-card .rt-link-btn .rl-arrow { transition: transform 0.25s; display: inline-block; }
+.route-card .rt-link-btn:hover .rl-arrow { transform: translate(2px, -2px); }
+
+.transit-planners {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 34px; padding-top: 26px; border-top: 1px solid rgba(250,247,242,0.10);
+}
+.transit-planners .tp-label {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(250,247,242,0.45); margin-right: 4px;
+}
+.planner-btn {
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+  font-size: 13px; color: var(--paper);
+  background: rgba(250,247,242,0.06); border: 1px solid rgba(250,247,242,0.14);
+  padding: 10px 16px; border-radius: 100px;
+  transition: all 0.28s cubic-bezier(0.22,1,0.36,1);
+}
+.planner-btn:hover {
+  border-color: var(--orange); background: rgba(255,107,26,0.12);
+  transform: translateY(-3px); box-shadow: 0 16px 28px -18px rgba(255,107,26,0.5);
+}
+.planner-btn .pb-arrow { opacity: 0.55; transition: transform 0.28s, opacity 0.28s; }
+.planner-btn:hover .pb-arrow { opacity: 1; transform: translate(3px, -3px); }
+
+@media (max-width: 760px) {
+  #transit-map { height: 380px; }
+  .tm-legend { left: 10px; bottom: 10px; padding: 10px 12px; gap: 6px; }
+  .tm-legend .tl-row { font-size: 10.5px; }
 }
 
 /* ---------- GOOGLE REVIEWS ---------- */
@@ -658,6 +817,20 @@ a.g-score:hover .g-cta { text-decoration: underline; text-underline-offset: 3px;
   font-size: 11.5px; color: var(--ink-soft); opacity: 0.55;
 }
 .review-card.anon .rc-foot svg { width: 14px; height: 14px; flex-shrink: 0; opacity: 0.85; }
+
+/* Lower rail: smaller cards, running the opposite way to the top rail. */
+.reviews-rail.sm .reviews-track { animation-duration: 64s; }
+.review-card.sm {
+  width: 268px; padding: 16px 18px 15px; gap: 9px; border-radius: 16px;
+}
+.review-card.sm .rc-quote { font-size: 30px; height: 12px; }
+.review-card.sm .rc-text { font-size: 12px; line-height: 1.55; }
+.review-card.sm.anon .rc-text { font-size: 12.5px; }
+.review-card.sm .rc-avatar { width: 32px; height: 32px; font-size: 13px; }
+.review-card.sm .rc-name { font-size: 13px; }
+.review-card.sm.anon .rc-foot { padding-top: 9px; font-size: 10.5px; }
+.review-card.sm .stars svg { width: 13px; height: 13px; }
+@media (max-width: 700px) { .review-card.sm { width: 232px; } }
 
 .reviews-foot {
   max-width: 1200px; margin: 34px auto 0; padding: 0 40px;
@@ -2878,6 +3051,16 @@ footer {
       <div class="t-stat"><span class="ts-num">Free</span><span class="ts-l">INTI shuttle, with student card</span></div>
     </div>
 
+    <div class="transit-map-wrap">
+      <div id="transit-map" role="application" aria-label="Map of the Nilai transit spine linking the BeLive residences, INTI International University, Nilai KTM Komuter station and KLIA"></div>
+      <div class="tm-legend">
+        <div class="tl-row"><span class="tl-line" style="background:#FF6B1A"></span> Airport Liner &mdash; Nilai KTM to klia2</div>
+        <div class="tl-row"><span class="tl-line" style="background:#4285F4"></span> KTM Komuter &mdash; Seremban Line</div>
+        <div class="tl-row"><span class="tl-dot" style="background:#FF6B1A"></span> INTI campus</div>
+        <div class="tl-row"><span class="tl-dot" style="background:#00BFA6"></span> BeLive residence</div>
+      </div>
+    </div>
+
     <div class="line-map">
       <div class="line-map-head">
         <span class="lm-badge">Airport Liner</span>
@@ -2897,6 +3080,14 @@ footer {
 
     <div class="transit-modes" id="transit-modes"></div>
     <div class="transit-grid" id="transit-grid"></div>
+
+    <div class="transit-planners">
+      <span class="tp-label">Plan a trip</span>
+      <a class="planner-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=INTI+International+University+Nilai&amp;travelmode=transit" target="_blank" rel="noopener">Google Maps directions <span class="pb-arrow">&#8599;</span></a>
+      <a class="planner-btn" href="https://moovitapp.com/index/en/public_transit-INTI_International_University-Kuala_Lumpur-site_26248661-1082" target="_blank" rel="noopener">Moovit &mdash; live bus &amp; train times <span class="pb-arrow">&#8599;</span></a>
+      <a class="planner-btn" href="https://www.ktmb.com.my" target="_blank" rel="noopener">KTMB timetable &amp; tickets <span class="pb-arrow">&#8599;</span></a>
+      <a class="planner-btn" href="https://www.klia2.info/buses/bus-operators/airport-liner/" target="_blank" rel="noopener">Airport Liner schedule <span class="pb-arrow">&#8599;</span></a>
+    </div>
 
     <p class="transit-note">
       Fares, journey times and frequencies are the operators' published figures and are indicative only &mdash; they change, and KTMB runs
@@ -3578,48 +3769,63 @@ const ROUTES = [
     from: 'Nilai KTM Komuter', to: 'KL Sentral',
     facts: ['<strong>~1 hr</strong>', '<strong>RM7</strong> one way', 'Every <strong>15–30 min</strong>'],
     desc: 'The Seremban Line runs straight into KL Sentral, where you can pick up the LRT, MRT, Monorail and KLIA Ekspres. A weekday-peak Komuter Express cuts the run to roughly 47 minutes.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=KL+Sentral&travelmode=transit',
+    src: { label: 'KTMB', url: 'https://www.ktmb.com.my' },
   },
   {
     mode: 'Airport Bus', icon: '\u{2708}\u{FE0F}',
     from: 'Nilai KTM Komuter', to: 'KLIA / klia2',
     facts: ['<strong>~RM3–RM4</strong>', 'From <strong>5:00am</strong>', 'Every <strong>~20 min</strong>'],
     desc: 'The Airport Liner is the cheapest way to either terminal, and it calls at INTI on the way. Last bus back from KLIA leaves at 12:30am, so late arrivals are still covered.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=Kuala+Lumpur+International+Airport&travelmode=transit',
+    src: { label: 'Airport Liner', url: 'https://www.klia2.info/buses/bus-operators/airport-liner/' },
   },
   {
     mode: 'Airport Bus', icon: '\u{1F393}',
     from: 'Nilai KTM Komuter', to: 'INTI campus',
     facts: ['<strong>~RM2.50</strong>', 'Every <strong>~20 min</strong>', 'Same Airport Liner route'],
     desc: 'INTI is a scheduled stop between Taman Cempaka and Salak Tinggi, so the airport bus doubles as a campus bus for anyone coming off the Komuter.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=INTI+International+University+Nilai&travelmode=transit',
+    src: { label: 'Moovit stop times', url: 'https://moovitapp.com/index/en/public_transit-Inti_International_University-Kuala_Lumpur-stop_35827010-1082' },
   },
   {
     mode: 'Campus Shuttle', icon: '\u{1F68C}',
     from: 'INTI campus', to: 'KTM, Mesamall, AEON, Giant',
     facts: ['<strong>Free</strong>', 'Show <strong>student card</strong>', 'Set timetable'],
     desc: 'INTI runs a complimentary shuttle for students and staff to Nilai KTM station, the malls, the mosque and the night market. Current timetable is published on INTI’s website.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=INTI+International+University+Nilai&destination=Mesamall+Nilai&travelmode=transit',
+    src: { label: 'INTI campus info', url: 'https://newinti.edu.my/campuses/inti-international-university/' },
   },
   {
     mode: 'Local Bus', icon: '\u{1F68D}',
     from: 'INTI campus', to: 'Nilai Sentral',
     facts: ['<strong>~RM1–RM2</strong>', '<strong>~11 min</strong>', 'Roughly every 4 hrs'],
     desc: 'A local service links the campus with Nilai Sentral. Infrequent, so it is worth checking the posted times rather than turning up and hoping.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=INTI+International+University+Nilai&destination=Nilai+Sentral&travelmode=transit',
+    src: { label: 'Moovit route', url: 'https://moovitapp.com/index/en/public_transit-INTI_International_University-Kuala_Lumpur-site_26248661-1082' },
   },
   {
     mode: 'Train', icon: '\u{1F687}',
     from: 'Nilai KTM Komuter', to: 'Seremban',
     facts: ['<strong>RM3.60</strong>', 'Same Komuter line', 'Every <strong>15–30 min</strong>'],
     desc: 'Southbound on the same platform for Seremban’s shopping, hospitals and the state capital — useful for weekends and specialist appointments.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=Seremban+KTM+Station&travelmode=transit',
+    src: { label: 'KTMB', url: 'https://www.ktmb.com.my' },
   },
   {
     mode: 'Ride-hail', icon: '\u{1F697}',
     from: 'Youth City / Akasia', to: 'INTI campus',
     facts: ['<strong>~3.5–3.7 km</strong>', '<strong>~8–9 min</strong>', 'Grab / e-hailing'],
     desc: 'The quickest door-to-door option and easy to split between housemates. Both residences sit in Putra Nilai, the same township as the campus.',
+    map: 'https://www.google.com/maps/dir/?api=1&origin=Youth+City+Residence+Nilai&destination=INTI+International+University+Nilai&travelmode=driving',
   },
   {
     mode: 'Local Bus', icon: '\u{1F6C2}',
     from: 'Nilai KTM Komuter', to: 'Nilai Bus Terminal',
     facts: ['<strong>~2 min</strong> walk', 'Intercity coaches', 'Adjoining the station'],
     desc: 'The terminal sits beside the Komuter station, so intercity coaches to other states connect directly with the train without a transfer across town.',
+    map: 'https://www.google.com/maps/search/?api=1&query=Nilai+Bus+Terminal',
+    src: { label: 'Terminal &amp; coach tickets', url: 'https://www.busonlineticket.com/terminal/nilai-bus-terminal/' },
   },
 ];
 
@@ -3638,6 +3844,10 @@ const ROUTES = [
       </div>
       <div class="rt-facts">${r.facts.map(f => `<span class="rt-fact">${f}</span>`).join('')}</div>
       <p class="rt-desc">${r.desc}</p>
+      ${(r.map || r.src) ? `<div class="rt-links">
+        ${r.map ? `<a class="rt-link-btn" href="${r.map}" target="_blank" rel="noopener">&#128506; Open in Maps <span class="rl-arrow">&#8599;</span></a>` : ''}
+        ${r.src ? `<a class="rt-link-btn" href="${r.src.url}" target="_blank" rel="noopener">${r.src.label} <span class="rl-arrow">&#8599;</span></a>` : ''}
+      </div>` : ''}
     </article>`;
 
   const modes = ['All', ...Array.from(new Set(ROUTES.map(r => r.mode)))];
@@ -3727,12 +3937,13 @@ const REVIEWS = [
     return out + '</span>';
   };
 
-  const card = (r, i) => {
+  const card = (r, i, compact) => {
+    const sm = compact ? ' sm' : '';
     // Named review: avatar, name, stars, Google mark across the top.
     if (r.name) {
       const colour = AVATAR_COLOURS[i % AVATAR_COLOURS.length];
       return `
-        <article class="review-card">
+        <article class="review-card${sm}">
           <div class="rc-top">
             <div class="rc-avatar" style="background:${colour}">${r.name.trim().charAt(0).toUpperCase()}</div>
             <div class="rc-who">
@@ -3748,7 +3959,7 @@ const REVIEWS = [
     }
     // Unattributed review: quote first, quiet sign-off — no invented identity.
     return `
-      <article class="review-card anon">
+      <article class="review-card anon${sm}">
         <div class="rc-quote">&ldquo;</div>
         <p class="rc-text">${r.text}</p>
         <div class="rc-foot">${gMark('')}<span>${r.detail || 'BeLive tenant'}</span></div>
@@ -3762,18 +3973,23 @@ const REVIEWS = [
 
   // Split across two rails, then duplicate each set so the marquee loops
   // seamlessly at translateX(-50%).
-  const fill = (track, set) => {
+  const fill = (track, set, compact) => {
     // repeat until the rail is comfortably wider than the viewport, then double
+    const w = compact ? 286 : 366;
     let seq = set.slice();
-    while (seq.length * 366 < window.innerWidth * 1.4) seq = seq.concat(set);
-    track.innerHTML = seq.concat(seq).map(card).join('');
+    while (seq.length * w < window.innerWidth * 1.4) seq = seq.concat(set);
+    track.innerHTML = seq.concat(seq)
+      .map((r, i) => card(r, i, compact)).join('');
+    if (compact) track.closest('.reviews-rail').classList.add('sm');
   };
-  if (REVIEWS.length >= 6) {
+  // Top rail: full-size cards, right to left. Lower rail: compact cards running
+  // the opposite way. Below five reviews the rails would show the same cards
+  // stacked on each other, so the lower one is dropped until there are enough.
+  if (REVIEWS.length >= 5) {
     const mid = Math.ceil(REVIEWS.length / 2);
     fill(trackA, REVIEWS.slice(0, mid));
-    fill(trackB, REVIEWS.slice(mid));
+    fill(trackB, REVIEWS.slice(mid), true);
   } else {
-    // Too few to fill two rails without showing the same cards side by side.
     fill(trackA, REVIEWS);
     trackB.closest('.reviews-rail').remove();
   }
@@ -3811,6 +4027,95 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const target = document.querySelector(a.getAttribute('href'));
     if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   });
+});
+
+// --- Transit spine map (Leaflet) ---
+// Schematic: stop coordinates are approximate and the connecting lines are drawn
+// straight between them, so this reads as a route diagram on a real basemap
+// rather than a turn-by-turn trace. Live times/fares live behind the card links.
+window.addEventListener('load', () => {
+  if (typeof L === 'undefined') return;
+  const el = document.getElementById('transit-map');
+  if (!el) return;
+
+  const P = {
+    inti:      [2.81364, 101.75824],
+    ktmNilai:  [2.80930, 101.79670],
+    youthCity: [2.82640, 101.78040],
+    akasia:    [2.82420, 101.78380],
+    jasmin:    [2.80100, 101.78200],
+    cempaka:   [2.79600, 101.77300],
+    salak:     [2.80590, 101.71300],
+    klia:      [2.74560, 101.70990],
+    klia2:     [2.75870, 101.68970],
+    seremban:  [2.72190, 101.94230],
+  };
+
+  const map = L.map('transit-map', { scrollWheelZoom: false, zoomControl: true })
+    .setView([2.7950, 101.7550], 12);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  // Airport Liner spine — Nilai KTM through INTI to both airport terminals
+  const liner = [P.ktmNilai, P.jasmin, P.cempaka, P.inti, P.salak, P.klia, P.klia2];
+  L.polyline(liner, { color: '#FF6B1A', weight: 4, opacity: 0.9, lineJoin: 'round' }).addTo(map);
+  L.polyline(liner, { color: '#FF6B1A', weight: 14, opacity: 0.14, lineJoin: 'round' }).addTo(map);
+
+  // KTM Komuter — northbound to KL, southbound to Seremban
+  L.polyline([P.ktmNilai, P.seremban], {
+    color: '#4285F4', weight: 3.5, opacity: 0.85, dashArray: '9 7',
+  }).addTo(map);
+  L.polyline([P.ktmNilai, [2.9200, 101.7900]], {
+    color: '#4285F4', weight: 3.5, opacity: 0.85, dashArray: '9 7',
+  }).addTo(map);
+
+  // Residences feed into the station
+  [P.youthCity, P.akasia].forEach(c => {
+    L.polyline([c, P.ktmNilai], { color: '#00BFA6', weight: 2, opacity: 0.6, dashArray: '3 6' }).addTo(map);
+  });
+
+  const pin = (colour, home) => L.divIcon({
+    className: '',
+    html: home ? `<div class="tm-pin home">&#9733;</div>`
+               : `<div class="tm-pin" style="background:${colour};color:${colour}"></div>`,
+    iconSize: home ? [30, 30] : [13, 13],
+    iconAnchor: home ? [15, 15] : [6.5, 6.5],
+    popupAnchor: [0, -12],
+  });
+
+  const STOPS = [
+    { c: P.inti,      name: 'INTI International University', colour: '#FF6B1A', home: true, campus: true, dir: 'top',
+      pop: '<b>INTI International University</b><br>Persiaran Perdana BBN, Putra Nilai.<br>An Airport Liner stop &mdash; the KLIA bus calls here.' },
+    { c: P.youthCity, name: 'Youth City Residence', colour: '#00BFA6', dir: 'top',
+      pop: '<b>Youth City Residence</b><br>Vision City, Putra Nilai &middot; ~3.5 km from campus.' },
+    { c: P.akasia,    name: 'Akasia @ Bandar Belia', colour: '#00BFA6', dir: 'right',
+      pop: '<b>Akasia @ Bandar Belia</b><br>Jalan Bandar Belia 1/1 &middot; ~3.7 km from campus.' },
+    { c: P.ktmNilai,  name: 'Nilai KTM', colour: '#4285F4', dir: 'right',
+      pop: '<b>Nilai KTM Komuter</b><br>Seremban Line &middot; KL Sentral ~1 hr, RM7.<br>Bus terminal is a 2-minute walk.' },
+    { c: P.cempaka,   name: 'Taman Cempaka', colour: '#FF6B1A', dir: 'bottom', pop: '<b>Taman Cempaka</b><br>Airport Liner stop.' },
+    { c: P.jasmin,    name: 'Taman Jasmin', colour: '#FF6B1A', dir: 'left', pop: '<b>Taman Jasmin</b><br>Airport Liner stop.' },
+    { c: P.salak,     name: 'Salak Tinggi', colour: '#FF6B1A', dir: 'left', pop: '<b>Bandar Baru Salak Tinggi</b><br>Airport Liner stop &middot; ERL interchange nearby.' },
+    { c: P.klia,      name: 'KLIA', colour: '#FF6B1A', dir: 'right', pop: '<b>KLIA</b><br>~RM3 from Nilai &middot; last bus back 12:30am.' },
+    { c: P.klia2,     name: 'klia2', colour: '#FF6B1A', dir: 'left', pop: '<b>klia2</b><br>Airport Liner terminus &middot; ~RM4 from Nilai.' },
+  ];
+
+  STOPS.forEach(st => {
+    const m = L.marker(st.c, { icon: pin(st.colour, st.home) }).addTo(map);
+    m.bindPopup(st.pop);
+    const dir = st.dir || 'top';
+    const off = { top: [0, st.home ? -16 : -10], bottom: [0, st.home ? 16 : 10],
+                  left: [st.home ? -16 : -9, 0], right: [st.home ? 16 : 9, 0] }[dir];
+    m.bindTooltip(st.name, {
+      permanent: true, direction: dir, opacity: 1,
+      className: 'tm-label' + (st.campus ? ' is-campus' : ''),
+      offset: off,
+    });
+  });
+
+  map.fitBounds(L.latLngBounds([P.klia2, P.youthCity, P.inti, P.ktmNilai]).pad(0.22));
 });
 
 // --- Catchment map (Leaflet) ---
