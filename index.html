@@ -330,6 +330,184 @@ section { padding: 100px 40px; position: relative; }
 
 @media (max-width: 768px) { .benefits-grid { grid-template-columns: 1fr; } }
 
+/* ---------- GETTING AROUND (transit) ---------- */
+.transit {
+  background:
+    radial-gradient(80% 50% at 8% 0%, rgba(255,107,26,0.16) 0%, transparent 62%),
+    radial-gradient(60% 45% at 96% 92%, rgba(0,191,166,0.14) 0%, transparent 62%),
+    var(--ink);
+  color: var(--paper);
+  padding: 100px 40px 104px;
+  position: relative; overflow: hidden;
+}
+/* faint grid, like a transit plan */
+.transit::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(250,247,242,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250,247,242,0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(80% 70% at 50% 40%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(80% 70% at 50% 40%, #000 0%, transparent 78%);
+}
+.transit-wrap { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.transit .section-head { margin-bottom: 44px; }
+.transit .section-head h2 { color: var(--paper); }
+.transit .section-head p { color: rgba(250,247,242,0.72); }
+
+/* headline numbers */
+.transit-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 40px;
+}
+.t-stat {
+  background: rgba(250,247,242,0.045);
+  border: 1px solid rgba(250,247,242,0.10);
+  border-radius: 16px; padding: 18px 20px;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s;
+}
+.t-stat:hover { border-color: rgba(255,107,26,0.5); background: rgba(255,107,26,0.07); transform: translateY(-3px); }
+.t-stat .ts-num {
+  display: block; font-family: 'Poppins', sans-serif; font-weight: 500;
+  font-size: 26px; line-height: 1.05; color: var(--orange); letter-spacing: -0.02em;
+}
+.t-stat .ts-l { display: block; margin-top: 7px; font-size: 12px; color: rgba(250,247,242,0.62); line-height: 1.45; }
+
+/* Airport Liner stop diagram */
+.line-map {
+  background: rgba(250,247,242,0.04);
+  border: 1px solid rgba(250,247,242,0.10);
+  border-radius: 22px; padding: 26px 28px 22px;
+  margin-bottom: 40px;
+}
+.line-map-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 26px;
+}
+.line-map-head .lm-badge {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+  color: var(--ink); background: var(--orange);
+  padding: 5px 11px; border-radius: 100px;
+}
+.line-map-head .lm-title { font-family: 'Poppins', sans-serif; font-size: 17px; color: var(--paper); }
+.line-map-head .lm-meta { font-size: 12px; color: rgba(250,247,242,0.55); margin-left: auto; }
+.line-stops { display: flex; align-items: flex-start; position: relative; }
+.line-stop { flex: 1; position: relative; text-align: center; padding-top: 26px; min-width: 0; }
+/* the rail */
+.line-stop::before {
+  content: ''; position: absolute; top: 8px; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-deep));
+  opacity: 0.55;
+}
+.line-stop:first-child::before { left: 50%; border-radius: 3px 0 0 3px; }
+.line-stop:last-child::before  { right: 50%; border-radius: 0 3px 3px 0; }
+.line-stop .dot {
+  position: absolute; top: 2px; left: 50%; transform: translateX(-50%);
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--ink); border: 3px solid var(--orange);
+  z-index: 1; transition: transform 0.25s, box-shadow 0.25s;
+}
+.line-stop.key .dot {
+  width: 21px; height: 21px; top: -1px;
+  background: var(--orange); border-color: #FFD9C2;
+  box-shadow: 0 0 0 6px rgba(255,107,26,0.18);
+}
+.line-stop:hover .dot { transform: translateX(-50%) scale(1.22); }
+.line-stop .stop-name {
+  font-size: 11.5px; line-height: 1.35; color: rgba(250,247,242,0.62);
+  padding: 0 4px; word-break: break-word;
+}
+.line-stop.key .stop-name { color: var(--paper); font-weight: 600; }
+.line-stop .stop-tag {
+  display: block; margin-top: 4px; font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--orange);
+}
+
+/* mode filter */
+.transit-modes { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 22px; }
+.mode-chip {
+  font-family: inherit; font-size: 13px; cursor: pointer;
+  background: rgba(250,247,242,0.06); color: rgba(250,247,242,0.72);
+  border: 1px solid rgba(250,247,242,0.12);
+  padding: 9px 16px; border-radius: 100px;
+  transition: all 0.25s;
+}
+.mode-chip:hover { color: var(--paper); border-color: rgba(255,107,26,0.5); }
+.mode-chip.active { background: var(--orange); border-color: var(--orange); color: white; font-weight: 500; }
+
+/* route cards */
+.transit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.route-card {
+  background: rgba(250,247,242,0.045);
+  border: 1px solid rgba(250,247,242,0.10);
+  border-radius: 18px; padding: 22px 22px 20px;
+  display: flex; flex-direction: column; gap: 14px;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s, box-shadow 0.3s;
+  animation: route-in 0.4s ease both;
+}
+@keyframes route-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.route-card:hover {
+  border-color: rgba(255,107,26,0.45); background: rgba(255,107,26,0.06);
+  transform: translateY(-5px); box-shadow: 0 24px 40px -28px rgba(0,0,0,0.9);
+}
+.route-card .rt-mode {
+  display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+  font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  color: var(--orange); background: rgba(255,107,26,0.12);
+  border: 1px solid rgba(255,107,26,0.28);
+  padding: 5px 10px; border-radius: 100px;
+}
+.route-card .rt-od { display: flex; flex-direction: column; gap: 7px; }
+.route-card .rt-point {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; color: var(--paper); font-family: 'Poppins', sans-serif; font-weight: 500;
+  line-height: 1.3;
+}
+.route-card .rt-point i {
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid var(--orange);
+}
+.route-card .rt-point.to i { background: var(--orange); }
+.route-card .rt-link {
+  height: 14px; margin: -4px 0 -4px 4px;
+  border-left: 2px dotted rgba(255,107,26,0.5);
+}
+.route-card .rt-facts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.route-card .rt-fact {
+  font-size: 11.5px; color: rgba(250,247,242,0.8);
+  background: rgba(250,247,242,0.07); border-radius: 8px; padding: 5px 9px;
+}
+.route-card .rt-fact strong { color: var(--paper); font-weight: 600; }
+.route-card .rt-desc { font-size: 12.5px; line-height: 1.6; color: rgba(250,247,242,0.62); margin-top: auto; }
+
+.transit-note {
+  margin-top: 30px; font-size: 11.5px; line-height: 1.65;
+  color: rgba(250,247,242,0.42); max-width: 900px;
+}
+.transit-note a { color: rgba(255,107,26,0.85); }
+
+@media (max-width: 1000px) {
+  .transit-stats { grid-template-columns: repeat(2, 1fr); }
+  .transit-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .transit { padding: 76px 22px 80px; }
+  .transit-grid { grid-template-columns: 1fr; }
+  .line-map { padding: 22px 18px 18px; }
+  /* stack the line vertically so stop names stay readable */
+  .line-stops { flex-direction: column; align-items: stretch; }
+  .line-stop { display: flex; align-items: center; gap: 14px; text-align: left; padding: 9px 0 9px 4px; min-height: 44px; }
+  .line-stop::before {
+    top: 0; bottom: 0; left: 11px; right: auto; width: 3px; height: auto;
+  }
+  .line-stop:first-child::before { top: 50%; left: 11px; border-radius: 3px 3px 0 0; }
+  .line-stop:last-child::before  { bottom: 50%; top: 0; border-radius: 0 0 3px 3px; }
+  .line-stop .dot { position: relative; top: 0; left: 0; transform: none; flex-shrink: 0; }
+  .line-stop.key .dot { top: 0; }
+  .line-stop:hover .dot { transform: scale(1.15); }
+  .line-stop .stop-name { padding: 0; font-size: 13px; }
+  .line-stop .stop-tag { display: inline-block; margin: 0 0 0 8px; }
+}
+
 /* ---------- GOOGLE REVIEWS ---------- */
 .reviews {
   background:
@@ -2643,6 +2821,54 @@ footer {
 
 </section>
 
+<!-- GETTING AROUND -->
+<!-- Route cards render from the ROUTES array in the script at the foot of this
+     file; the mode chips filter them. Fares and durations are the published
+     figures found for each operator and are indicative — see .transit-note. -->
+<section class="transit" id="getting-around">
+  <div class="transit-wrap">
+    <div class="section-head">
+      <div class="kicker">Getting Around</div>
+      <h2>Nilai, <em>door to door.</em></h2>
+      <p>Campus, the airport and central KL are all on one rail-and-bus spine — here is what each trip actually costs and how long it takes.</p>
+    </div>
+
+    <div class="transit-stats">
+      <div class="t-stat"><span class="ts-num">~1 hr</span><span class="ts-l">KTM Nilai to KL Sentral</span></div>
+      <div class="t-stat"><span class="ts-num">RM7</span><span class="ts-l">One-way Komuter fare to KL</span></div>
+      <div class="t-stat"><span class="ts-num">Every 20 min</span><span class="ts-l">Airport Liner, from 5am daily</span></div>
+      <div class="t-stat"><span class="ts-num">Free</span><span class="ts-l">INTI shuttle, with student card</span></div>
+    </div>
+
+    <div class="line-map">
+      <div class="line-map-head">
+        <span class="lm-badge">Airport Liner</span>
+        <span class="lm-title">Nilai KTM &rarr; KLIA &amp; klia2 &mdash; and it stops at your campus</span>
+        <span class="lm-meta">From 5:00am &middot; every ~20 min &middot; last bus back from KLIA 12:30am</span>
+      </div>
+      <div class="line-stops">
+        <div class="line-stop"><span class="dot"></span><span class="stop-name">Nilai KTM Komuter</span><span class="stop-tag">Interchange</span></div>
+        <div class="line-stop"><span class="dot"></span><span class="stop-name">Taman Jasmin</span></div>
+        <div class="line-stop"><span class="dot"></span><span class="stop-name">Taman Cempaka</span></div>
+        <div class="line-stop key"><span class="dot"></span><span class="stop-name">INTI International University</span><span class="stop-tag">Campus</span></div>
+        <div class="line-stop"><span class="dot"></span><span class="stop-name">Bandar Baru Salak Tinggi</span></div>
+        <div class="line-stop"><span class="dot"></span><span class="stop-name">KLIA</span></div>
+        <div class="line-stop"><span class="dot"></span><span class="stop-name">klia2</span><span class="stop-tag">Terminus</span></div>
+      </div>
+    </div>
+
+    <div class="transit-modes" id="transit-modes"></div>
+    <div class="transit-grid" id="transit-grid"></div>
+
+    <p class="transit-note">
+      Fares, journey times and frequencies are the operators' published figures and are indicative only &mdash; they change, and KTMB runs
+      maintenance windows that alter the Komuter timetable. Confirm before you travel with
+      <a href="https://www.ktmb.com.my" target="_blank" rel="noopener">KTMB</a>, the Airport Liner counter at Nilai KTM, or the shuttle timetable on
+      <a href="https://newinti.edu.my" target="_blank" rel="noopener">INTI's website</a>. Both BeLive residences sit in Putra Nilai, a short ride from Nilai KTM Komuter station and its adjoining bus terminal.
+    </p>
+  </div>
+</section>
+
 <!-- BENEFITS -->
 <section class="benefits" id="benefits">
   <div class="section-head">
@@ -3299,6 +3525,101 @@ renderCommon('youthcity');
   roomSel.addEventListener('change', render);
   carparkSel.addEventListener('change', render);
   populateRooms();
+  render();
+})();
+
+// --- Getting Around: route cards + mode filter ---
+// Sources: KTMB Komuter Seremban Line (Nilai is a station on the Batu Caves -
+// Pulau Sebang line); Airport Liner's Nilai KTM - KLIA/klia2 service, which
+// calls at INTI; INTI's own free student shuttle; and the Nilai Sentral local
+// bus. Figures are the operators' published ones and are flagged indicative in
+// the note under the grid.
+const ROUTES = [
+  {
+    mode: 'Train', icon: '\u{1F686}',
+    from: 'Nilai KTM Komuter', to: 'KL Sentral',
+    facts: ['<strong>~1 hr</strong>', '<strong>RM7</strong> one way', 'Every <strong>15–30 min</strong>'],
+    desc: 'The Seremban Line runs straight into KL Sentral, where you can pick up the LRT, MRT, Monorail and KLIA Ekspres. A weekday-peak Komuter Express cuts the run to roughly 47 minutes.',
+  },
+  {
+    mode: 'Airport Bus', icon: '\u{2708}\u{FE0F}',
+    from: 'Nilai KTM Komuter', to: 'KLIA / klia2',
+    facts: ['<strong>~RM3–RM4</strong>', 'From <strong>5:00am</strong>', 'Every <strong>~20 min</strong>'],
+    desc: 'The Airport Liner is the cheapest way to either terminal, and it calls at INTI on the way. Last bus back from KLIA leaves at 12:30am, so late arrivals are still covered.',
+  },
+  {
+    mode: 'Airport Bus', icon: '\u{1F393}',
+    from: 'Nilai KTM Komuter', to: 'INTI campus',
+    facts: ['<strong>~RM2.50</strong>', 'Every <strong>~20 min</strong>', 'Same Airport Liner route'],
+    desc: 'INTI is a scheduled stop between Taman Cempaka and Salak Tinggi, so the airport bus doubles as a campus bus for anyone coming off the Komuter.',
+  },
+  {
+    mode: 'Campus Shuttle', icon: '\u{1F68C}',
+    from: 'INTI campus', to: 'KTM, Mesamall, AEON, Giant',
+    facts: ['<strong>Free</strong>', 'Show <strong>student card</strong>', 'Set timetable'],
+    desc: 'INTI runs a complimentary shuttle for students and staff to Nilai KTM station, the malls, the mosque and the night market. Current timetable is published on INTI’s website.',
+  },
+  {
+    mode: 'Local Bus', icon: '\u{1F68D}',
+    from: 'INTI campus', to: 'Nilai Sentral',
+    facts: ['<strong>~RM1–RM2</strong>', '<strong>~11 min</strong>', 'Roughly every 4 hrs'],
+    desc: 'A local service links the campus with Nilai Sentral. Infrequent, so it is worth checking the posted times rather than turning up and hoping.',
+  },
+  {
+    mode: 'Train', icon: '\u{1F687}',
+    from: 'Nilai KTM Komuter', to: 'Seremban',
+    facts: ['<strong>RM3.60</strong>', 'Same Komuter line', 'Every <strong>15–30 min</strong>'],
+    desc: 'Southbound on the same platform for Seremban’s shopping, hospitals and the state capital — useful for weekends and specialist appointments.',
+  },
+  {
+    mode: 'Ride-hail', icon: '\u{1F697}',
+    from: 'Youth City / Akasia', to: 'INTI campus',
+    facts: ['<strong>~3.5–3.7 km</strong>', '<strong>~8–9 min</strong>', 'Grab / e-hailing'],
+    desc: 'The quickest door-to-door option and easy to split between housemates. Both residences sit in Putra Nilai, the same township as the campus.',
+  },
+  {
+    mode: 'Local Bus', icon: '\u{1F6C2}',
+    from: 'Nilai KTM Komuter', to: 'Nilai Bus Terminal',
+    facts: ['<strong>~2 min</strong> walk', 'Intercity coaches', 'Adjoining the station'],
+    desc: 'The terminal sits beside the Komuter station, so intercity coaches to other states connect directly with the train without a transfer across town.',
+  },
+];
+
+(function initTransit() {
+  const grid = document.getElementById('transit-grid');
+  const modesEl = document.getElementById('transit-modes');
+  if (!grid || !modesEl) return;
+
+  const routeCard = (r, i) => `
+    <article class="route-card" style="animation-delay:${Math.min(i, 8) * 45}ms">
+      <span class="rt-mode">${r.icon} ${r.mode}</span>
+      <div class="rt-od">
+        <div class="rt-point"><i></i>${r.from}</div>
+        <div class="rt-link"></div>
+        <div class="rt-point to"><i></i>${r.to}</div>
+      </div>
+      <div class="rt-facts">${r.facts.map(f => `<span class="rt-fact">${f}</span>`).join('')}</div>
+      <p class="rt-desc">${r.desc}</p>
+    </article>`;
+
+  const modes = ['All', ...Array.from(new Set(ROUTES.map(r => r.mode)))];
+  let active = 'All';
+
+  const render = () => {
+    const list = active === 'All' ? ROUTES : ROUTES.filter(r => r.mode === active);
+    grid.innerHTML = list.map(routeCard).join('');
+    modesEl.querySelectorAll('.mode-chip').forEach(c =>
+      c.classList.toggle('active', c.dataset.mode === active));
+  };
+
+  modesEl.innerHTML = modes.map(m =>
+    `<button type="button" class="mode-chip" data-mode="${m}">${m}</button>`).join('');
+  modesEl.addEventListener('click', e => {
+    const chip = e.target.closest('.mode-chip');
+    if (!chip) return;
+    active = chip.dataset.mode;
+    render();
+  });
   render();
 })();
 
