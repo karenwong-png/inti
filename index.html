@@ -534,12 +534,6 @@ section { padding: 100px 40px; position: relative; }
 .route-card .rt-fact strong { color: var(--paper); font-weight: 600; }
 .route-card .rt-desc { font-size: 12.5px; line-height: 1.6; color: rgba(250,247,242,0.62); margin-top: auto; }
 
-.transit-note {
-  margin-top: 30px; font-size: 11.5px; line-height: 1.65;
-  color: rgba(250,247,242,0.42); max-width: 900px;
-}
-.transit-note a { color: rgba(255,107,26,0.85); }
-
 @media (max-width: 1000px) {
   .transit-stats { grid-template-columns: repeat(2, 1fr); }
   .transit-grid { grid-template-columns: repeat(2, 1fr); }
@@ -673,28 +667,6 @@ section { padding: 100px 40px; position: relative; }
 }
 .route-card .rt-link-btn .rl-arrow { transition: transform 0.25s; display: inline-block; }
 .route-card .rt-link-btn:hover .rl-arrow { transform: translate(2px, -2px); }
-
-.transit-planners {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  margin-top: 34px; padding-top: 26px; border-top: 1px solid rgba(250,247,242,0.10);
-}
-.transit-planners .tp-label {
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(250,247,242,0.45); margin-right: 4px;
-}
-.planner-btn {
-  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-  font-size: 13px; color: var(--paper);
-  background: rgba(250,247,242,0.06); border: 1px solid rgba(250,247,242,0.14);
-  padding: 10px 16px; border-radius: 100px;
-  transition: all 0.28s cubic-bezier(0.22,1,0.36,1);
-}
-.planner-btn:hover {
-  border-color: var(--orange); background: rgba(255,107,26,0.12);
-  transform: translateY(-3px); box-shadow: 0 16px 28px -18px rgba(255,107,26,0.5);
-}
-.planner-btn .pb-arrow { opacity: 0.55; transition: transform 0.28s, opacity 0.28s; }
-.planner-btn:hover .pb-arrow { opacity: 1; transform: translate(3px, -3px); }
 
 @media (max-width: 760px) {
   #transit-map { height: 380px; }
@@ -3065,8 +3037,9 @@ footer {
 
 <!-- GETTING AROUND -->
 <!-- Route cards render from the ROUTES array in the script at the foot of this
-     file; the mode chips filter them. Fares and durations are the published
-     figures found for each operator and are indicative — see .transit-note. -->
+     file; the mode chips filter them. Fares and durations are each operator's
+     published figures and are indicative — they change, so re-check them
+     against KTMB / Airport Liner / INTI before relying on them in print. -->
 <section class="transit" id="getting-around">
   <div class="transit-wrap">
     <div class="section-head">
@@ -3112,20 +3085,6 @@ footer {
     <div class="transit-modes" id="transit-modes"></div>
     <div class="transit-grid" id="transit-grid"></div>
 
-    <div class="transit-planners">
-      <span class="tp-label">Plan a trip</span>
-      <a class="planner-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=INTI+International+University+Nilai&amp;travelmode=transit" target="_blank" rel="noopener">Google Maps directions <span class="pb-arrow">&#8599;</span></a>
-      <a class="planner-btn" href="https://moovitapp.com/index/en/public_transit-INTI_International_University-Kuala_Lumpur-site_26248661-1082" target="_blank" rel="noopener">Moovit &mdash; live bus &amp; train times <span class="pb-arrow">&#8599;</span></a>
-      <a class="planner-btn" href="https://www.ktmb.com.my" target="_blank" rel="noopener">KTMB timetable &amp; tickets <span class="pb-arrow">&#8599;</span></a>
-      <a class="planner-btn" href="https://www.klia2.info/buses/bus-operators/airport-liner/" target="_blank" rel="noopener">Airport Liner schedule <span class="pb-arrow">&#8599;</span></a>
-    </div>
-
-    <p class="transit-note">
-      Fares, journey times and frequencies are the operators' published figures and are indicative only &mdash; they change, and KTMB runs
-      maintenance windows that alter the Komuter timetable. Confirm before you travel with
-      <a href="https://www.ktmb.com.my" target="_blank" rel="noopener">KTMB</a>, the Airport Liner counter at Nilai KTM, or the shuttle timetable on
-      <a href="https://newinti.edu.my" target="_blank" rel="noopener">INTI's website</a>. Both BeLive residences sit in Putra Nilai, a short ride from Nilai KTM Komuter station and its adjoining bus terminal.
-    </p>
   </div>
 </section>
 
