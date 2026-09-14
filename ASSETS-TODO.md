@@ -40,3 +40,19 @@ code change needed.
 (2000x433, transparent, with the "Your Future Built Today" bar). It is used in
 the nav, the partnership card and the footer. Because the type is black and
 grey, the footer places it on a white plaque rather than recolouring the mark.
+
+## Deployment
+
+The site deploys to GitHub Pages from `main` via `.github/workflows/deploy-pages.yml`,
+and the `CNAME` file at the repo root points it at **inti.belive.my**.
+
+Two things have to be true for that URL to work, and neither can be done from
+the repository:
+
+1. **Pages must be enabled** — Settings → Pages → Build and deployment →
+   Source: **GitHub Actions**. Until this is set every workflow run fails at
+   `Configure Pages` with "Resource not accessible by integration".
+2. **DNS must point at GitHub** — in the DNS provider for `belive.my`
+   (currently Cloudflare), add a `CNAME` record: name `inti`, target
+   `karenwong-png.github.io`. Leave it DNS-only (grey cloud) until GitHub has
+   issued the TLS certificate, otherwise certificate provisioning fails.
