@@ -20,8 +20,8 @@ code change needed.
 | --- | --- | --- |
 | `YouthCity_condo.jpg` | Building photo on the Youth City tab | in repo |
 | `YC_pool.jpg`, `YC_gym.jpg`, `YC_playground.jpg` | Facility strip | in repo |
-| `YC_master.jpg`, `YC_double_1.jpg` (RM878), `YC_double_2.jpg` (RM678) | Room cards | still needed |
-| `YC_kitchen.jpg`, `YC_dining.jpg`, `YC_yard.jpg` | Shared spaces | still needed |
+| `YC_master.jpg`, `YC_double_1.jpg` (RM878), `YC_double_2.jpg` (RM678) | Room cards | in repo |
+| `YC_kitchen.jpg`, `YC_dining.jpg`, `YC_yard.jpg` | Shared spaces | in repo |
 | `BeLive_YouthCity_INTI.jpg` | "Getting to INTI International University" route guide | still needed |
 
 ## Akasia @ Bandar Belia
