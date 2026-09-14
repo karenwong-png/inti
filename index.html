@@ -4114,15 +4114,17 @@ const REVIEWS = [
     if (compact) track.closest('.reviews-rail').classList.add('sm');
   };
   // Top rail: full-size cards, right to left. Lower rail: compact cards running
-  // the opposite way. Below five reviews the rails would show the same cards
-  // stacked on each other, so the lower one is dropped until there are enough.
-  if (REVIEWS.length >= 5) {
+  // left to right. With six or more reviews the two rails take half each; with
+  // fewer, both show every review and the lower one is rotated so the rows are
+  // never in lockstep.
+  if (REVIEWS.length >= 6) {
     const mid = Math.ceil(REVIEWS.length / 2);
     fill(trackA, REVIEWS.slice(0, mid));
     fill(trackB, REVIEWS.slice(mid), true);
   } else {
+    const offset = Math.floor(REVIEWS.length / 2);
     fill(trackA, REVIEWS);
-    trackB.closest('.reviews-rail').remove();
+    fill(trackB, REVIEWS.slice(offset).concat(REVIEWS.slice(0, offset)), true);
   }
 
   if (GOOGLE_RATING.score) {
