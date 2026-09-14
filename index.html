@@ -622,6 +622,41 @@ section { padding: 100px 40px; position: relative; }
 .tm-legend .tl-line { width: 20px; height: 3px; border-radius: 3px; flex-shrink: 0; }
 .tm-legend .tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
+/* expandable per-card route map */
+.route-card { cursor: pointer; }
+.route-card:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.rt-toggle {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 600; color: var(--orange);
+  margin-top: 2px;
+}
+.rt-toggle .rt-chev { transition: transform 0.35s cubic-bezier(0.22,1,0.36,1); display: inline-block; }
+.route-card.open .rt-toggle .rt-chev { transform: rotate(180deg); }
+.route-card:hover .rt-toggle { text-decoration: underline; text-underline-offset: 3px; }
+.rt-map {
+  height: 0; opacity: 0; overflow: hidden; border-radius: 12px;
+  border: 1px solid transparent; background: #0B0B0D;
+  transition: height 0.42s cubic-bezier(0.22,1,0.36,1), opacity 0.3s, margin 0.42s, border-color 0.42s;
+}
+.route-card.open .rt-map {
+  height: 186px; opacity: 1; margin-top: 2px;
+  border-color: rgba(250,247,242,0.14);
+}
+.rt-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.86) contrast(1.06) saturate(0.42);
+}
+.rt-map .leaflet-control-attribution { display: none; }
+.rt-map .leaflet-control-zoom a {
+  background: rgba(14,14,16,0.85); color: var(--paper);
+  border: 1px solid rgba(250,247,242,0.14); width: 22px; height: 22px; line-height: 22px; font-size: 14px;
+}
+.rt-map .leaflet-control-zoom a:hover { background: var(--orange); border-color: var(--orange); }
+.rt-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 2.5px solid var(--ink); box-shadow: 0 0 0 2px currentColor;
+}
+.rt-dot.end { width: 15px; height: 15px; }
+
 /* per-card links + trip planners */
 .route-card .rt-links { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid rgba(250,247,242,0.09); }
 .route-card .rt-link-btn {
@@ -3771,6 +3806,8 @@ const ROUTES = [
     desc: 'The Seremban Line runs straight into KL Sentral, where you can pick up the LRT, MRT, Monorail and KLIA Ekspres. A weekday-peak Komuter Express cuts the run to roughly 47 minutes.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=KL+Sentral&travelmode=transit',
     src: { label: 'KTMB', url: 'https://www.ktmb.com.my' },
+    colour: '#4285F4',
+    path: [[2.80930,101.79670],[2.9200,101.7900],[3.0300,101.7600],[3.13430,101.68690]],
   },
   {
     mode: 'Airport Bus', icon: '\u{2708}\u{FE0F}',
@@ -3779,6 +3816,8 @@ const ROUTES = [
     desc: 'The Airport Liner is the cheapest way to either terminal, and it calls at INTI on the way. Last bus back from KLIA leaves at 12:30am, so late arrivals are still covered.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=Kuala+Lumpur+International+Airport&travelmode=transit',
     src: { label: 'Airport Liner', url: 'https://www.klia2.info/buses/bus-operators/airport-liner/' },
+    colour: '#FF6B1A',
+    path: [[2.80930,101.79670],[2.80100,101.78200],[2.79600,101.77300],[2.81364,101.75824],[2.80590,101.71300],[2.74560,101.70990],[2.75870,101.68970]],
   },
   {
     mode: 'Airport Bus', icon: '\u{1F393}',
@@ -3787,6 +3826,8 @@ const ROUTES = [
     desc: 'INTI is a scheduled stop between Taman Cempaka and Salak Tinggi, so the airport bus doubles as a campus bus for anyone coming off the Komuter.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=INTI+International+University+Nilai&travelmode=transit',
     src: { label: 'Moovit stop times', url: 'https://moovitapp.com/index/en/public_transit-Inti_International_University-Kuala_Lumpur-stop_35827010-1082' },
+    colour: '#FF6B1A',
+    path: [[2.80930,101.79670],[2.80100,101.78200],[2.79600,101.77300],[2.81364,101.75824]],
   },
   {
     mode: 'Campus Shuttle', icon: '\u{1F68C}',
@@ -3795,6 +3836,8 @@ const ROUTES = [
     desc: 'INTI runs a complimentary shuttle for students and staff to Nilai KTM station, the malls, the mosque and the night market. Current timetable is published on INTI’s website.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=INTI+International+University+Nilai&destination=Mesamall+Nilai&travelmode=transit',
     src: { label: 'INTI campus info', url: 'https://newinti.edu.my/campuses/inti-international-university/' },
+    colour: '#00BFA6',
+    path: [[2.81364,101.75824],[2.82000,101.78700],[2.81300,101.79800],[2.80930,101.79670]],
   },
   {
     mode: 'Local Bus', icon: '\u{1F68D}',
@@ -3803,6 +3846,8 @@ const ROUTES = [
     desc: 'A local service links the campus with Nilai Sentral. Infrequent, so it is worth checking the posted times rather than turning up and hoping.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=INTI+International+University+Nilai&destination=Nilai+Sentral&travelmode=transit',
     src: { label: 'Moovit route', url: 'https://moovitapp.com/index/en/public_transit-INTI_International_University-Kuala_Lumpur-site_26248661-1082' },
+    colour: '#F59E0B',
+    path: [[2.81364,101.75824],[2.81600,101.79200]],
   },
   {
     mode: 'Train', icon: '\u{1F687}',
@@ -3811,6 +3856,8 @@ const ROUTES = [
     desc: 'Southbound on the same platform for Seremban’s shopping, hospitals and the state capital — useful for weekends and specialist appointments.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=Nilai+KTM+Komuter+Station&destination=Seremban+KTM+Station&travelmode=transit',
     src: { label: 'KTMB', url: 'https://www.ktmb.com.my' },
+    colour: '#4285F4',
+    path: [[2.80930,101.79670],[2.77000,101.82000],[2.72190,101.94230]],
   },
   {
     mode: 'Ride-hail', icon: '\u{1F697}',
@@ -3818,6 +3865,8 @@ const ROUTES = [
     facts: ['<strong>~3.5–3.7 km</strong>', '<strong>~8–9 min</strong>', 'Grab / e-hailing'],
     desc: 'The quickest door-to-door option and easy to split between housemates. Both residences sit in Putra Nilai, the same township as the campus.',
     map: 'https://www.google.com/maps/dir/?api=1&origin=Youth+City+Residence+Nilai&destination=INTI+International+University+Nilai&travelmode=driving',
+    colour: '#00BFA6',
+    path: [[2.82640,101.78040],[2.81364,101.75824]],
   },
   {
     mode: 'Local Bus', icon: '\u{1F6C2}',
@@ -3826,6 +3875,8 @@ const ROUTES = [
     desc: 'The terminal sits beside the Komuter station, so intercity coaches to other states connect directly with the train without a transfer across town.',
     map: 'https://www.google.com/maps/search/?api=1&query=Nilai+Bus+Terminal',
     src: { label: 'Terminal &amp; coach tickets', url: 'https://www.busonlineticket.com/terminal/nilai-bus-terminal/' },
+    colour: '#F59E0B',
+    path: [[2.80930,101.79670],[2.80985,101.79760]],
   },
 ];
 
@@ -3835,7 +3886,8 @@ const ROUTES = [
   if (!grid || !modesEl) return;
 
   const routeCard = (r, i) => `
-    <article class="route-card" style="animation-delay:${Math.min(i, 8) * 45}ms">
+    <article class="route-card" style="animation-delay:${Math.min(i, 8) * 45}ms"
+             ${r.path ? `role="button" tabindex="0" aria-expanded="false" data-idx="${i}"` : ''}>
       <span class="rt-mode">${r.icon} ${r.mode}</span>
       <div class="rt-od">
         <div class="rt-point"><i></i>${r.from}</div>
@@ -3844,6 +3896,8 @@ const ROUTES = [
       </div>
       <div class="rt-facts">${r.facts.map(f => `<span class="rt-fact">${f}</span>`).join('')}</div>
       <p class="rt-desc">${r.desc}</p>
+      ${r.path ? `<div class="rt-toggle">Show route map <span class="rt-chev">&#9662;</span></div>
+      <div class="rt-map" id="rtmap-${i}"></div>` : ''}
       ${(r.map || r.src) ? `<div class="rt-links">
         ${r.map ? `<a class="rt-link-btn" href="${r.map}" target="_blank" rel="noopener">&#128506; Open in Maps <span class="rl-arrow">&#8599;</span></a>` : ''}
         ${r.src ? `<a class="rt-link-btn" href="${r.src.url}" target="_blank" rel="noopener">${r.src.label} <span class="rl-arrow">&#8599;</span></a>` : ''}
@@ -3853,12 +3907,93 @@ const ROUTES = [
   const modes = ['All', ...Array.from(new Set(ROUTES.map(r => r.mode)))];
   let active = 'All';
 
+  // One Leaflet instance per opened card, torn down whenever the grid re-renders.
+  const miniMaps = new Map();
+  let shown = [];
+
+  const buildMini = (card) => {
+    if (typeof L === 'undefined') return;
+    const holder = card.querySelector('.rt-map');
+    if (!holder || miniMaps.has(holder.id)) return;
+    const r = shown[Number(card.dataset.idx)];
+    if (!r || !r.path) return;
+
+    const m = L.map(holder, {
+      zoomControl: true, scrollWheelZoom: false, attributionControl: false,
+      dragging: true, keyboard: false,
+    });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(m);
+
+    const colour = r.colour || '#FF6B1A';
+    L.polyline(r.path, { color: colour, weight: 4, opacity: 0.95, lineJoin: 'round' }).addTo(m);
+    L.polyline(r.path, { color: colour, weight: 13, opacity: 0.16, lineJoin: 'round' }).addTo(m);
+
+    const endIcon = (end) => L.divIcon({
+      className: '',
+      html: `<div class="rt-dot${end ? ' end' : ''}" style="background:${end ? colour : '#0E0E10'};color:${colour}"></div>`,
+      iconSize: end ? [15, 15] : [11, 11],
+      iconAnchor: end ? [7.5, 7.5] : [5.5, 5.5],
+    });
+    r.path.forEach((c, idx) => {
+      const isEnd = idx === 0 || idx === r.path.length - 1;
+      L.marker(c, { icon: endIcon(isEnd), interactive: false, keyboard: false }).addTo(m);
+    });
+
+    m.__bounds = L.latLngBounds(r.path).pad(0.28);
+    miniMaps.set(holder.id, m);
+  };
+
+  // The panel animates from height 0, so Leaflet has to be re-measured and
+  // re-fitted once it has actually opened — otherwise it sizes to nothing and
+  // the route lands off-screen.
+  const sizeMini = (card) => {
+    const holder = card.querySelector('.rt-map');
+    const m = holder && miniMaps.get(holder.id);
+    if (!m) return;
+    const apply = () => {
+      m.invalidateSize({ animate: false });
+      if (m.__bounds) m.fitBounds(m.__bounds, { animate: false });
+    };
+    holder.addEventListener('transitionend', function once(e) {
+      if (e.propertyName !== 'height') return;
+      holder.removeEventListener('transitionend', once);
+      apply();
+    });
+    setTimeout(apply, 480);   // fallback if the transition never fires
+  };
+
   const render = () => {
-    const list = active === 'All' ? ROUTES : ROUTES.filter(r => r.mode === active);
-    grid.innerHTML = list.map(routeCard).join('');
+    miniMaps.forEach(m => m.remove());
+    miniMaps.clear();
+    shown = active === 'All' ? ROUTES : ROUTES.filter(r => r.mode === active);
+    grid.innerHTML = shown.map(routeCard).join('');
     modesEl.querySelectorAll('.mode-chip').forEach(c =>
       c.classList.toggle('active', c.dataset.mode === active));
   };
+
+  const toggleCard = (card) => {
+    const open = card.classList.toggle('open');
+    card.setAttribute('aria-expanded', String(open));
+    const t = card.querySelector('.rt-toggle');
+    if (t) t.firstChild.textContent = open ? 'Hide route map ' : 'Show route map ';
+    if (open) {
+      buildMini(card);
+      sizeMini(card);
+    }
+  };
+
+  grid.addEventListener('click', e => {
+    if (e.target.closest('a')) return;          // let the deep links through
+    const card = e.target.closest('.route-card[role="button"]');
+    if (card) toggleCard(card);
+  });
+  grid.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.route-card[role="button"]');
+    if (!card) return;
+    e.preventDefault();
+    toggleCard(card);
+  });
 
   modesEl.innerHTML = modes.map(m =>
     `<button type="button" class="mode-chip" data-mode="${m}">${m}</button>`).join('');
