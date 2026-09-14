@@ -2695,16 +2695,14 @@ footer {
         <tr>
           <td>Room Pricing <span class="td-sub">per month, from</span></td>
           <td><ul>
-            <li>Master — RM1,100</li>
-            <li>Queen Balcony — RM850</li>
-            <li>Queen — RM800</li>
-            <li>Single — RM700</li>
+            <li>Master Room — RM1,200</li>
+            <li>Double Room — RM878</li>
+            <li>Double Room — RM678</li>
           </ul></td>
           <td><ul>
-            <li>Master — RM1,100</li>
-            <li>Queen — RM800</li>
-            <li>Single — RM700</li>
-            <li>Mini Single — RM650</li>
+            <li>Master Room — RM828</li>
+            <li>Double Room — RM770</li>
+            <li>Single Room — RM650</li>
           </ul></td>
         </tr>
         <tr>
@@ -2855,10 +2853,11 @@ const roomData = {
   youthcity: {
     label: 'Youth City Residence',
     rooms: [
-      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'YC_master.jpg' },
-      { name: 'Queen Balcony Bedroom',  rent: 850, disp: 'RM850',   img: 'YC_queen_balcony.jpg' },
-      { name: 'Queen Bedroom',          rent: 800, disp: 'RM800',   img: 'YC_queen.jpg' },
-      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'YC_single.jpg' },
+      // Two Double Rooms at different rates — names are BeLive's; the price
+      // distinguishes them until the room-type labels are refined.
+      { name: 'Master Room', rent: 1200, disp: 'RM1,200', img: 'YC_master.jpg' },
+      { name: 'Double Room', rent:  878, disp: 'RM878',   img: 'YC_double_1.jpg' },
+      { name: 'Double Room', rent:  678, disp: 'RM678',   img: 'YC_double_2.jpg' },
     ],
     common: [
       { img: 'YC_kitchen.jpg',     label: 'Shared Kitchen', alt: 'Youth City Residence shared kitchen' },
@@ -2869,10 +2868,9 @@ const roomData = {
   akasia: {
     label: 'Akasia @ Bandar Belia',
     rooms: [
-      { name: 'Master Room',           rent: 1100, disp: 'RM1,100', img: 'AK_master.jpg' },
-      { name: 'Queen Bedroom',          rent: 800, disp: 'RM800',   img: 'AK_queen.jpg' },
-      { name: 'Single Bedroom',         rent: 700, disp: 'RM700',   img: 'AK_single.jpg' },
-      { name: 'Mini Single Bedroom',    rent: 650, disp: 'RM650',   img: 'AK_mini_single.jpg' },
+      { name: 'Master Room', rent: 828, disp: 'RM828', img: 'AK_master.jpg' },
+      { name: 'Double Room', rent: 770, disp: 'RM770', img: 'AK_double.jpg' },
+      { name: 'Single Room', rent: 650, disp: 'RM650', img: 'AK_single.jpg' },
     ],
     common: [
       { img: 'AK_kitchen.jpg', label: 'Shared Kitchen', alt: 'Akasia shared kitchen' },

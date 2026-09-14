@@ -20,7 +20,7 @@ code change needed.
 | --- | --- | --- |
 | `YouthCity_condo.jpg` | Building photo on the Youth City tab | in repo |
 | `YC_pool.jpg`, `YC_gym.jpg`, `YC_playground.jpg` | Facility strip | in repo |
-| `YC_master.jpg`, `YC_queen_balcony.jpg`, `YC_queen.jpg`, `YC_single.jpg` | Room cards | still needed |
+| `YC_master.jpg`, `YC_double_1.jpg` (RM878), `YC_double_2.jpg` (RM678) | Room cards | still needed |
 | `YC_kitchen.jpg`, `YC_dining.jpg`, `YC_yard.jpg` | Shared spaces | still needed |
 | `BeLive_YouthCity_INTI.jpg` | "Getting to INTI International University" route guide | still needed |
 
@@ -30,7 +30,7 @@ code change needed.
 | --- | --- |
 | `Akasia_condo.jpg` | Building photo on the Akasia tab |
 | `AK_pool.jpg`, `AK_gym.jpg`, `AK_jogging.jpg` | Facility strip |
-| `AK_master.jpg`, `AK_queen.jpg`, `AK_single.jpg`, `AK_mini_single.jpg` | Room cards |
+| `AK_master.jpg`, `AK_double.jpg`, `AK_single.jpg` | Room cards |
 | `AK_kitchen.jpg`, `AK_living.jpg`, `AK_yard.jpg` | Shared spaces |
 | `BeLive_Akasia_INTI.jpg` | "Getting to INTI International University" route guide |
 
