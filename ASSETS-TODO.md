@@ -16,13 +16,13 @@ code change needed.
 
 ## Youth City Residence
 
-| File | Where it appears |
-| --- | --- |
-| `YouthCity_condo.jpg` | Building photo on the Youth City tab |
-| `YC_pool.jpg`, `YC_gym.jpg`, `YC_garden.jpg` | Facility strip |
-| `YC_master.jpg`, `YC_queen_balcony.jpg`, `YC_queen.jpg`, `YC_single.jpg` | Room cards |
-| `YC_kitchen.jpg`, `YC_dining.jpg`, `YC_yard.jpg` | Shared spaces |
-| `BeLive_YouthCity_INTI.jpg` | "Getting to INTI International University" route guide |
+| File | Where it appears | Status |
+| --- | --- | --- |
+| `YouthCity_condo.jpg` | Building photo on the Youth City tab | in repo |
+| `YC_pool.jpg`, `YC_gym.jpg`, `YC_playground.jpg` | Facility strip | in repo |
+| `YC_master.jpg`, `YC_queen_balcony.jpg`, `YC_queen.jpg`, `YC_single.jpg` | Room cards | still needed |
+| `YC_kitchen.jpg`, `YC_dining.jpg`, `YC_yard.jpg` | Shared spaces | still needed |
+| `BeLive_YouthCity_INTI.jpg` | "Getting to INTI International University" route guide | still needed |
 
 ## Akasia @ Bandar Belia
 
