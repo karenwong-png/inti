@@ -553,6 +553,18 @@ section { padding: 100px 40px; position: relative; }
 .stars svg { width: 15px; height: 15px; display: block; }
 .stars .s-on   { fill: #FBBC04; }
 .stars .s-off  { fill: rgba(14,14,16,0.16); }
+/* Partial rating: a clipped gold layer sits over a grey one, so 4.7 renders as
+   four full stars plus 70% of the fifth rather than being rounded to 5. */
+.stars-frac { position: relative; display: inline-block; line-height: 0; }
+.stars-frac .sf-base { display: inline-flex; gap: 2px; }
+.stars-frac .sf-fill {
+  position: absolute; inset: 0; display: inline-flex; gap: 2px;
+  overflow: hidden; white-space: nowrap;
+}
+.stars-frac svg { width: 17px; height: 17px; display: block; flex-shrink: 0; }
+.stars-frac .sf-base svg path { fill: rgba(14,14,16,0.15); }
+.stars-frac .sf-fill svg path { fill: #FBBC04; }
+.g-score .g-num-row { display: flex; align-items: center; gap: 10px; }
 
 /* Marquee rails */
 .reviews-rail { position: relative; }
@@ -2551,8 +2563,8 @@ footer {
 <section class="reviews" id="reviews">
   <div class="reviews-head">
     <div>
-      <div class="kicker">Reviews</div>
-      <h2>What tenants say about <em>living with BeLive.</em></h2>
+      <div class="kicker">Google Reviews</div>
+      <h2>Rated <em>4.7 on Google</em><br>by BeLive tenants.</h2>
     </div>
     <div class="g-score" id="g-score" hidden></div>
   </div>
@@ -3627,7 +3639,7 @@ const ROUTES = [
 // GOOGLE_RATING drives the aggregate badge. It stays hidden while score is null,
 // so the section never shows a rating that has not been read off the real
 // Google Business Profile. Fill in score / count to switch it on.
-const GOOGLE_RATING = { score: null, count: null, url: null };
+const GOOGLE_RATING = { score: 4.7, count: 2298, url: null };
 
 // Tenant reviews. Every field except `text` is optional and is only rendered
 // when set — no byline is invented for a quote whose author we do not have.
@@ -3662,6 +3674,18 @@ const REVIEWS = [
       <path fill="#FBBC04" d="M11.5 28.5c-.5-1.4-.7-2.9-.7-4.5s.3-3.1.7-4.5l-7.1-5.5C2.9 17 2 20.4 2 24s.9 7 2.4 10z"/>
       <path fill="#EA4335" d="M24 10.6c4.1 0 6.9 1.8 8.5 3.3l6.2-6C34.9 4.4 29.9 2 24 2 15.4 2 8.1 6.9 4.4 14l7.1 5.5c1.8-5.3 6.7-8.9 12.5-8.9z"/>
     </svg>`;
+
+  const STAR_PATH = 'M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1z';
+  // score out of 5, rendered to one decimal place of precision
+  const starsFraction = (score) => {
+    const pct = Math.max(0, Math.min(100, (score / 5) * 100));
+    const row = () => Array.from({ length: 5 },
+      () => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${STAR_PATH}"/></svg>`).join('');
+    return `<span class="stars-frac" role="img" aria-label="${score} out of 5 stars">
+      <span class="sf-base">${row()}</span>
+      <span class="sf-fill" style="width:${pct}%">${row()}</span>
+    </span>`;
+  };
 
   const starsRow = (n) => {
     let out = '<span class="stars" role="img" aria-label="' + n + ' out of 5 stars">';
@@ -3723,12 +3747,13 @@ const REVIEWS = [
   }
 
   if (GOOGLE_RATING.score) {
-    const rounded = Math.round(GOOGLE_RATING.score);
     scoreEl.innerHTML = `
       ${gMark('g-mark')}
       <div class="g-meta">
-        <div class="g-num">${GOOGLE_RATING.score.toFixed(1)}</div>
-        ${starsRow(rounded)}
+        <div class="g-num-row">
+          <span class="g-num">${GOOGLE_RATING.score.toFixed(1)}</span>
+          ${starsFraction(GOOGLE_RATING.score)}
+        </div>
         <div class="g-label">${GOOGLE_RATING.count ? `from <strong>${GOOGLE_RATING.count.toLocaleString('en-MY')}</strong> Google reviews` : 'on Google'}</div>
       </div>`;
     scoreEl.hidden = false;
