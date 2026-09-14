@@ -330,6 +330,139 @@ section { padding: 100px 40px; position: relative; }
 
 @media (max-width: 768px) { .benefits-grid { grid-template-columns: 1fr; } }
 
+/* ---------- GOOGLE REVIEWS ---------- */
+.reviews {
+  background:
+    radial-gradient(90% 60% at 12% 0%, rgba(255,107,26,0.10) 0%, transparent 60%),
+    radial-gradient(70% 50% at 92% 100%, rgba(0,191,166,0.10) 0%, transparent 60%),
+    var(--paper);
+  padding: 96px 0 100px;
+  overflow: hidden; position: relative;
+}
+.reviews-head {
+  max-width: 1200px; margin: 0 auto 40px; padding: 0 40px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 28px; flex-wrap: wrap;
+}
+.reviews-head .kicker { margin-bottom: 14px; }
+.reviews-head h2 {
+  font-family: 'Poppins', sans-serif; font-weight: 400;
+  font-size: clamp(32px, 4vw, 50px); line-height: 1.04;
+  letter-spacing: -0.03em; color: var(--ink);
+}
+.reviews-head h2 em { font-style: italic; color: var(--orange); }
+
+/* Aggregate card — Google mark, score, stars, review count */
+.g-score {
+  display: flex; align-items: center; gap: 18px;
+  background: white; border: 1px solid rgba(14,14,16,0.07);
+  border-radius: 20px; padding: 18px 24px;
+  box-shadow: 0 20px 40px -24px rgba(14,14,16,0.32);
+  flex-shrink: 0;
+}
+.g-score[hidden] { display: none; }
+.g-score .g-mark { width: 40px; height: 40px; flex-shrink: 0; }
+.g-score .g-num {
+  font-family: 'Poppins', sans-serif; font-weight: 600;
+  font-size: 34px; line-height: 1; color: var(--ink); letter-spacing: -0.02em;
+}
+.g-score .g-meta { display: flex; flex-direction: column; gap: 5px; }
+.g-score .g-label { font-size: 11.5px; color: var(--ink-soft); opacity: 0.62; }
+.g-score .g-label strong { font-weight: 600; opacity: 0.9; }
+
+/* Stars */
+.stars { display: inline-flex; gap: 2px; line-height: 1; }
+.stars svg { width: 15px; height: 15px; display: block; }
+.stars .s-on   { fill: #FBBC04; }
+.stars .s-off  { fill: rgba(14,14,16,0.16); }
+
+/* Marquee rails */
+.reviews-rail { position: relative; }
+.reviews-rail + .reviews-rail { margin-top: 18px; }
+.reviews-rail::before, .reviews-rail::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 90px; z-index: 2;
+  pointer-events: none;
+}
+.reviews-rail::before { left: 0;  background: linear-gradient(90deg, var(--paper), transparent); }
+.reviews-rail::after  { right: 0; background: linear-gradient(270deg, var(--paper), transparent); }
+.reviews-track {
+  display: flex; gap: 18px; width: max-content;
+  animation: review-scroll 52s linear infinite;
+  will-change: transform;
+}
+.reviews-rail.reverse .reviews-track { animation-direction: reverse; }
+.reviews-rail:hover .reviews-track,
+.reviews-rail:focus-within .reviews-track { animation-play-state: paused; }
+@keyframes review-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-50% - 9px)); }
+}
+
+/* Review card */
+.review-card {
+  width: 348px; flex-shrink: 0;
+  background: white; border: 1px solid rgba(14,14,16,0.07);
+  border-radius: 20px; padding: 22px 24px 20px;
+  box-shadow: 0 14px 30px -22px rgba(14,14,16,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.review-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,107,26,0.35);
+  box-shadow: 0 26px 44px -26px rgba(14,14,16,0.4);
+}
+.review-card .rc-top { display: flex; align-items: center; gap: 12px; }
+.review-card .rc-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 15px;
+  color: white; letter-spacing: 0.01em;
+}
+.review-card .rc-who { min-width: 0; }
+.review-card .rc-name {
+  font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14px;
+  color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.review-card .rc-sub { font-size: 11px; color: var(--ink-soft); opacity: 0.55; margin-top: 2px; }
+.review-card .rc-g { margin-left: auto; width: 18px; height: 18px; flex-shrink: 0; opacity: 0.9; }
+.review-card .rc-text {
+  font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); opacity: 0.86;
+}
+.review-card .rc-quote {
+  font-family: 'Poppins', sans-serif; font-size: 40px; line-height: 0.6;
+  color: var(--orange); opacity: 0.18; height: 16px;
+}
+/* No verified byline: lead with the quote and sign off quietly underneath,
+   instead of repeating an identical name badge on every card. */
+.review-card.anon .rc-text { font-size: 14px; opacity: 0.9; }
+.review-card.anon .rc-foot {
+  display: flex; align-items: center; gap: 8px; margin-top: auto;
+  padding-top: 12px; border-top: 1px solid rgba(14,14,16,0.07);
+  font-size: 11.5px; color: var(--ink-soft); opacity: 0.55;
+}
+.review-card.anon .rc-foot svg { width: 14px; height: 14px; flex-shrink: 0; opacity: 0.85; }
+
+.reviews-foot {
+  max-width: 1200px; margin: 34px auto 0; padding: 0 40px;
+  display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+}
+.reviews-foot .rf-note { font-size: 12px; color: var(--ink-soft); opacity: 0.6; }
+
+@media (max-width: 700px) {
+  .reviews { padding: 72px 0 76px; }
+  .reviews-head { padding: 0 24px; margin-bottom: 30px; }
+  .reviews-foot { padding: 0 24px; }
+  .review-card { width: 280px; padding: 18px 18px 16px; }
+  .reviews-rail::before, .reviews-rail::after { width: 44px; }
+  .g-score { padding: 14px 18px; gap: 14px; }
+  .g-score .g-num { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-track { animation: none; }
+  .reviews-rail { overflow-x: auto; }
+}
+
 /* ---------- WHY CHOOSE BELIVE ---------- */
 .why-belive {
   background: linear-gradient(180deg, var(--paper) 0%, #FDF8F1 100%);
@@ -2184,7 +2317,7 @@ footer {
     <li><a href="#difference">BeLive Difference</a></li>
     <li><a href="#how-to-book">How to Book</a></li>
   </ul>
-  <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn">Book Now <span class="arrow">→</span></a>
+  <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="cta-btn">Book Now <span class="arrow">→</span></a>
 </nav>
 
 <!-- HERO -->
@@ -2198,7 +2331,7 @@ footer {
       Minutes from <strong>INTI International University</strong>, Putra Nilai — modern fully furnished rooms designed for student comfort, convenience and community living, powered by BeLive.
     </p>
     <div class="hero-ctas">
-      <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn orange">Book a Room Now <span class="arrow">→</span></a>
+      <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="cta-btn orange">Book a Room Now <span class="arrow">→</span></a>
       <a href="#residences" class="cta-btn outline">Explore Room Types</a>
     </div>
     <div class="hero-stats">
@@ -2228,6 +2361,30 @@ footer {
     <div class="built-together-photos">
       <figure style="grid-column:1/-1;"><img src="BeLivexINTI_photo.jpg" data-optional="remove" data-optional-block=".built-together-photos" alt="BeLive × INTI International University"></figure>
     </div>
+  </div>
+</section>
+
+<!-- GOOGLE REVIEWS -->
+<!-- Cards, the aggregate badge and the star rows are all rendered from the
+     REVIEWS / GOOGLE_RATING constants in the script at the foot of this file.
+     Only fields that are actually set get rendered: a review with no name shows
+     as a tenant review without a byline, one with no stars shows no star row,
+     and the aggregate badge stays hidden until GOOGLE_RATING has a score. -->
+<section class="reviews" id="reviews">
+  <div class="reviews-head">
+    <div>
+      <div class="kicker">Reviews</div>
+      <h2>What tenants say about <em>living with BeLive.</em></h2>
+    </div>
+    <div class="g-score" id="g-score" hidden></div>
+  </div>
+
+  <div class="reviews-rail"><div class="reviews-track" id="reviews-track-a"></div></div>
+  <div class="reviews-rail reverse"><div class="reviews-track" id="reviews-track-b"></div></div>
+
+  <div class="reviews-foot">
+    <span class="rf-note" id="reviews-note"></span>
+    <a class="cta-btn orange" id="reviews-cta" href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener">Book a Room Now <span class="arrow">&rarr;</span></a>
   </div>
 </section>
 
@@ -2752,7 +2909,7 @@ footer {
     </div>
   </div>
   <div class="section-cta-row">
-    <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn orange">Enquire Now <span class="arrow">→</span></a>
+    <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="cta-btn orange">Enquire Now <span class="arrow">→</span></a>
   </div>
 </section>
 
@@ -2801,7 +2958,7 @@ footer {
     </p>
   </div>
   <div class="section-cta-row">
-    <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="cta-btn orange">Check Availability <span class="arrow">→</span></a>
+    <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="cta-btn orange">Check Availability <span class="arrow">→</span></a>
   </div>
 </section>
 
@@ -2811,7 +2968,7 @@ footer {
     <h2>Rent Safe, <em>Stay Happy.</em></h2>
     <p>Smart student co-living designed for comfort, convenience, and peace of mind.</p>
     <div class="final-cta-buttons">
-      <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="fcta-btn primary">Book a Room Now <span class="arrow">→</span></a>
+      <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="fcta-btn primary">Book a Room Now <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
@@ -2828,7 +2985,7 @@ footer {
 </footer>
 
 <!-- Floating Book Now CTA -->
-<a class="booking-float" href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener">
+<a class="booking-float" href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener">
   <img src="Booking_Button.png" width="1024" height="1536"
        alt="Book now — enquire about a BeLive room at INTI International University">
 </a>
@@ -2893,7 +3050,7 @@ function renderRooms(key) {
           <span class="now">${r.disp}</span>
           <span class="per">/ month</span>
         </div>
-        <a href="https://bit.ly/BeLive_INTI" target="_blank" rel="noopener" class="room-cta">Book This Room <span class="arrow">→</span></a>
+        <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="room-cta">Book This Room <span class="arrow">→</span></a>
       </div>
     </div>
   `).join('');
@@ -3143,6 +3300,125 @@ renderCommon('youthcity');
   carparkSel.addEventListener('change', render);
   populateRooms();
   render();
+})();
+
+// --- Google reviews rail ---
+// GOOGLE_RATING drives the aggregate badge. It stays hidden while score is null,
+// so the section never shows a rating that has not been read off the real
+// Google Business Profile. Fill in score / count to switch it on.
+const GOOGLE_RATING = { score: null, count: null, url: null };
+
+// Tenant reviews. Every field except `text` is optional and is only rendered
+// when set — no byline is invented for a quote whose author we do not have.
+//   text   : the review, verbatim
+//   name   : reviewer's display name
+//   stars  : 1-5
+//   detail : short context line under the name (e.g. "Google review")
+// The four seeded quotes are real BeLive tenant testimonials carried on
+// BeLive's own channels; they are shown without a byline or star row because
+// the reviewer names and ratings could not be verified. Replace this array with
+// the reviews copied off the Google Business Profile.
+const REVIEWS = [
+  { text: "Really nice place for students to live, thanks so much for BeLive | Sab @ Tenant Relations to help me search such a nice accommodation." },
+  { text: "Easy to communicate with all the agents, especially Intan, Ashraf and Alan — they will fulfil your requirements. A cozy and safe place to stay." },
+  { text: "I couldn't have asked for a better living situation as an international student! My landlord, Naeem, has been incredibly supportive and welcoming." },
+  { text: "I've had a truly positive experience with BeLive | Sab @ Tenant Relations." },
+];
+
+(function initReviews() {
+  const trackA = document.getElementById('reviews-track-a');
+  const trackB = document.getElementById('reviews-track-b');
+  const scoreEl = document.getElementById('g-score');
+  const noteEl = document.getElementById('reviews-note');
+  if (!trackA || !trackB) return;
+
+  const AVATAR_COLOURS = ['#FF6B1A', '#00BFA6', '#4285F4', '#E5530A', '#7C4DFF', '#0F9D58'];
+
+  const gMark = (size) => `
+    <svg class="${size}" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-2.7-.4-3.9H24v7.1h12.1c-.2 1.8-1.6 4.5-4.5 6.3l6.9 5.3c4.1-3.8 6.6-9.4 6.6-14.8z"/>
+      <path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-6.9-5.3c-1.8 1.3-4.3 2.2-7.6 2.2-5.8 0-10.7-3.8-12.5-9.1l-7.1 5.5C8.1 41.1 15.4 46 24 46z"/>
+      <path fill="#FBBC04" d="M11.5 28.5c-.5-1.4-.7-2.9-.7-4.5s.3-3.1.7-4.5l-7.1-5.5C2.9 17 2 20.4 2 24s.9 7 2.4 10z"/>
+      <path fill="#EA4335" d="M24 10.6c4.1 0 6.9 1.8 8.5 3.3l6.2-6C34.9 4.4 29.9 2 24 2 15.4 2 8.1 6.9 4.4 14l7.1 5.5c1.8-5.3 6.7-8.9 12.5-8.9z"/>
+    </svg>`;
+
+  const starsRow = (n) => {
+    let out = '<span class="stars" role="img" aria-label="' + n + ' out of 5 stars">';
+    for (let i = 1; i <= 5; i++) {
+      out += `<svg viewBox="0 0 24 24" aria-hidden="true"><path class="${i <= n ? 's-on' : 's-off'}" d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1z"/></svg>`;
+    }
+    return out + '</span>';
+  };
+
+  const card = (r, i) => {
+    // Named review: avatar, name, stars, Google mark across the top.
+    if (r.name) {
+      const colour = AVATAR_COLOURS[i % AVATAR_COLOURS.length];
+      return `
+        <article class="review-card">
+          <div class="rc-top">
+            <div class="rc-avatar" style="background:${colour}">${r.name.trim().charAt(0).toUpperCase()}</div>
+            <div class="rc-who">
+              <div class="rc-name">${r.name}</div>
+              ${r.detail ? `<div class="rc-sub">${r.detail}</div>` : ''}
+            </div>
+            ${gMark('rc-g')}
+          </div>
+          ${r.stars ? starsRow(r.stars) : ''}
+          <div class="rc-quote">&ldquo;</div>
+          <p class="rc-text">${r.text}</p>
+        </article>`;
+    }
+    // Unattributed review: quote first, quiet sign-off — no invented identity.
+    return `
+      <article class="review-card anon">
+        <div class="rc-quote">&ldquo;</div>
+        <p class="rc-text">${r.text}</p>
+        <div class="rc-foot">${gMark('')}<span>${r.detail || 'BeLive tenant'}</span></div>
+      </article>`;
+  };
+
+  if (!REVIEWS.length) {
+    document.getElementById('reviews').hidden = true;
+    return;
+  }
+
+  // Split across two rails, then duplicate each set so the marquee loops
+  // seamlessly at translateX(-50%).
+  const fill = (track, set) => {
+    // repeat until the rail is comfortably wider than the viewport, then double
+    let seq = set.slice();
+    while (seq.length * 366 < window.innerWidth * 1.4) seq = seq.concat(set);
+    track.innerHTML = seq.concat(seq).map(card).join('');
+  };
+  if (REVIEWS.length >= 6) {
+    const mid = Math.ceil(REVIEWS.length / 2);
+    fill(trackA, REVIEWS.slice(0, mid));
+    fill(trackB, REVIEWS.slice(mid));
+  } else {
+    // Too few to fill two rails without showing the same cards side by side.
+    fill(trackA, REVIEWS);
+    trackB.closest('.reviews-rail').remove();
+  }
+
+  if (GOOGLE_RATING.score) {
+    const rounded = Math.round(GOOGLE_RATING.score);
+    scoreEl.innerHTML = `
+      ${gMark('g-mark')}
+      <div class="g-meta">
+        <div class="g-num">${GOOGLE_RATING.score.toFixed(1)}</div>
+        ${starsRow(rounded)}
+        <div class="g-label">${GOOGLE_RATING.count ? `from <strong>${GOOGLE_RATING.count.toLocaleString('en-MY')}</strong> Google reviews` : 'on Google'}</div>
+      </div>`;
+    scoreEl.hidden = false;
+    if (noteEl) {
+      noteEl.innerHTML = GOOGLE_RATING.url
+        ? `Read every review on <a href="${GOOGLE_RATING.url}" target="_blank" rel="noopener">Google</a>.`
+        : 'Reviews from BeLive tenants across Malaysia.';
+    }
+  } else if (noteEl) {
+    noteEl.textContent = 'Reviews from BeLive tenants across Malaysia.';
+  }
 })();
 
 // --- Smooth scroll for nav ---
