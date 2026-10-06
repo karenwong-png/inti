@@ -2025,10 +2025,15 @@ a.g-score:hover .g-cta { text-decoration: underline; text-underline-offset: 3px;
   .res-panel.active { grid-template-columns: 1fr; }
   .rooms-track .room-card { flex-basis: calc((100% - 20px) / 2); }
 }
-@media (max-width: 540px) {
-  .rooms-track .room-card { flex-basis: 100%; }
+/* Section side padding drops to 20px at 768px, so arrows hung 22px outside
+   the carousel poke 2px past the viewport. Tuck them inside for that whole
+   band, not just below 540px. */
+@media (max-width: 768px) {
   .carousel-arrow.prev { left: 4px; }
   .carousel-arrow.next { right: 4px; }
+}
+@media (max-width: 540px) {
+  .rooms-track .room-card { flex-basis: 100%; }
 }
 
 /* ---------- AMENITIES STRIP ---------- */
