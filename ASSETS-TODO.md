@@ -43,16 +43,36 @@ grey, the footer places it on a white plaque rather than recolouring the mark.
 
 ## Deployment
 
-The site deploys to GitHub Pages from `main` via `.github/workflows/deploy-pages.yml`,
-and the `CNAME` file at the repo root points it at **inti.belive.my**.
+**Live at <https://karenwong-png.github.io/inti/>.**
 
-Two things have to be true for that URL to work, and neither can be done from
-the repository:
+Pages is enabled and serves from the `gh-pages` branch.
+`.github/workflows/deploy-pages.yml` runs on every push to `main` and pushes
+`main`'s tree onto `gh-pages`; GitHub serves it from there. No manual step.
 
-1. **Pages must be enabled** — Settings → Pages → Build and deployment →
-   Source: **GitHub Actions**. Until this is set every workflow run fails at
-   `Configure Pages` with "Resource not accessible by integration".
-2. **DNS must point at GitHub** — in the DNS provider for `belive.my`
-   (currently Cloudflare), add a `CNAME` record: name `inti`, target
-   `karenwong-png.github.io`. Leave it DNS-only (grey cloud) until GitHub has
-   issued the TLS certificate, otherwise certificate provisioning fails.
+### Why it publishes this way
+
+The workflow originally used the `configure-pages` / `upload-pages-artifact` /
+`deploy-pages` trio with `enablement: true`. That can never work from a
+workflow: creating a Pages site is not available to the workflow token
+("Resource not accessible by integration"), only to a repo admin. Pages was
+enabled instead by pushing a `gh-pages` branch, which GitHub auto-enables
+Pages for. With Pages sourced from a branch, GitHub locks the `github-pages`
+environment to that branch, so a `deploy-pages` job running on `main` is
+rejected with "Branch main is not allowed to deploy to github-pages due to
+environment protection rules" — hence the plain push.
+
+If the source is ever switched to **GitHub Actions** (Settings → Pages →
+Build and deployment), the workflow can go back to the artifact trio, minus
+the `enablement` flag.
+
+### Custom domain — not set
+
+There is deliberately no `CNAME` file. `inti.belive.my` currently resolves to
+**Vercel** (as does `inceif.belive.my`), so a `CNAME` claiming it for Pages
+would only make GitHub flag the domain as misconfigured and redirect the
+working github.io URL at a host that serves something else.
+
+To move the domain to Pages later: add a root `CNAME` file containing
+`inti.belive.my`, and in Cloudflare change the `inti` record from the Vercel
+target to a `CNAME` at `karenwong-png.github.io`, DNS-only (grey cloud) until
+GitHub has issued the certificate.
