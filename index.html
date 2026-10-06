@@ -3399,7 +3399,7 @@ footer {
     <p class="payment-disclaimer">
       <strong>Note:</strong> Prices are inclusive of 8% SST. Any adjustments or changes will be determined based on the monthly rental amount and the agreed rental terms.<br><br>
       <strong>Terms &amp; Conditions:</strong> Prices shown are for reference only. Figures are based on a <strong>12-month tenancy</strong>; tenancies of less than 12 months carry a different rental rate. Final figures will be confirmed by the BeLive team before signing.<br><br>
-      <strong>Tenant Type:</strong> Local students and local staff pay the same rate — an RM120 discount on the rental charges, with the security deposit waived. International students and international staff also pay the same rate as each other. Select your tenant type above for the applicable breakdown.
+      <strong>Tenant Type:</strong> Every tenant type pays the same rental charges. Local students and local staff have the security deposit waived; international students and international staff pay it in full. Select your tenant type above for the applicable breakdown.
     </p>
   </div>
   <div class="section-cta-row">
@@ -3697,7 +3697,6 @@ renderCommon('youthcity');
     accessCard: 150,
     intiProcessing: 150, // INTI processing fee — charged to every tenant type
     rentalAddOn: 200,      // added to room price for all tenants
-    localDiscount: 120,    // deducted for local students & local staff
     depositMultiple: 2,    // security deposit = room rental x 2 (multiple not shown to users)
   };
   const fmt = (n) => 'RM ' + n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -3715,21 +3714,19 @@ renderCommon('youthcity');
     const tenant = TENANT_TYPES[tenantSel.value] || TENANT_TYPES['intl-student'];
     const isLocal = tenant.local;
     const rentalCharges = rent + FEES.rentalAddOn;
-    const discount = isLocal ? FEES.localDiscount : 0;
     const wantsCarpark = carparkSel.value === 'yes';
     const carpark = wantsCarpark ? FEES.carPark : 0;
     // Deposit follows the room rental; waived for local students & local staff.
     const depositBeforeWaiver = rent * FEES.depositMultiple;
     const securityDeposit = isLocal ? 0 : depositBeforeWaiver;
     const total = FEES.adminMoveIn + FEES.intiProcessing
-      + rentalCharges - discount + carpark + securityDeposit + FEES.accessCard;
+      + rentalCharges + carpark + securityDeposit + FEES.accessCard;
 
     breakdown.innerHTML = `
       <div class="payment-row group-head"><span class="pr-label">One-Time &amp; Monthly Fees</span></div>
       <div class="payment-row"><div><span class="pr-label">Admin &amp; Move-In Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.adminMoveIn)}</span></div>
       <div class="payment-row"><div><span class="pr-label">INTI Processing Fee</span><span class="pr-note">One-time · incl. SST</span></div><span class="pr-value">${fmt(FEES.intiProcessing)}</span></div>
       <div class="payment-row"><div><span class="pr-label">Rental Charges</span><span class="pr-note">${condoLabels[condoSel.value]} — ${room.name} · incl. SST</span></div><span class="pr-value">${fmt(rentalCharges)}</span></div>
-      ${isLocal ? `<div class="payment-row"><div><span class="pr-label">Discount</span><span class="pr-note">${tenant.label} rate</span></div><span class="pr-value discount">− ${fmt(discount)}</span></div>` : ''}
       <div class="payment-row"><div><span class="pr-label">Car Park (Monthly)</span><span class="pr-note">${wantsCarpark ? 'Reserved bay added · incl. SST' : 'Not included'}</span></div><span class="pr-value${wantsCarpark ? '' : ' muted'}">${wantsCarpark ? fmt(FEES.carPark) : '—'}</span></div>
       <div class="payment-row group-head"><span class="pr-label">Refundable</span></div>
       <div class="payment-row"><div><span class="pr-label">Security Deposit</span><span class="pr-note">${isLocal ? 'Waived for local students &amp; local staff' : 'Based on room rental · refundable · incl. SST'}</span></div><span class="pr-value${isLocal ? ' discount' : ''}">${isLocal ? `<span class="pr-was">${fmt(depositBeforeWaiver)}</span>${fmt(0)}` : fmt(securityDeposit)}</span></div>
