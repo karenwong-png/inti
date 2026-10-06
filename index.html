@@ -1930,9 +1930,29 @@ a.g-score:hover .g-cta { text-decoration: underline; text-underline-offset: 3px;
 }
 
 .rooms-carousel { position: relative; }
-.rooms-viewport { overflow: hidden; }
-.rooms-track { display: flex; gap: 20px; transition: transform 0.45s cubic-bezier(.22,.61,.36,1); will-change: transform; }
-.rooms-track .room-card { flex: 0 0 calc((100% - 40px) / 3); }
+/* Native scroller, not a transformed track: swipe and trackpad both work, and
+   every card is reachable without the arrows. */
+.rooms-viewport {
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,107,26,0.65) rgba(250,247,242,0.12);
+}
+.rooms-viewport::-webkit-scrollbar { height: 8px; }
+.rooms-viewport::-webkit-scrollbar-track {
+  background: rgba(250,247,242,0.12); border-radius: 100px;
+}
+.rooms-viewport::-webkit-scrollbar-thumb {
+  background: rgba(255,107,26,0.65); border-radius: 100px;
+}
+.rooms-viewport::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+.rooms-track { display: flex; gap: 20px; }
+.rooms-track .room-card { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce) {
+  .rooms-viewport { scroll-behavior: auto; }
+}
 .carousel-arrow {
   position: absolute; top: calc(50% - 24px); transform: translateY(-50%);
   width: 44px; height: 44px; border-radius: 50%;
@@ -3297,14 +3317,14 @@ footer {
         <tr>
           <td>Room Pricing <span class="td-sub">per month, from</span></td>
           <td><ul>
-            <li>Master Room — RM1,280</li>
-            <li>Double Room — RM958</li>
             <li>Double Room — RM758</li>
+            <li>Double Room — RM958</li>
+            <li>Master Room — RM1,280</li>
           </ul></td>
           <td><ul>
-            <li>Master Room — RM908</li>
-            <li>Double Room — RM850</li>
             <li>Single Room — RM730</li>
+            <li>Double Room — RM850</li>
+            <li>Master Room — RM908</li>
           </ul></td>
         </tr>
         <tr>
@@ -3457,9 +3477,9 @@ const roomData = {
     rooms: [
       // Two Double Rooms at different rates — names are BeLive's; the price
       // distinguishes them until the room-type labels are refined.
-      { name: 'Master Room', rent: 1280, disp: 'RM1,280', img: 'YC_master.jpg' },
-      { name: 'Double Room', rent:  958, disp: 'RM958',   img: 'YC_double_1.jpg' },
       { name: 'Double Room', rent:  758, disp: 'RM758',   img: 'YC_double_2.jpg' },
+      { name: 'Double Room', rent:  958, disp: 'RM958',   img: 'YC_double_1.jpg' },
+      { name: 'Master Room', rent: 1280, disp: 'RM1,280', img: 'YC_master.jpg' },
     ],
     common: [
       { img: 'YC_kitchen.jpg',     label: 'Shared Kitchen', alt: 'Youth City Residence shared kitchen' },
@@ -3470,9 +3490,9 @@ const roomData = {
   akasia: {
     label: 'Akasia @ Bandar Belia',
     rooms: [
-      { name: 'Master Room', rent: 908, disp: 'RM908', img: 'AK_master.jpg' },
-      { name: 'Double Room', rent: 850, disp: 'RM850', img: 'AK_double.jpg' },
       { name: 'Single Room', rent: 730, disp: 'RM730', img: 'AK_single.jpg' },
+      { name: 'Double Room', rent: 850, disp: 'RM850', img: 'AK_double.jpg' },
+      { name: 'Master Room', rent: 908, disp: 'RM908', img: 'AK_master.jpg' },
     ],
     common: [
       { img: 'AK_kitchen.jpg', label: 'Shared Kitchen', alt: 'Akasia shared kitchen' },
@@ -3481,6 +3501,11 @@ const roomData = {
     ],
   },
 };
+
+// Cheapest first everywhere, so the carousel, the room dropdown and the
+// comparison table all agree with the hero's "From RMxxx" stat. Sorted at
+// runtime so a future rate edit cannot put the order out of step.
+Object.values(roomData).forEach(d => d.rooms.sort((a, b) => a.rent - b.rent));
 
 function renderRooms(key) {
   const d = roomData[key];
@@ -3522,7 +3547,7 @@ function renderRooms(key) {
       <button class="carousel-arrow next" aria-label="Next rooms">›</button>
     </div>
   `;
-  initRoomsCarousel(d.rooms.length);
+  initRoomsCarousel();
 }
 
 function renderCommon(key) {
@@ -3538,40 +3563,53 @@ function renderCommon(key) {
 }
 
 let roomsCarouselResizeHandler = null;
-function initRoomsCarousel(total) {
+function initRoomsCarousel() {
   const root = roomsStrip.querySelector('.rooms-carousel');
   if (!root) return;
+  const viewport = root.querySelector('.rooms-viewport');
   const track = root.querySelector('.rooms-track');
   const prev = root.querySelector('.carousel-arrow.prev');
   const next = root.querySelector('.carousel-arrow.next');
-  let index = 0;
+  if (!viewport || !track || !prev || !next) return;
 
-  const visibleCount = () => {
-    if (window.innerWidth <= 540) return 1;
-    if (window.innerWidth <= 900) return 2;
-    return 3;
-  };
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  const update = () => {
-    const v = visibleCount();
-    const maxIndex = Math.max(0, total - v);
-    if (index > maxIndex) index = maxIndex;
+  // One card plus the flex gap, measured rather than assumed, so it stays
+  // right across the breakpoints that change the card's flex-basis.
+  const step = () => {
     const card = track.querySelector('.room-card');
-    const cardWidth = card ? card.getBoundingClientRect().width : 0;
-    const gap = 20;
-    track.style.transform = `translateX(-${index * (cardWidth + gap)}px)`;
-    prev.disabled = index <= 0;
-    next.disabled = index >= maxIndex;
+    if (!card) return viewport.clientWidth;
+    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 20;
+    return card.getBoundingClientRect().width + gap;
   };
 
-  prev.addEventListener('click', () => { index = Math.max(0, index - 1); update(); });
-  next.addEventListener('click', () => { index = index + 1; update(); });
+  // Derived from scrollLeft, never from an index counter — so the arrows stay
+  // correct after a swipe or a trackpad scroll, not just after an arrow click.
+  // scrollLeft runs negative under dir="rtl" in some engines, hence the abs.
+  const sync = () => {
+    const pos = Math.abs(viewport.scrollLeft);
+    const max = viewport.scrollWidth - viewport.clientWidth;
+    prev.disabled = pos <= 1;
+    next.disabled = pos >= max - 1;
+  };
+
+  const go = (dir) => {
+    const rtl = getComputedStyle(viewport).direction === 'rtl';
+    viewport.scrollBy({
+      left: dir * step() * (rtl ? -1 : 1),
+      behavior: reduceMotion.matches ? 'auto' : 'smooth',
+    });
+  };
+
+  prev.addEventListener('click', () => go(-1));
+  next.addEventListener('click', () => go(1));
+  viewport.addEventListener('scroll', sync, { passive: true });
 
   if (roomsCarouselResizeHandler) window.removeEventListener('resize', roomsCarouselResizeHandler);
-  roomsCarouselResizeHandler = update;
+  roomsCarouselResizeHandler = sync;
   window.addEventListener('resize', roomsCarouselResizeHandler);
 
-  requestAnimationFrame(update);
+  requestAnimationFrame(sync);
 }
 
 function activateResidence(key) {
