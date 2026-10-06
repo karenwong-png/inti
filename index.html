@@ -76,34 +76,30 @@ nav.top {
 
 /* ---------- LANGUAGE SWITCHER ---------- */
 .lang-switch { position: relative; display: inline-flex; align-items: center; flex: 0 0 auto; }
-.lang-switch::before {
-  content: '\1F310'; position: absolute; left: 11px; font-size: 13px;
-  pointer-events: none; opacity: 0.75;
-}
 .lang-select {
   appearance: none; -webkit-appearance: none;
   font-family: inherit; font-size: 13px; color: var(--ink); cursor: pointer;
-  background: rgba(14,14,16,0.04);
-  border: 1px solid rgba(14,14,16,0.14); border-radius: 100px;
-  padding: 9px 30px 9px 32px;
-  transition: border-color 0.25s, background 0.25s;
+  background-color: rgba(14,14,16,0.04);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%230E0E10' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  border: 1.5px solid rgba(14,14,16,0.14); border-radius: 100px;
+  padding: 9px 36px 9px 18px;
+  transition: border-color 0.25s, background-color 0.25s;
 }
-.lang-select:hover { border-color: var(--orange); background: rgba(255,107,26,0.08); }
-.lang-select:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
-.lang-switch::after {
-  content: ''; position: absolute; right: 13px; pointer-events: none;
-  width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent;
-  border-top: 5px solid rgba(14,14,16,0.55);
-}
-@media (max-width: 1100px) { .lang-select { padding: 8px 26px 8px 28px; font-size: 12px; } }
+/* Open state shows as :focus, so hover and focus share the orange pill. */
+.lang-select:hover,
+.lang-select:focus { border-color: var(--orange); background-color: rgba(255,107,26,0.08); }
+.lang-select:focus { outline: none; }
+/* Soft halo rather than a hard outline, so the keyboard ring doesn't stack a
+   second circle outside the orange border. Matches .calc-field select. */
+.lang-select:focus-visible { box-shadow: 0 0 0 3px rgba(255,107,26,0.22); }
+@media (max-width: 1100px) { .lang-select { padding: 8px 32px 8px 14px; font-size: 12px; } }
 
 /* Arabic: flip the document, but never the maps — Leaflet positions its panes
    and controls in LTR space, and the basemap labels are not mirrored either. */
 [dir="rtl"] #vitrox-map, [dir="rtl"] #transit-map, [dir="rtl"] .rt-map,
 [dir="rtl"] .leaflet-container { direction: ltr; }
-[dir="rtl"] .lang-switch::before { left: auto; right: 11px; }
-[dir="rtl"] .lang-switch::after { right: auto; left: 13px; }
-[dir="rtl"] .lang-select { padding: 9px 32px 9px 30px; }
+[dir="rtl"] .lang-select { background-position: left 14px center; padding: 9px 18px 9px 36px; }
 .brand .x { color: var(--ink); opacity: 0.3; font-size: 18px; font-style: italic; }
 
 nav ul { list-style: none; display: flex; gap: 36px; }
@@ -159,6 +155,23 @@ nav ul a:hover::after { transform: scaleX(1); }
     padding: 9px 16px; font-size: 13px; flex: 0 0 auto;
   }
   nav.top .cta-btn .arrow { display: none; }
+}
+
+/* Phone widths: brand lockup + switcher + CTA still did not fit on a 390px
+   screen (the Book Now button was clipped off the right edge on main, by
+   119px in English and 176px in Malay). Shrink the lockup and the controls
+   so the whole row fits. */
+@media (max-width: 480px) {
+  nav.top { padding: 10px 10px; gap: 7px; }
+  .brand-logos { gap: 6px; }
+  .brand img.logo-belive { height: 17px; }
+  .brand img.logo-vitrox { height: 23px; }
+  .brand .x { font-size: 10px; }
+  .brand-tagline { font-size: 7px; letter-spacing: 0.06em; }
+  .lang-select { padding: 7px 25px 7px 10px; font-size: 11px; background-position: right 9px center; }
+  [dir="rtl"] .lang-select { padding: 7px 10px 7px 25px; background-position: left 9px center; }
+  /* Malay's "Tempah Sekarang" is the longest CTA label, so it sets this size. */
+  nav.top .cta-btn { padding: 8px 11px; font-size: 11.5px; }
 }
 
 /* ---------- HERO ---------- */
@@ -2787,10 +2800,10 @@ footer {
   <div class="lang-switch">
     <label class="sr-only" for="lang-select">Language</label>
     <select id="lang-select" class="lang-select" aria-label="Language" data-i18n-skip>
-      <option value="en">English</option>
-      <option value="zh">中文</option>
-      <option value="ms">Bahasa Melayu</option>
-      <option value="ar">العربية</option>
+      <option value="en">EN · English</option>
+      <option value="zh">中文 · Chinese</option>
+      <option value="ms">BM · Bahasa Melayu</option>
+      <option value="ar">AR · العربية</option>
     </select>
   </div>
   <a href="https://bit.ly/INTIInternationalCollegeAccommodationPartner" target="_blank" rel="noopener" class="cta-btn">Book Now <span class="arrow">→</span></a>
@@ -4232,6 +4245,27 @@ const I18N_PHRASE_KEYS = Object.keys(I18N_PHRASES).sort((a, b) => b.length - a.l
 (function initLanguage() {
   const select = document.getElementById('lang-select');
   if (!select) return;
+
+  // The header has room for the full "EN · English" labels on a wide desktop
+  // only — Malay is the longest and pushes the Book Now button off-screen below
+  // ~1200px. Below that show just the code. Option text is set here rather than
+  // in the markup so both forms stay in one place.
+  const LANG_LABELS = {
+    en: ['EN', 'EN \u00b7 English'],
+    zh: ['\u4e2d\u6587', '\u4e2d\u6587 \u00b7 Chinese'],
+    ms: ['BM', 'BM \u00b7 Bahasa Melayu'],
+    ar: ['AR', 'AR \u00b7 \u0627\u0644\u0639\u0631\u0628\u064a\u0629'],
+  };
+  const compactQuery = window.matchMedia('(max-width: 1200px)');
+  function applyOptionLabels() {
+    const i = compactQuery.matches ? 0 : 1;
+    for (const opt of select.options) {
+      const pair = LANG_LABELS[opt.value];
+      if (pair) opt.textContent = pair[i];
+    }
+  }
+  applyOptionLabels();
+  compactQuery.addEventListener('change', applyOptionLabels);
 
   const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA']);
   const ORIGINALS = new WeakMap();
