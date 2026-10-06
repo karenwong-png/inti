@@ -5,38 +5,27 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Pages on this repo is served from the gh-pages branch (source: "Deploy from
+# a branch"), because enabling the Actions source needs repo-admin rights that
+# the workflow token does not have. The github-pages environment is therefore
+# locked to gh-pages, and a deploy-pages job running on main is rejected with
+# "Branch main is not allowed to deploy to github-pages". So publishing is a
+# plain push of main's tree onto gh-pages; GitHub serves it from there.
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Allow one concurrent deployment, don't cancel in-progress runs.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
         with:
-          # Auto-enable GitHub Pages (source: GitHub Actions) if not already on.
-          enablement: true
+          fetch-depth: 0
 
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Publish the whole repo root (static site: index.html + image assets).
-          path: .
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish main to gh-pages
+        run: git push origin HEAD:refs/heads/gh-pages
